@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SplashCompose</string>
+    <string name="screen_photo">Photo</string>
+    <string name="screen_collections">Collections</string>
+    <string name="screen_love">Love</string>
+    <string name="screen_settings">Settings</string>
+</resources>
