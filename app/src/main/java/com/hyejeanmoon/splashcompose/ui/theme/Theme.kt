@@ -8,13 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = Scallop_Seashell,
+    primary = Gray,
     primaryVariant = Pewter,
     secondary = Ivory
 )
 
 private val LightColorPalette = lightColors(
-    primary = Scallop_Seashell,
+    primary = Gray,
     primaryVariant = Pewter,
     secondary = Ivory
 

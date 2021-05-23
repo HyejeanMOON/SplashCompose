@@ -1,34 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="../../../../layout/compose-model-1620542862274.xml" value="0.20819256756756757" />
-        <entry key="../../../../layout/compose-model-1620546482675.xml" value="0.45" />
-        <entry key="../../../../layout/compose-model-1621139085607.xml" value="0.36484098939929327" />
-        <entry key="../../../../layout/compose-model-1621144362151.xml" value="0.380516353066137" />
-        <entry key="../../../../layout/compose-model-1621146641883.xml" value="0.335" />
-        <entry key="../../../../layout/compose-model-1621147198658.xml" value="0.34881756756756754" />
-        <entry key="../../../../layout/compose-model-1621152689878.xml" value="0.35203180212014135" />
-        <entry key="../../../../layout/compose-model-1621667568229.xml" value="0.34881756756756754" />
-        <entry key="../../../../layout/compose-model-1621684807548.xml" value="0.3277777777777778" />
-        <entry key="../../../../layout/compose-model-1621744756873.xml" value="0.32592592592592595" />
-        <entry key="../../../../layout/compose-model-1621747044151.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/ic_collections.xml" value="0.4197916666666667" />
-        <entry key="app/src/main/res/drawable/ic_icon_collections.xml" value="0.40520833333333334" />
-        <entry key="app/src/main/res/drawable/ic_icon_love.xml" value="0.40520833333333334" />
-        <entry key="app/src/main/res/drawable/ic_icon_photo.xml" value="0.40520833333333334" />
-        <entry key="app/src/main/res/drawable/ic_icon_search.xml" value="0.40520833333333334" />
-        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.4197916666666667" />
-        <entry key="app/src/main/res/drawable/ic_love.xml" value="0.4197916666666667" />
-        <entry key="app/src/main/res/drawable/ic_none_picture.xml" value="0.4197916666666667" />
-        <entry key="app/src/main/res/drawable/ic_photo.xml" value="0.4197916666666667" />
-        <entry key="app/src/main/res/drawable/ic_settings.xml" value="0.4197916666666667" />
-      </map>
-    </option>
-  </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

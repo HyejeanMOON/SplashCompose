@@ -21,9 +21,9 @@ class PhotoViewModel : ViewModel() {
 
     var photoList = Pager(
         config = PagingConfig(
-            pageSize = 10,
+            pageSize = 20,
             enablePlaceholders = false,
-            initialLoadSize = 20
+            initialLoadSize = 30
         ),
         pagingSourceFactory = {photosDataSource}
     ).flow

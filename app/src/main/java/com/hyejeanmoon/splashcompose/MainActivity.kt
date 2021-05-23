@@ -1,9 +1,11 @@
 package com.hyejeanmoon.splashcompose
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -20,11 +22,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.hyejeanmoon.splashcompose.collections.CollectionScreen
+import com.hyejeanmoon.splashcompose.love.LoveScreen
+import com.hyejeanmoon.splashcompose.photo.PhotoScreen
 import com.hyejeanmoon.splashcompose.photo.PhotoViewModel
+import com.hyejeanmoon.splashcompose.settings.SettingsScreen
 import com.hyejeanmoon.splashcompose.ui.theme.Pewter
 import kotlinx.coroutines.launch
 
@@ -34,8 +42,23 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setStatusBarColor(R.color.gray, true)
+
         setContent {
             SplashComposeApp(viewModel)
+        }
+    }
+
+    /**
+     * Set color of statusBar
+     */
+    private fun setStatusBarColor(@ColorRes color: Int, isLightStatusBar: Boolean) {
+        window.statusBarColor = ContextCompat.getColor(this, color)
+        if (isLightStatusBar) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        } else {
+            window.decorView.systemUiVisibility = 0
         }
     }
 }
@@ -55,26 +78,33 @@ fun SplashComposeApp(viewModel: PhotoViewModel) {
                             Screen.Love,
                             Screen.Settings,
                         )
-//                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-//                        val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentRoute = navBackStackEntry?.destination?.route
 
                         screenList.forEach { screen ->
                             BottomNavigationItem(
-                                selected = true,
-                                onClick = { /*TODO*/ },
+                                selected = currentRoute == screen.route,
+                                onClick = {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.startDestinationId,{})
+                                        launchSingleTop = true
+                                    }
+                                },
                                 icon = {
                                     Icon(
                                         modifier = Modifier.size(28.dp),
                                         painter = painterResource(id = screen.drawableId),
                                         contentDescription = stringResource(
                                             id = screen.stringId
-                                        )
+                                        ),
+                                        tint = if (currentRoute == screen.route) Color.Red else Color.Black
                                     )
                                 },
                                 label = {
                                     Text(
                                         text = stringResource(id = screen.stringId),
-                                        color = Color.Black
+                                        color = if (currentRoute == screen.route) Color.Red else Color.Black
                                     )
                                 }
                             )
@@ -87,30 +117,15 @@ fun SplashComposeApp(viewModel: PhotoViewModel) {
                     )
                 }
             ) {
-//                NavHost(navController, startDestination = Screen.Photo.route) {
-//                    composable(Screen.Photo.route) {
-//                        Text(text = "hello")
-//                    }
-//                    composable(Screen.Collections.route) { }
-//                    composable(Screen.Love.route) {}
-//                    composable(Screen.Settings.route) {}
-//                }
-
-                TestTextView(viewModel = viewModel)
-
+                NavHost(navController, startDestination = Screen.Photo.route) {
+                    composable(Screen.Photo.route) {
+                        PhotoScreen(viewModel = viewModel)
+                    }
+                    composable(Screen.Collections.route) { CollectionScreen() }
+                    composable(Screen.Love.route) { LoveScreen() }
+                    composable(Screen.Settings.route) { SettingsScreen() }
+                }
             }
-        }
-    }
-}
-
-@Composable
-fun TestTextView(
-    viewModel: PhotoViewModel
-) {
-    val pagingItems = viewModel.photoList.collectAsLazyPagingItems()
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(lazyPagingItems = pagingItems){ item ->
-            Text(text = item?.id.toString(), modifier = Modifier.size(120.dp))
         }
     }
 }
