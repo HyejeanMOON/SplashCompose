@@ -1,30 +1,34 @@
-package com.hyejeanmoon.splashcompose.photo
+package com.hyejeanmoon.splashcompose.collections
 
 import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
+import com.hyejeanmoon.splashcompose.collectionphotos.PhotosOfCollectionDataSource
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel
-class PhotoViewModel: ViewModel() {
+class CollectionsViewModel : ViewModel() {
 
-    private val photosApiService =
-        ApiServiceHelper.createPhotosApiService(
+    private val collectionsApiService =
+        ApiServiceHelper.createCollectionsApiService(
             EnvParameters.BASE_URL,
             OkHttpClient().splashOkHttpClient
         )
 
-    private val photosDataSource = PhotosDataSource(PhotosRepository(photosApiService))
+    private val collectionRepository = CollectionsRepository(collectionsApiService)
 
-    var photoList = Pager(
+    private val collectionsDataSource =
+        CollectionsDataSource(collectionRepository)
+
+    var collections = Pager(
         config = PagingConfig(
-            pageSize = 20,
+            pageSize = 10,
             enablePlaceholders = false,
             initialLoadSize = 30
         ),
-        pagingSourceFactory = {photosDataSource}
+        pagingSourceFactory = { collectionsDataSource }
     ).flow
 }

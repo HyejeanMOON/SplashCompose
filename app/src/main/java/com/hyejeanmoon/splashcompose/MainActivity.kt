@@ -1,44 +1,41 @@
 package com.hyejeanmoon.splashcompose
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
-import com.hyejeanmoon.splashcompose.R
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
-import com.hyejeanmoon.splashcompose.collections.CollectionScreen
+import com.hyejeanmoon.splashcompose.collectionphotos.PhotosOfCollectionActivity
+import com.hyejeanmoon.splashcompose.collections.CollectionsScreen
+import com.hyejeanmoon.splashcompose.collections.CollectionsViewModel
 import com.hyejeanmoon.splashcompose.love.LoveScreen
 import com.hyejeanmoon.splashcompose.photo.PhotoScreen
 import com.hyejeanmoon.splashcompose.photo.PhotoViewModel
 import com.hyejeanmoon.splashcompose.settings.SettingsScreen
-import com.hyejeanmoon.splashcompose.ui.theme.Pewter
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: PhotoViewModel by viewModels()
+    private val photoViewModel: PhotoViewModel by viewModels()
+    private val collectionsViewModel: CollectionsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +43,16 @@ class MainActivity : ComponentActivity() {
         setStatusBarColor(R.color.gray, true)
 
         setContent {
-            SplashComposeApp(viewModel)
+            SplashComposeApp(
+                photoViewModel,
+                collectionsViewModel,
+                onCollectionsItemClick = {
+                    val intent = Intent()
+                    intent.setClass(this, PhotosOfCollectionActivity::class.java)
+                    intent.putExtra(PhotosOfCollectionActivity.INTENT_ID, it)
+                    startActivity(intent)
+                }
+            )
         }
     }
 
@@ -64,7 +70,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SplashComposeApp(viewModel: PhotoViewModel) {
+fun SplashComposeApp(
+    photoViewModel: PhotoViewModel,
+    collectionsViewModel: CollectionsViewModel,
+    onCollectionsItemClick: (String) -> Unit
+) {
     SplashComposeTheme {
         Surface(color = MaterialTheme.colors.background) {
             val navController = rememberNavController()
@@ -87,7 +97,6 @@ fun SplashComposeApp(viewModel: PhotoViewModel) {
                                 selected = currentRoute == screen.route,
                                 onClick = {
                                     navController.navigate(screen.route) {
-                                        popUpTo(navController.graph.startDestinationId,{})
                                         launchSingleTop = true
                                     }
                                 },
@@ -119,9 +128,14 @@ fun SplashComposeApp(viewModel: PhotoViewModel) {
             ) {
                 NavHost(navController, startDestination = Screen.Photo.route) {
                     composable(Screen.Photo.route) {
-                        PhotoScreen(viewModel = viewModel)
+                        PhotoScreen(viewModel = photoViewModel)
                     }
-                    composable(Screen.Collections.route) { CollectionScreen() }
+                    composable(Screen.Collections.route) {
+                        CollectionsScreen(
+                            collectionsViewModel = collectionsViewModel,
+                            onCollectionsItemClick = onCollectionsItemClick
+                        )
+                    }
                     composable(Screen.Love.route) { LoveScreen() }
                     composable(Screen.Settings.route) { SettingsScreen() }
                 }

@@ -1,52 +1,51 @@
 package com.hyejeanmoon.splashcompose.compose
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun PhotoListNameLabel(
-    modifier:Modifier = Modifier,
-    photoListName:String
-){
-    Text(
-        text = photoListName,
-        modifier = modifier.clickable {  },
-        textAlign = TextAlign.Center,
-        fontSize = 24.sp,
-        color = Color.White
-    )
-}
-
-@Composable
-fun PhotoListNumberLabel(
+fun CollectionsTitleText(
     modifier: Modifier = Modifier,
-    photoListNumber:Int
-){
+    collectionsName: String
+) {
     Text(
-        text = "$photoListNumber photos",
+        text = collectionsName,
         modifier = modifier,
         textAlign = TextAlign.Center,
-        fontSize = 12.sp,
+        fontSize = 25.sp,
+        color = Color.White
+    )
+}
+
+@Composable
+fun CollectionsNumbersText(
+    modifier: Modifier = Modifier,
+    numberOfCollections: String
+) {
+    Text(
+        text = "$numberOfCollections photos",
+        modifier = modifier,
+        textAlign = TextAlign.End,
+        fontSize = 18.sp,
         color = Color.White
     )
 }
 
 @Preview
 @Composable
-fun PreviewPhotoListLabel(){
-    PhotoListNameLabel(photoListName = "PhotoList")
+fun PreviewCollectionsNameText() {
+    CollectionsTitleText(collectionsName = "SplashCompose")
 }
 
 @Preview
 @Composable
-fun PreviewPhotoListNumberLabel(){
-    PhotoListNumberLabel(photoListNumber = 12)
+fun PreviewCollectionsNumbersText() {
+    CollectionsNumbersText(numberOfCollections = "10")
 }
 
