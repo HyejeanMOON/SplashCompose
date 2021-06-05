@@ -1,23 +1,25 @@
 package com.hyejeanmoon.splashcompose.collections
 
+import android.graphics.Paint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.hyejeanmoon.splashcompose.compose.CollectionsImage
-import com.hyejeanmoon.splashcompose.compose.CollectionsNumbersText
-import com.hyejeanmoon.splashcompose.compose.CollectionsTitleText
-import com.hyejeanmoon.splashcompose.compose.PhotoImage
+import com.google.accompanist.glide.rememberGlidePainter
+import com.hyejeanmoon.splashcompose.compose.*
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.ui.theme.Transparent_Gray
@@ -26,7 +28,7 @@ import com.hyejeanmoon.splashcompose.ui.theme.Transparent_Gray
 fun CollectionsScreen(
     modifier: Modifier = Modifier,
     collectionsViewModel: CollectionsViewModel,
-    onCollectionsItemClick:(String) -> Unit
+    onCollectionsItemClick: (String) -> Unit
 ) {
     val pagingItems = collectionsViewModel.collections.collectAsLazyPagingItems()
     LazyColumn(
@@ -37,7 +39,7 @@ fun CollectionsScreen(
                 val item by remember { mutableStateOf(collectionsItem) }
                 CollectionsItem(
                     collections = item,
-                    onClick = { id->
+                    onClick = { id ->
                         onCollectionsItemClick(id)
                     }
                 )
@@ -50,41 +52,15 @@ fun CollectionsScreen(
 fun CollectionsItem(
     modifier: Modifier = Modifier,
     collections: Collections,
-    onClick:(String) -> Unit
+    onClick: (String) -> Unit
 ) {
-    Box(modifier = modifier.clickable {
+    Column(modifier = modifier
+        .clickable {
         onClick(collections.id.orEmpty())
     }) {
-//        val (img, title, numbers) = createRefs()
-
         CollectionsImage(
-//            modifier = Modifier.constrainAs(img) {
-//                top.linkTo(parent.top)
-//                bottom.linkTo(parent.bottom)
-//                start.linkTo(parent.start)
-//                end.linkTo(parent.end)
-//            },
-            coverUrl = collections.coverPhoto?.urls?.small.orEmpty()
+            coverUrl = collections.coverPhoto?.urls?.regular.orEmpty()
         )
-//
-//        CollectionsTitleText(
-//            modifier = Modifier.constrainAs(title) {
-//                top.linkTo(img.top)
-//                bottom.linkTo(img.bottom)
-//                start.linkTo(img.start)
-//                end.linkTo(img.end)
-//            },
-//            collectionsName = collections.title.orEmpty()
-//        )
-//
-//        CollectionsNumbersText(
-//            modifier = Modifier
-//                .constrainAs(numbers) {
-//                    bottom.linkTo(img.bottom)
-//                    end.linkTo(img.end)
-//                }
-//                .padding(0.dp, 0.dp, 20.dp, 20.dp),
-//            numberOfCollections = collections.totalPhotos.orEmpty()
-//        )
+//        CollectionsDetailText(collections = collections)
     }
 }

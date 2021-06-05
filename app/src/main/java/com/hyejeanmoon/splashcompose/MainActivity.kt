@@ -28,6 +28,7 @@ import com.hyejeanmoon.splashcompose.collections.CollectionsViewModel
 import com.hyejeanmoon.splashcompose.love.LoveScreen
 import com.hyejeanmoon.splashcompose.photo.PhotoScreen
 import com.hyejeanmoon.splashcompose.photo.PhotoViewModel
+import com.hyejeanmoon.splashcompose.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.settings.SettingsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,7 +52,28 @@ class MainActivity : ComponentActivity() {
                     intent.setClass(this, PhotosOfCollectionActivity::class.java)
                     intent.putExtra(PhotosOfCollectionActivity.INTENT_ID, it)
                     startActivity(intent)
-                }
+                },
+                onSettingsItemClick = { detail ->
+
+                },
+                settingsItems = listOf(
+                    SettingsItem(
+                        "Account",
+                        listOf("User Account", "Log Out")
+                    ),
+                    SettingsItem(
+                        "Application Settings",
+                        listOf(
+                            "Change Display Resolution",
+                            "Change Download Resolution",
+                            "Change Photo Display Order"
+                        )
+                    ),
+                    SettingsItem(
+                        "Others",
+                        listOf("Version", "About Me")
+                    )
+                )
             )
         }
     }
@@ -73,7 +95,9 @@ class MainActivity : ComponentActivity() {
 fun SplashComposeApp(
     photoViewModel: PhotoViewModel,
     collectionsViewModel: CollectionsViewModel,
-    onCollectionsItemClick: (String) -> Unit
+    onCollectionsItemClick: (String) -> Unit,
+    onSettingsItemClick: (String) -> Unit,
+    settingsItems: List<SettingsItem>
 ) {
     SplashComposeTheme {
         Surface(color = MaterialTheme.colors.background) {
@@ -137,7 +161,12 @@ fun SplashComposeApp(
                         )
                     }
                     composable(Screen.Love.route) { LoveScreen() }
-                    composable(Screen.Settings.route) { SettingsScreen() }
+                    composable(Screen.Settings.route) {
+                        SettingsScreen(
+                            settingsItems = settingsItems,
+                            onSettingsItemClick = onSettingsItemClick
+                        )
+                    }
                 }
             }
         }
