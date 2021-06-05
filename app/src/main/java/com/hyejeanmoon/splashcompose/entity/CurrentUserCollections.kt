@@ -2,8 +2,9 @@ package com.hyejeanmoon.splashcompose.entity
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class CurrentUserCollections {
+class CurrentUserCollections : Serializable {
     @Expose
     @SerializedName("id")
     val id: Int? = null
