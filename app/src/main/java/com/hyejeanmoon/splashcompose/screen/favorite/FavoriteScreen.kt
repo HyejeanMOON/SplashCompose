@@ -1,9 +1,9 @@
-package com.hyejeanmoon.splashcompose.love
+package com.hyejeanmoon.splashcompose.screen.favorite
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 @Composable
 fun LoveScreen(){
-    Text(text = "LoveScreen")
+    Text(text = "FavoriteScreen")
 }

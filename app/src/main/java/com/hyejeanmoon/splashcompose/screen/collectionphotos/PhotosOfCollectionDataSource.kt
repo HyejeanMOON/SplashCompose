@@ -1,8 +1,8 @@
-package com.hyejeanmoon.splashcompose.collectionphotos
+package com.hyejeanmoon.splashcompose.screen.collectionphotos
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.hyejeanmoon.splashcompose.collections.CollectionsRepository
+import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
 import com.hyejeanmoon.splashcompose.entity.Photo
 
 class PhotosOfCollectionDataSource(

@@ -1,7 +1,7 @@
 package com.hyejeanmoon.splashcompose.api
 
-import com.hyejeanmoon.splashcompose.collections.CollectionsApiService
-import com.hyejeanmoon.splashcompose.photos.PhotosApiService
+import com.hyejeanmoon.splashcompose.screen.collections.CollectionsApiService
+import com.hyejeanmoon.splashcompose.screen.photos.PhotosApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

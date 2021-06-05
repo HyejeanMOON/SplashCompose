@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".collectionphotos.PhotosOfCollectionActivity"/>
+        <activity android:name="com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity"/>
     </application>
 
 </manifest>

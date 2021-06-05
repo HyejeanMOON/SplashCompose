@@ -1,4 +1,4 @@
-package com.hyejeanmoon.splashcompose.settings
+package com.hyejeanmoon.splashcompose.screen.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer

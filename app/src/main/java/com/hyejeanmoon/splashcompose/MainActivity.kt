@@ -21,14 +21,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.hyejeanmoon.splashcompose.collectionphotos.PhotosOfCollectionActivity
-import com.hyejeanmoon.splashcompose.collections.CollectionsScreen
-import com.hyejeanmoon.splashcompose.collections.CollectionsViewModel
-import com.hyejeanmoon.splashcompose.love.LoveScreen
-import com.hyejeanmoon.splashcompose.photos.PhotoScreen
-import com.hyejeanmoon.splashcompose.photos.PhotosViewModel
-import com.hyejeanmoon.splashcompose.settings.SettingsItem
-import com.hyejeanmoon.splashcompose.settings.SettingsScreen
+import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
+import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
+import com.hyejeanmoon.splashcompose.screen.collections.CollectionsViewModel
+import com.hyejeanmoon.splashcompose.screen.favorite.LoveScreen
+import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
+import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
+import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
+import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

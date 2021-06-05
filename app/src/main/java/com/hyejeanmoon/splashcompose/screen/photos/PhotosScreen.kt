@@ -1,4 +1,4 @@
-package com.hyejeanmoon.splashcompose.photos
+package com.hyejeanmoon.splashcompose.screen.photos
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn

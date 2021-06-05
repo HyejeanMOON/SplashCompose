@@ -1,16 +1,23 @@
-package com.hyejeanmoon.splashcompose.collections
+package com.hyejeanmoon.splashcompose.screen.collectionphotos
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
-import com.hyejeanmoon.splashcompose.collectionphotos.PhotosOfCollectionDataSource
+import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
-import dagger.hilt.android.lifecycle.HiltViewModel
 
-@HiltViewModel
-class CollectionsViewModel : ViewModel() {
+class PhotosOfCollectionViewModel(
+    private val state: SavedStateHandle
+):ViewModel() {
+
+    private var id = ""
+
+    init {
+        id = state.get<String>(PhotosOfCollectionActivity.INTENT_ID).orEmpty()
+    }
 
     private val collectionsApiService =
         ApiServiceHelper.createCollectionsApiService(
@@ -20,15 +27,15 @@ class CollectionsViewModel : ViewModel() {
 
     private val collectionRepository = CollectionsRepository(collectionsApiService)
 
-    private val collectionsDataSource =
-        CollectionsDataSource(collectionRepository)
+    private val photosOfCollectionDataSource =
+        PhotosOfCollectionDataSource(collectionRepository,id)
 
-    var collections = Pager(
+    var photosOfCollections = Pager(
         config = PagingConfig(
             pageSize = 10,
             enablePlaceholders = false,
             initialLoadSize = 30
         ),
-        pagingSourceFactory = { collectionsDataSource }
+        pagingSourceFactory = { photosOfCollectionDataSource }
     ).flow
 }

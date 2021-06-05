@@ -1,4 +1,4 @@
-package com.hyejeanmoon.splashcompose.photos
+package com.hyejeanmoon.splashcompose.screen.photos
 
 import com.hyejeanmoon.splashcompose.entity.Photo
 import retrofit2.Call

@@ -1,4 +1,4 @@
-package com.hyejeanmoon.splashcompose.collections
+package com.hyejeanmoon.splashcompose.screen.collections
 
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.entity.Collections

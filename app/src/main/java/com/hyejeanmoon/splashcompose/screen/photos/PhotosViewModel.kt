@@ -1,4 +1,4 @@
-package com.hyejeanmoon.splashcompose.photos
+package com.hyejeanmoon.splashcompose.screen.photos
 
 import androidx.lifecycle.ViewModel
 import androidx.paging.Pager

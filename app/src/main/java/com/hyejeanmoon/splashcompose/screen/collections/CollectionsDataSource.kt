@@ -1,4 +1,4 @@
-package com.hyejeanmoon.splashcompose.collections
+package com.hyejeanmoon.splashcompose.screen.collections
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
