@@ -2,7 +2,6 @@ package com.hyejeanmoon.splashcompose
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,8 +25,8 @@ import com.hyejeanmoon.splashcompose.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.collections.CollectionsScreen
 import com.hyejeanmoon.splashcompose.collections.CollectionsViewModel
 import com.hyejeanmoon.splashcompose.love.LoveScreen
-import com.hyejeanmoon.splashcompose.photo.PhotoScreen
-import com.hyejeanmoon.splashcompose.photo.PhotoViewModel
+import com.hyejeanmoon.splashcompose.photos.PhotoScreen
+import com.hyejeanmoon.splashcompose.photos.PhotosViewModel
 import com.hyejeanmoon.splashcompose.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.settings.SettingsScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val photoViewModel: PhotoViewModel by viewModels()
+    private val photosViewModel: PhotosViewModel by viewModels()
     private val collectionsViewModel: CollectionsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             SplashComposeApp(
-                photoViewModel,
+                photosViewModel,
                 collectionsViewModel,
                 onCollectionsItemClick = {
                     val intent = Intent()
@@ -93,7 +92,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SplashComposeApp(
-    photoViewModel: PhotoViewModel,
+    photoViewModel: PhotosViewModel,
     collectionsViewModel: CollectionsViewModel,
     onCollectionsItemClick: (String) -> Unit,
     onSettingsItemClick: (String) -> Unit,

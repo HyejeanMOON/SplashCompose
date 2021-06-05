@@ -1,4 +1,4 @@
-package com.hyejeanmoon.splashcompose.photo
+package com.hyejeanmoon.splashcompose.photos
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,7 +14,7 @@ import com.hyejeanmoon.splashcompose.compose.PhotoImage
 @Composable
 fun PhotoScreen(
     modifier: Modifier = Modifier,
-    viewModel: PhotoViewModel
+    viewModel: PhotosViewModel
 ) {
     val pagingItems = viewModel.photoList.collectAsLazyPagingItems()
     LazyColumn(

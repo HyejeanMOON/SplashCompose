@@ -1,4 +1,4 @@
-package com.hyejeanmoon.splashcompose.photo
+package com.hyejeanmoon.splashcompose.photos
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

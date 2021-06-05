@@ -1,4 +1,4 @@
-package com.hyejeanmoon.splashcompose.photo
+package com.hyejeanmoon.splashcompose.photos
 
 import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
@@ -9,7 +9,7 @@ import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel
-class PhotoViewModel: ViewModel() {
+class PhotosViewModel: ViewModel() {
 
     private val photosApiService =
         ApiServiceHelper.createPhotosApiService(
