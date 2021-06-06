@@ -23,7 +23,7 @@ class ApiEnqueueCallback<T>(
         this.call = call
 
         val body = response.body() ?: throw MoonException(
-            message = "code = $response.code().toString() , message = ${
+            message = "code = ${response.code().toString()} , message = ${
                 response.errorBody()
                     .toString()
             }"

@@ -7,7 +7,17 @@
         <entry key="../../../../layout/compose-model-1622269423759.xml" value="1.0" />
         <entry key="../../../../layout/compose-model-1622290178637.xml" value="0.6303030303030303" />
         <entry key="../../../../layout/compose-model-1622875526893.xml" value="0.75" />
+        <entry key="../../../../layout/compose-model-1622882430646.xml" value="0.27870370370370373" />
+        <entry key="../../../../layout/compose-model-1622887788474.xml" value="0.27870370370370373" />
+        <entry key="app/src/main/res/drawable/ic_aperture.xml" value="0.275" />
+        <entry key="app/src/main/res/drawable/ic_camera.xml" value="0.275" />
+        <entry key="app/src/main/res/drawable/ic_download.xml" value="0.275" />
+        <entry key="app/src/main/res/drawable/ic_exposure.xml" value="0.275" />
+        <entry key="app/src/main/res/drawable/ic_favorites.xml" value="0.275" />
+        <entry key="app/src/main/res/drawable/ic_iso.xml" value="0.275" />
         <entry key="app/src/main/res/drawable/ic_right.xml" value="0.27870370370370373" />
+        <entry key="app/src/main/res/drawable/ic_size.xml" value="0.275" />
+        <entry key="app/src/main/res/drawable/ic_times.xml" value="0.275" />
       </map>
     </option>
   </component>

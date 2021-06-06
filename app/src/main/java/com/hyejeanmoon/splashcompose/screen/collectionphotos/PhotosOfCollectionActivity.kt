@@ -1,5 +1,6 @@
 package com.hyejeanmoon.splashcompose.screen.collectionphotos
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -11,6 +12,8 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import com.hyejeanmoon.splashcompose.R
+import com.hyejeanmoon.splashcompose.entity.Photo
+import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 
 class PhotosOfCollectionActivity : ComponentActivity() {
@@ -23,7 +26,12 @@ class PhotosOfCollectionActivity : ComponentActivity() {
         val viewModel: PhotosOfCollectionViewModel by viewModels()
 
         setContent {
-            PhotosOfCollectionsApp(viewModel = viewModel)
+            PhotosOfCollectionsApp(
+                viewModel = viewModel,
+                onPhotoClick = {
+                    PhotoDetailActivity.start(it?.id.orEmpty(), this)
+                }
+            )
         }
     }
 
@@ -41,16 +49,27 @@ class PhotosOfCollectionActivity : ComponentActivity() {
 
     companion object {
         const val INTENT_ID = "INTENT_ID"
+
+        fun start(activity: ComponentActivity, photoId: String) {
+            val intent = Intent()
+            intent.setClass(activity, PhotosOfCollectionActivity::class.java)
+            intent.putExtra(INTENT_ID, photoId)
+            activity.startActivity(intent)
+        }
     }
 }
 
 @Composable
 fun PhotosOfCollectionsApp(
-    viewModel: PhotosOfCollectionViewModel
+    viewModel: PhotosOfCollectionViewModel,
+    onPhotoClick: (Photo?) -> Unit
 ) {
     SplashComposeTheme {
         Surface(color = MaterialTheme.colors.background) {
-            PhotosOfCollectionScreen(photosOfCollectionViewModel = viewModel)
+            PhotosOfCollectionScreen(
+                photosOfCollectionViewModel = viewModel,
+                onPhotoClick = onPhotoClick
+            )
         }
     }
 }

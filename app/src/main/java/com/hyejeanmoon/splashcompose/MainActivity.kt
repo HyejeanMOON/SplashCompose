@@ -21,10 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsViewModel
 import com.hyejeanmoon.splashcompose.screen.favorite.LoveScreen
+import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
@@ -47,10 +49,7 @@ class MainActivity : ComponentActivity() {
                 photosViewModel,
                 collectionsViewModel,
                 onCollectionsItemClick = {
-                    val intent = Intent()
-                    intent.setClass(this, PhotosOfCollectionActivity::class.java)
-                    intent.putExtra(PhotosOfCollectionActivity.INTENT_ID, it)
-                    startActivity(intent)
+                    PhotosOfCollectionActivity.start(this, it)
                 },
                 onSettingsItemClick = { detail ->
 
@@ -72,7 +71,10 @@ class MainActivity : ComponentActivity() {
                         "Others",
                         listOf("Version", "About Me")
                     )
-                )
+                ),
+                onPhotoClick = {
+                    PhotoDetailActivity.start(it?.id.orEmpty(), this)
+                }
             )
         }
     }
@@ -96,6 +98,7 @@ fun SplashComposeApp(
     collectionsViewModel: CollectionsViewModel,
     onCollectionsItemClick: (String) -> Unit,
     onSettingsItemClick: (String) -> Unit,
+    onPhotoClick: (Photo?) -> Unit,
     settingsItems: List<SettingsItem>
 ) {
     SplashComposeTheme {
@@ -151,7 +154,10 @@ fun SplashComposeApp(
             ) {
                 NavHost(navController, startDestination = Screen.Photo.route) {
                     composable(Screen.Photo.route) {
-                        PhotoScreen(viewModel = photoViewModel)
+                        PhotoScreen(
+                            viewModel = photoViewModel,
+                            onPhotoClick = onPhotoClick
+                        )
                     }
                     composable(Screen.Collections.route) {
                         CollectionsScreen(

@@ -1,20 +1,29 @@
 package com.hyejeanmoon.splashcompose.screen.photos
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.hyejeanmoon.splashcompose.compose.PhotoImage
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.accompanist.glide.rememberGlidePainter
+import com.hyejeanmoon.splashcompose.entity.Photo
 
 @Composable
 fun PhotoScreen(
     modifier: Modifier = Modifier,
-    viewModel: PhotosViewModel
+    viewModel: PhotosViewModel,
+    onPhotoClick: (Photo?) -> Unit
 ) {
     val pagingItems = viewModel.photoList.collectAsLazyPagingItems()
     LazyColumn(
@@ -24,7 +33,33 @@ fun PhotoScreen(
             val item by remember {
                 mutableStateOf(photoItem)
             }
-            PhotoImage(photoUrl = item?.urls?.regular.orEmpty())
+            PhotoImage(
+                photo = item,
+                onPhotoClick = onPhotoClick
+            )
         }
     }
+}
+
+@Composable
+fun PhotoImage(
+    modifier: Modifier = Modifier,
+    photo: Photo?,
+    onPhotoClick: (Photo?) -> Unit
+) {
+    Image(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(0.dp, 1.dp)
+            .clickable { onPhotoClick(photo) },
+        painter = rememberGlidePainter(
+            photo?.urls?.regular.orEmpty(),
+            fadeIn = true,
+            requestBuilder = {
+                diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            }
+        ),
+        contentDescription = "photo image",
+        contentScale = ContentScale.FillWidth
+    )
 }

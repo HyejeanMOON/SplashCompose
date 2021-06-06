@@ -9,12 +9,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.hyejeanmoon.splashcompose.compose.PhotoImage
+import com.hyejeanmoon.splashcompose.entity.Photo
+import com.hyejeanmoon.splashcompose.screen.photos.PhotoImage
 
 @Composable
 fun PhotosOfCollectionScreen(
     modifier: Modifier = Modifier,
-    photosOfCollectionViewModel: PhotosOfCollectionViewModel
+    photosOfCollectionViewModel: PhotosOfCollectionViewModel,
+    onPhotoClick: (Photo?) -> Unit
 ) {
     val pagingItems = photosOfCollectionViewModel.photosOfCollections.collectAsLazyPagingItems()
 
@@ -25,7 +27,7 @@ fun PhotosOfCollectionScreen(
             val item by remember {
                 mutableStateOf(photoItem)
             }
-            PhotoImage(photoUrl = item?.urls?.regular.orEmpty())
+            PhotoImage(photo = item, onPhotoClick = onPhotoClick)
         }
     }
 }
