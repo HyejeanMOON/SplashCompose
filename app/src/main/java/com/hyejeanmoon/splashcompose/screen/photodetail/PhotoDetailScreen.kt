@@ -1,6 +1,7 @@
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -30,7 +31,8 @@ import java.util.logging.SimpleFormatter
 @Composable
 fun PhotoDetailScreen(
     modifier: Modifier = Modifier,
-    viewModel: PhotoDetailViewModel
+    viewModel: PhotoDetailViewModel,
+    onDownloadClick: (String) -> Unit
 ) {
 
     val photo by viewModel.photo.observeAsState()
@@ -40,7 +42,7 @@ fun PhotoDetailScreen(
         modifier = modifier.verticalScroll(state = scrollState)
     ) {
         PhotoDetailImg(photo = photo)
-        PhotoDetailUserInfo(photo = photo)
+        PhotoDetailUserInfo(photo = photo, onDownloadClick = onDownloadClick)
 //        PhotoDetailCreatedTimes(photo = photo)
 
         photo?.also {
@@ -83,7 +85,7 @@ fun PhotoDetailImg(
             .fillMaxWidth()
             .requiredHeight(500.dp),
         painter = rememberGlidePainter(
-            request = photo?.urls?.full.orEmpty(),
+            request = photo?.urls?.regular.orEmpty(),
             fadeIn = true,
             requestBuilder = {
                 diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -97,7 +99,8 @@ fun PhotoDetailImg(
 @Composable
 fun PhotoDetailUserInfo(
     modifier: Modifier = Modifier,
-    photo: Photo?
+    photo: Photo?,
+    onDownloadClick: (String) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -155,7 +158,8 @@ fun PhotoDetailUserInfo(
                     end.linkTo(favoriteIcon.start)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                },
+                }
+                .clickable { onDownloadClick(photo?.id.orEmpty()) },
             painter = painterResource(id = R.drawable.ic_download),
             contentDescription = "download icon"
         )

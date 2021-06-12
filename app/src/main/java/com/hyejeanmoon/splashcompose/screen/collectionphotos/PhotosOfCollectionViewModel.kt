@@ -32,7 +32,7 @@ class PhotosOfCollectionViewModel(
 
     var photosOfCollections = Pager(
         config = PagingConfig(
-            pageSize = 10,
+            pageSize = 15,
             enablePlaceholders = false,
             initialLoadSize = 30
         ),

@@ -39,4 +39,8 @@ class PhotoDetailViewModel(
             )
         }
     }
+
+    fun downloadPhotoById(id: String) {
+
+    }
 }

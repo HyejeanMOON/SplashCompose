@@ -1,5 +1,6 @@
 package com.hyejeanmoon.splashcompose.screen.photos
 
+import com.hyejeanmoon.splashcompose.entity.DownloadPhoto
 import com.hyejeanmoon.splashcompose.entity.Photo
 import retrofit2.Call
 import retrofit2.http.GET
@@ -49,4 +50,12 @@ interface PhotosApiService {
      */
     @GET("/photos/random")
     fun getRandomPhoto(): Call<Photo>
+
+    /**
+     * download a photo by id.
+     */
+    @GET("/photos/{id}/download")
+    fun downloadPhoto(
+        @Path("id") id: String
+    ):Call<DownloadPhoto>
 }

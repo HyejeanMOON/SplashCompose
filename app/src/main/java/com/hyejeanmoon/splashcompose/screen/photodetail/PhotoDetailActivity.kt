@@ -14,7 +14,7 @@ import com.hyejeanmoon.splashcompose.entity.Photo
 
 class PhotoDetailActivity : ComponentActivity() {
 
-    private val viewModel:PhotoDetailViewModel by viewModels()
+    private val viewModel: PhotoDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,12 @@ class PhotoDetailActivity : ComponentActivity() {
         viewModel.getPhotoById()
 
         setContent {
-            PhotoDetailScreen(viewModel = viewModel)
+            PhotoDetailScreen(
+                viewModel = viewModel,
+                onDownloadClick = {
+
+                }
+            )
         }
     }
 
