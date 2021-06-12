@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,25 +26,25 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.accompanist.glide.rememberGlidePainter
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
-import java.util.logging.SimpleFormatter
 
 
 @Composable
 fun PhotoDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: PhotoDetailViewModel,
-    onDownloadClick: (String) -> Unit
+    onDownloadClick: (String) -> Unit,
+    onBackIconClick: () -> Unit
 ) {
 
     val photo by viewModel.photo.observeAsState()
 
     val scrollState = rememberScrollState()
     Column(
-        modifier = modifier.verticalScroll(state = scrollState)
+        modifier = Modifier.verticalScroll(state = scrollState)
     ) {
-        PhotoDetailImg(photo = photo)
+        PhotoDetailImg(photo = photo, onBackIconClick = onBackIconClick)
         PhotoDetailUserInfo(photo = photo, onDownloadClick = onDownloadClick)
-//        PhotoDetailCreatedTimes(photo = photo)
+        PhotoDetailCreatedTimes(photo = photo)
 
         photo?.also {
             val country = it.location?.country.orEmpty()
@@ -78,22 +79,48 @@ fun PhotoDetailScreen(
 @Composable
 fun PhotoDetailImg(
     modifier: Modifier = Modifier,
-    photo: Photo?
+    photo: Photo?,
+    onBackIconClick: () -> Unit
 ) {
-    Image(
+    ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
-            .requiredHeight(500.dp),
-        painter = rememberGlidePainter(
-            request = photo?.urls?.regular.orEmpty(),
-            fadeIn = true,
-            requestBuilder = {
-                diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            }
-        ),
-        contentDescription = "photo detail",
-        contentScale = ContentScale.Crop
-    )
+            .requiredHeight(500.dp)
+    ) {
+        val (image, icon) = createRefs()
+
+        Image(
+            modifier = Modifier
+                .constrainAs(image) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            painter = rememberGlidePainter(
+                request = photo?.urls?.regular.orEmpty(),
+                fadeIn = true,
+                requestBuilder = {
+                    diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                }
+            ),
+            contentDescription = "photo detail",
+            contentScale = ContentScale.Crop
+        )
+
+        Icon(
+            modifier = Modifier
+                .constrainAs(icon) {
+                    top.linkTo(image.top)
+                    start.linkTo(image.start)
+                }
+                .padding(20.dp)
+                .clickable { onBackIconClick() },
+            painter = painterResource(id = R.drawable.ic_arrow_back),
+            contentDescription = "back icon",
+            tint = Color.White
+        )
+    }
 }
 
 @Composable
@@ -209,8 +236,7 @@ fun PhotoDetailLocation(
             modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp),
             text = location,
             fontSize = 14.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
+            color = Color.Black
         )
     }
 }

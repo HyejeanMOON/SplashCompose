@@ -7,10 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.content.ContextCompat
 import com.hyejeanmoon.splashcompose.R
-import com.hyejeanmoon.splashcompose.entity.Photo
 
 class PhotoDetailActivity : ComponentActivity() {
 
@@ -27,6 +25,9 @@ class PhotoDetailActivity : ComponentActivity() {
                 viewModel = viewModel,
                 onDownloadClick = {
 
+                },
+                onBackIconClick = {
+                    finish()
                 }
             )
         }
