@@ -1,6 +1,5 @@
 package com.hyejeanmoon.splashcompose
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -9,11 +8,9 @@ import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
@@ -31,6 +30,7 @@ import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
+import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,8 +48,8 @@ class MainActivity : ComponentActivity() {
             SplashComposeApp(
                 photosViewModel,
                 collectionsViewModel,
-                onCollectionsItemClick = {
-                    PhotosOfCollectionActivity.start(this, it)
+                onCollectionsItemClick = { collectionId, collectionTitle ->
+                    PhotosOfCollectionActivity.start(this, collectionId, collectionTitle)
                 },
                 onSettingsItemClick = { detail ->
 
@@ -90,13 +90,17 @@ class MainActivity : ComponentActivity() {
             window.decorView.systemUiVisibility = 0
         }
     }
+
+    override fun onBackPressed() {
+        finish()
+    }
 }
 
 @Composable
 fun SplashComposeApp(
     photoViewModel: PhotosViewModel,
     collectionsViewModel: CollectionsViewModel,
-    onCollectionsItemClick: (String) -> Unit,
+    onCollectionsItemClick: (String, String) -> Unit,
     onSettingsItemClick: (String) -> Unit,
     onPhotoClick: (Photo?) -> Unit,
     settingsItems: List<SettingsItem>

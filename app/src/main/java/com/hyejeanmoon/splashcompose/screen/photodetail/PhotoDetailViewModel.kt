@@ -9,7 +9,9 @@ import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class PhotoDetailViewModel(
     private val state: SavedStateHandle
 ) : ViewModel() {

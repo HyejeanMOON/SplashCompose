@@ -16,7 +16,7 @@ class PhotosOfCollectionViewModel(
     private var id = ""
 
     init {
-        id = state.get<String>(PhotosOfCollectionActivity.INTENT_ID).orEmpty()
+        id = state.get<String>(PhotosOfCollectionActivity.COLLECTION_ID).orEmpty()
     }
 
     private val collectionsApiService =

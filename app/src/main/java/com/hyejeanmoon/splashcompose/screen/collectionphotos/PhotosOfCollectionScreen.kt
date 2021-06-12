@@ -1,14 +1,22 @@
 package com.hyejeanmoon.splashcompose.screen.collectionphotos
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoImage
 
@@ -16,18 +24,43 @@ import com.hyejeanmoon.splashcompose.screen.photos.PhotoImage
 fun PhotosOfCollectionScreen(
     modifier: Modifier = Modifier,
     photosOfCollectionViewModel: PhotosOfCollectionViewModel,
-    onPhotoClick: (Photo?) -> Unit
+    onPhotoClick: (Photo?) -> Unit,
+    onBackIconClick: () -> Unit,
+    collectionTitle: String
 ) {
     val pagingItems = photosOfCollectionViewModel.photosOfCollections.collectAsLazyPagingItems()
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize()
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = collectionTitle,
+                        color = Color.Black
+                    )
+                },
+                navigationIcon = {
+                    Icon(
+                        modifier = Modifier.clickable { onBackIconClick() },
+                        painter = painterResource(id = R.drawable.ic_arrow_back),
+                        contentDescription = "back icon",
+                        tint = Color.Black
+                    )
+                }
+            )
+        }
     ) {
-        items(lazyPagingItems = pagingItems) { photoItem ->
-            val item by remember {
-                mutableStateOf(photoItem)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(lazyPagingItems = pagingItems) { photoItem ->
+                val item by remember {
+                    mutableStateOf(photoItem)
+                }
+                PhotoImage(photo = item, onPhotoClick = onPhotoClick)
             }
-            PhotoImage(photo = item, onPhotoClick = onPhotoClick)
         }
     }
+
 }

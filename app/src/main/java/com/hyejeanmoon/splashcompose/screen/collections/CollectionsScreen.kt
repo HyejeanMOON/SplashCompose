@@ -2,18 +2,24 @@ package com.hyejeanmoon.splashcompose.screen.collections
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -24,7 +30,7 @@ import com.hyejeanmoon.splashcompose.entity.Collections
 fun CollectionsScreen(
     modifier: Modifier = Modifier,
     collectionsViewModel: CollectionsViewModel,
-    onCollectionsItemClick: (String) -> Unit
+    onCollectionsItemClick: (String, String) -> Unit
 ) {
     val pagingItems = collectionsViewModel.collections.collectAsLazyPagingItems()
     LazyColumn(
@@ -35,9 +41,7 @@ fun CollectionsScreen(
                 val item by remember { mutableStateOf(collectionsItem) }
                 CollectionsItem(
                     collections = item,
-                    onClick = { id ->
-                        onCollectionsItemClick(id)
-                    }
+                    onCollectionsItemClick = onCollectionsItemClick
                 )
             }
         }
@@ -48,78 +52,67 @@ fun CollectionsScreen(
 fun CollectionsItem(
     modifier: Modifier = Modifier,
     collections: Collections,
-    onClick: (String) -> Unit
+    onCollectionsItemClick: (String, String) -> Unit
 ) {
-    Column(modifier = modifier
-        .clickable {
-        onClick(collections.id.orEmpty())
-    }) {
-        CollectionsImage(
-            coverUrl = collections.coverPhoto?.urls?.regular.orEmpty()
-        )
-//        CollectionsDetailText(collections = collections)
-    }
-}
-
-@Composable
-fun CollectionsImage(
-    modifier: Modifier = Modifier,
-    coverUrl: String
-) {
-    Image(
+    ConstraintLayout(
         modifier = modifier
+            .padding(0.dp, 1.dp)
             .fillMaxWidth()
-            .padding(0.dp, 1.dp),
-        painter = rememberGlidePainter(
-            coverUrl,
-            fadeIn = true,
-            requestBuilder = {
-                diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .requiredHeight(300.dp)
+            .clickable {
+                onCollectionsItemClick(collections.id.orEmpty(), collections.title.orEmpty())
             }
-        ),
-        contentDescription = "collections cover image",
-        contentScale = ContentScale.FillWidth
-    )
-}
-
-@Composable
-fun CollectionsDetailText(
-    modifier: Modifier = Modifier,
-    collections: Collections
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .size(50.dp)
     ) {
+
+        val (image, title, photoNumber) = createRefs()
+
         Image(
             modifier = Modifier
-                .padding(40.dp, 0.dp)
-                .clip(CircleShape),
+                .fillMaxWidth()
+                .requiredHeight(300.dp)
+                .constrainAs(image) {
+                    start.linkTo(image.start)
+                    end.linkTo(image.end)
+                    top.linkTo(image.top)
+                    bottom.linkTo(image.bottom)
+                },
             painter = rememberGlidePainter(
-                request = collections.user?.profileImage?.large,
+                collections.coverPhoto?.urls?.regular.orEmpty(),
                 fadeIn = true,
                 requestBuilder = {
                     diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 }
             ),
-            contentDescription = "author image"
+            contentDescription = "collections cover image",
+            contentScale = ContentScale.Crop
         )
 
         Text(
-            modifier = Modifier.padding(40.dp, 0.dp),
+            modifier = Modifier
+                .constrainAs(title) {
+                    start.linkTo(image.start)
+                    end.linkTo(image.end)
+                    top.linkTo(image.top)
+                    bottom.linkTo(image.bottom)
+                },
             text = collections.title.orEmpty(),
-            color = Color.Black,
-            fontSize = 16.sp,
-            textAlign = TextAlign.End
+            fontSize = 24.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
         )
 
         Text(
-            modifier = Modifier.padding(40.dp, 0.dp),
-            text = "${collections.totalPhotos} photos",
-            color = Color.Black,
-            fontSize = 12.sp,
-            textAlign = TextAlign.End
+            modifier = Modifier
+                .constrainAs(photoNumber) {
+                    end.linkTo(image.end)
+                    bottom.linkTo(image.bottom)
+                }
+                .padding(20.dp),
+            text = "${collections.totalPhotos.orEmpty()} photos",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            color = Color.White
         )
     }
 }

@@ -23,6 +23,8 @@ class PhotosOfCollectionActivity : ComponentActivity() {
 
         setStatusBarColor(R.color.gray, true)
 
+        val collectionTitle = intent.getStringExtra(COLLECTION_TITLE).orEmpty()
+
         val viewModel: PhotosOfCollectionViewModel by viewModels()
 
         setContent {
@@ -30,7 +32,9 @@ class PhotosOfCollectionActivity : ComponentActivity() {
                 viewModel = viewModel,
                 onPhotoClick = {
                     PhotoDetailActivity.start(it?.id.orEmpty(), this)
-                }
+                },
+                onBackIconClick = { finish() },
+                collectionTitle = collectionTitle
             )
         }
     }
@@ -48,12 +52,14 @@ class PhotosOfCollectionActivity : ComponentActivity() {
     }
 
     companion object {
-        const val INTENT_ID = "INTENT_ID"
+        const val COLLECTION_ID = "COLLECTION_ID"
+        private const val COLLECTION_TITLE = "COLLECTION_TITLE"
 
-        fun start(activity: ComponentActivity, photoId: String) {
+        fun start(activity: ComponentActivity, collectionId: String, collectionTitle: String) {
             val intent = Intent()
             intent.setClass(activity, PhotosOfCollectionActivity::class.java)
-            intent.putExtra(INTENT_ID, photoId)
+            intent.putExtra(COLLECTION_ID, collectionId)
+            intent.putExtra(COLLECTION_TITLE, collectionTitle)
             activity.startActivity(intent)
         }
     }
@@ -62,13 +68,17 @@ class PhotosOfCollectionActivity : ComponentActivity() {
 @Composable
 fun PhotosOfCollectionsApp(
     viewModel: PhotosOfCollectionViewModel,
-    onPhotoClick: (Photo?) -> Unit
+    onPhotoClick: (Photo?) -> Unit,
+    onBackIconClick: () -> Unit,
+    collectionTitle: String
 ) {
     SplashComposeTheme {
         Surface(color = MaterialTheme.colors.background) {
             PhotosOfCollectionScreen(
                 photosOfCollectionViewModel = viewModel,
-                onPhotoClick = onPhotoClick
+                onPhotoClick = onPhotoClick,
+                onBackIconClick = onBackIconClick,
+                collectionTitle = collectionTitle
             )
         }
     }
