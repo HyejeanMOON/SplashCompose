@@ -2,6 +2,7 @@ package com.hyejeanmoon.splashcompose.api
 
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsApiService
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosApiService
+import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,4 +44,18 @@ object ApiServiceHelper {
         return retrofit.create(CollectionsApiService::class.java)
     }
 
+    @Provides
+    fun createUserDetailApiService(
+        baseUrl: String,
+        okHttpClient: OkHttpClient
+    ): UserDetailApiService {
+        val retrofit = Retrofit
+            .Builder()
+            .baseUrl(baseUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(UserDetailApiService::class.java)
+    }
 }
