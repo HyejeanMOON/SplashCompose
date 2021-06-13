@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -33,18 +32,22 @@ fun PhotoDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: PhotoDetailViewModel,
     onDownloadClick: (String) -> Unit,
-    onBackIconClick: () -> Unit
+    onBackIconClick: () -> Unit,
+    onUserInfoClick: (String) -> Unit
 ) {
 
     val photo by viewModel.photo.observeAsState()
 
     val scrollState = rememberScrollState()
     Column(
-        modifier = Modifier.verticalScroll(state = scrollState)
+        modifier = modifier.verticalScroll(state = scrollState)
     ) {
         PhotoDetailImg(photo = photo, onBackIconClick = onBackIconClick)
-        PhotoDetailUserInfo(photo = photo, onDownloadClick = onDownloadClick)
-        PhotoDetailCreatedTimes(photo = photo)
+        PhotoDetailUserInfo(
+            photo = photo,
+            onDownloadClick = onDownloadClick,
+            onUserInfoClick = onUserInfoClick
+        )
 
         photo?.also {
             val country = it.location?.country.orEmpty()
@@ -57,6 +60,8 @@ fun PhotoDetailScreen(
                 PhotoDetailLocation(location = country)
             }
         }
+
+        PhotoDetailCreatedTimes(photo = photo)
 
         Divider(
             modifier = Modifier.padding(20.dp, 10.dp)
@@ -127,7 +132,8 @@ fun PhotoDetailImg(
 fun PhotoDetailUserInfo(
     modifier: Modifier = Modifier,
     photo: Photo?,
-    onDownloadClick: (String) -> Unit
+    onDownloadClick: (String) -> Unit,
+    onUserInfoClick: (String) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -145,7 +151,8 @@ fun PhotoDetailUserInfo(
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                },
+                }
+                .clickable { onUserInfoClick(photo?.user?.userName.orEmpty()) },
             painter = rememberGlidePainter(
                 request = photo?.user?.profileImage?.large.orEmpty(),
                 fadeIn = true,
@@ -161,7 +168,8 @@ fun PhotoDetailUserInfo(
                     start.linkTo(userPhoto.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                },
+                }
+                .clickable { onUserInfoClick(photo?.user?.userName.orEmpty()) },
             text = photo?.user?.name.orEmpty(),
             color = Color.Black,
             fontSize = 16.sp

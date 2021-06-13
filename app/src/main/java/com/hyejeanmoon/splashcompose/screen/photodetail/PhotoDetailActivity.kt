@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.hyejeanmoon.splashcompose.R
+import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 
 class PhotoDetailActivity : ComponentActivity() {
 
@@ -28,6 +29,9 @@ class PhotoDetailActivity : ComponentActivity() {
                 },
                 onBackIconClick = {
                     finish()
+                },
+                onUserInfoClick = { userName ->
+                    UserDetailActivity.startUserDetailActivity(this, userName = userName)
                 }
             )
         }

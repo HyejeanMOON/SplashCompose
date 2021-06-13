@@ -152,7 +152,7 @@ fun SplashComposeApp(
                 },
                 topBar = {
                     TopAppBar(
-                        title = { Text(text = "SplashCompose", color = Color.Black) }
+                        title = { Text(text = "Splash Compose", color = Color.Black) }
                     )
                 }
             ) {
