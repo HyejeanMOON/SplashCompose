@@ -22,8 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.accompanist.glide.rememberGlidePainter
+import com.google.accompanist.coil.rememberCoilPainter
 import com.hyejeanmoon.splashcompose.entity.Collections
 
 @Composable
@@ -76,12 +75,9 @@ fun CollectionsItem(
                     top.linkTo(image.top)
                     bottom.linkTo(image.bottom)
                 },
-            painter = rememberGlidePainter(
+            painter = rememberCoilPainter(
                 collections.coverPhoto?.urls?.regular.orEmpty(),
-                fadeIn = true,
-                requestBuilder = {
-                    diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                }
+                fadeIn = true
             ),
             contentDescription = "collections cover image",
             contentScale = ContentScale.Crop

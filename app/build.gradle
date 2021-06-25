@@ -89,6 +89,9 @@ dependencies {
     // glide
     implementation "com.google.accompanist:accompanist-glide:0.12.0"
 
+    // coil
+    implementation "com.google.accompanist:accompanist-coil:0.12.0"
+
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:2.6.2"
     implementation "com.squareup.retrofit2:converter-gson:2.6.2"

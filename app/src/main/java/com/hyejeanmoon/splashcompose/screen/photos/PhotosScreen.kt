@@ -15,8 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.accompanist.glide.rememberGlidePainter
+import com.google.accompanist.coil.rememberCoilPainter
 import com.hyejeanmoon.splashcompose.entity.Photo
 
 @Composable
@@ -52,12 +51,9 @@ fun PhotoImage(
             .fillMaxWidth()
             .padding(0.dp, 1.dp)
             .clickable { onPhotoClick(photo) },
-        painter = rememberGlidePainter(
+        painter = rememberCoilPainter(
             photo?.urls?.regular.orEmpty(),
-            fadeIn = true,
-            requestBuilder = {
-                diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            }
+            fadeIn = true
         ),
         contentDescription = "photo image",
         contentScale = ContentScale.FillWidth
