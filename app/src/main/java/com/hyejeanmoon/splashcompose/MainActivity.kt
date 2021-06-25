@@ -1,25 +1,25 @@
 package com.hyejeanmoon.splashcompose
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
+import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
@@ -42,9 +42,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setStatusBarColor(R.color.gray, true)
-
         setContent {
+
+            SetUpStatusBar()
+
             SplashComposeApp(
                 photosViewModel,
                 collectionsViewModel,
@@ -76,18 +77,6 @@ class MainActivity : ComponentActivity() {
                     PhotoDetailActivity.start(it?.id.orEmpty(), this)
                 }
             )
-        }
-    }
-
-    /**
-     * Set color of statusBar
-     */
-    private fun setStatusBarColor(@ColorRes color: Int, isLightStatusBar: Boolean) {
-        window.statusBarColor = ContextCompat.getColor(this, color)
-        if (isLightStatusBar) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        } else {
-            window.decorView.systemUiVisibility = 0
         }
     }
 

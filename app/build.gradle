@@ -53,32 +53,32 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.0-beta01'
+    implementation 'androidx.activity:activity-compose:1.3.0-beta02'
     testImplementation 'junit:junit:4.13.2'
 
-    implementation 'androidx.compose.ui:ui:1.0.0-beta08'
+    implementation 'androidx.compose.ui:ui:1.0.0-beta09'
     // Tooling support (Previews, etc.)
-    implementation 'androidx.compose.ui:ui-tooling:1.0.0-beta08'
+    implementation 'androidx.compose.ui:ui-tooling:1.0.0-beta09'
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation 'androidx.compose.foundation:foundation:1.0.0-beta08'
+    implementation 'androidx.compose.foundation:foundation:1.0.0-beta09'
     // Material Design
-    implementation 'androidx.compose.material:material:1.0.0-beta08'
+    implementation 'androidx.compose.material:material:1.0.0-beta09'
     // Material design icons
-    implementation 'androidx.compose.material:material-icons-core:1.0.0-beta08'
-    implementation 'androidx.compose.material:material-icons-extended:1.0.0-beta08'
+    implementation 'androidx.compose.material:material-icons-core:1.0.0-beta09'
+    implementation 'androidx.compose.material:material-icons-extended:1.0.0-beta09'
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.3.0-beta01'
+    implementation 'androidx.activity:activity-compose:1.3.0-beta02'
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha06'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07'
     // Integration with observables
-    implementation 'androidx.compose.runtime:runtime-livedata:1.0.0-beta08'
-    implementation 'androidx.compose.runtime:runtime-rxjava2:1.0.0-beta08'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.0.0-beta09'
+    implementation 'androidx.compose.runtime:runtime-rxjava2:1.0.0-beta09'
 
     // constraintLayout
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha07"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha08"
 
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.0-beta08'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.0-beta09'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -87,7 +87,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // glide
-    implementation "com.google.accompanist:accompanist-glide:0.10.0"
+    implementation "com.google.accompanist:accompanist-glide:0.12.0"
 
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:2.6.2"
@@ -97,7 +97,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Jetpack Navigation
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha02"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha03"
 
     // Jetpack Paging3
     implementation "androidx.paging:paging-compose:1.0.0-alpha10"
@@ -108,7 +108,7 @@ dependencies {
     kapt 'androidx.hilt:hilt-compiler:1.0.0'
     // When using Java.
     annotationProcessor 'androidx.hilt:hilt-compiler:1.0.0'
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha02'
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
 
     // ROOM
     implementation "androidx.room:room-runtime:2.3.0"
@@ -120,8 +120,10 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:2.6.0-beta01"
 
     // Pager
-    implementation "com.google.accompanist:accompanist-pager:0.10.0"
+    implementation "com.google.accompanist:accompanist-pager:0.12.0"
     // If using indicators, also depend on
-    implementation "com.google.accompanist:accompanist-pager-indicators:0.10.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.12.0"
 
+    // System ui controller
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.12.0"
 }

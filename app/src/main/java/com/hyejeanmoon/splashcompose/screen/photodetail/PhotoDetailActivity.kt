@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.hyejeanmoon.splashcompose.R
+import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 
 class PhotoDetailActivity : ComponentActivity() {
@@ -18,10 +19,11 @@ class PhotoDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setStatusBarColor(R.color.gray, true)
         viewModel.getPhotoById()
 
         setContent {
+            SetUpStatusBar()
+
             PhotoDetailScreen(
                 viewModel = viewModel,
                 onDownloadClick = {
@@ -34,19 +36,6 @@ class PhotoDetailActivity : ComponentActivity() {
                     UserDetailActivity.startUserDetailActivity(this, userName = userName)
                 }
             )
-        }
-    }
-
-
-    /**
-     * Set color of statusBar
-     */
-    private fun setStatusBarColor(@ColorRes color: Int, isLightStatusBar: Boolean) {
-        window.statusBarColor = ContextCompat.getColor(this, color)
-        if (isLightStatusBar) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        } else {
-            window.decorView.systemUiVisibility = 0
         }
     }
 

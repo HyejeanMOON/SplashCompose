@@ -12,6 +12,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import com.hyejeanmoon.splashcompose.R
+import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
@@ -21,13 +22,13 @@ class PhotosOfCollectionActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setStatusBarColor(R.color.gray, true)
-
         val collectionTitle = intent.getStringExtra(COLLECTION_TITLE).orEmpty()
 
         val viewModel: PhotosOfCollectionViewModel by viewModels()
 
         setContent {
+            SetUpStatusBar()
+
             PhotosOfCollectionsApp(
                 viewModel = viewModel,
                 onPhotoClick = {
@@ -36,18 +37,6 @@ class PhotosOfCollectionActivity : ComponentActivity() {
                 onBackIconClick = { finish() },
                 collectionTitle = collectionTitle
             )
-        }
-    }
-
-    /**
-     * Set color of statusBar
-     */
-    private fun setStatusBarColor(@ColorRes color: Int, isLightStatusBar: Boolean) {
-        window.statusBarColor = ContextCompat.getColor(this, color)
-        if (isLightStatusBar) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        } else {
-            window.decorView.systemUiVisibility = 0
         }
     }
 
