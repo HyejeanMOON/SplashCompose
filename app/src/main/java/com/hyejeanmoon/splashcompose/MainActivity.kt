@@ -27,6 +27,7 @@ import com.hyejeanmoon.splashcompose.screen.favorite.LoveScreen
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
+import com.hyejeanmoon.splashcompose.screen.settings.SettingItemDetail
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
@@ -76,17 +77,19 @@ class MainActivity : ComponentActivity() {
                     SettingsItem(
                         SETTINGS_TITLE_APPLICATION_SETTINGS,
                         listOf(
-                            SETTINGS_ITEM_DISPLAY_RESOLUTION,
-                            SETTINGS_ITEM_DOWNLOAD_RESOLUTION,
-                            SETTINGS_ITEM_PHOTO_DISPLAY_ORDER,
-                            SETTINGS_ITEM_CLEAR_CACHE
+                            SettingItemDetail(
+                               title = SETTINGS_ITEM_DISPLAY_RESOLUTION
+                            ),
+                            SettingItemDetail(title= SETTINGS_ITEM_DOWNLOAD_RESOLUTION),
+                            SettingItemDetail(title = SETTINGS_ITEM_PHOTO_DISPLAY_ORDER),
+                            SettingItemDetail(title = SETTINGS_ITEM_CLEAR_CACHE)
                         )
                     ),
                     SettingsItem(
                         SETTINGS_TITLE_OTHERS,
                         listOf(
-                            SETTINGS_ITEM_VERSION,
-                            SETTINGS_ITEM_ABOUT_DEVELOPER
+                            SettingItemDetail(title = SETTINGS_ITEM_VERSION, content = BuildConfig.VERSION_NAME),
+                            SettingItemDetail(title = SETTINGS_ITEM_ABOUT_DEVELOPER)
                         )
                     )
                 ),
