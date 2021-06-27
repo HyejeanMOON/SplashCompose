@@ -1,17 +1,19 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
-import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.entity.UserDetail
+import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @HiltViewModel
 class UserDetailViewModel(
@@ -27,9 +29,6 @@ class UserDetailViewModel(
     private val _userDetail: MutableLiveData<UserDetail> = MutableLiveData()
     val userDetail: LiveData<UserDetail> get() = _userDetail
 
-    private val _userPhotos: MutableLiveData<List<Photo>> = MutableLiveData()
-    val userPhotos: LiveData<List<Photo>> get() = _userPhotos
-
     private val userDetailApiService = ApiServiceHelper.createUserDetailApiService(
         EnvParameters.BASE_URL,
         OkHttpClient().splashOkHttpClient
@@ -37,6 +36,20 @@ class UserDetailViewModel(
 
     private val _exception: MutableLiveData<Exception> = MutableLiveData()
     val exception: LiveData<Exception> get() = _exception
+
+    private val userDetailRepository = UserDetailRepository(userDetailApiService)
+    private val userDetailPhotosDataSource = UserDetailPhotosDataSource(
+        userDetailRepository,
+        userName
+    )
+    private val userDetailLikedPhotosDataSource = UserDetailLikedPhotosDataSource(
+        userDetailRepository,
+        userName
+    )
+    private val userDetailCollectionsDataSource = UserDetailCollectionsDataSource(
+        userDetailRepository,
+        userName
+    )
 
     fun getUserDetailInfo() {
         userDetailApiService.getUserDetails(
@@ -50,15 +63,30 @@ class UserDetailViewModel(
         )
     }
 
-    fun getUsersPhotos(){
-        userDetailApiService.getPhotosByUserName(userName).enqueue(
-            ApiEnqueueCallback({
-                Log.d("MOON", "getUsersPhotos ${it.size}")
-                 _userPhotos.value = it
-            },{
-                _exception.value = it
-            })
-        )
+    val userDetailPhotosFlow = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = false,
+            initialLoadSize = 30
+        ),
+        pagingSourceFactory = { userDetailPhotosDataSource }
+    ).flow
 
-    }
+    val userDetailCollectionsFlow = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = false,
+            initialLoadSize = 30
+        ),
+        pagingSourceFactory = { userDetailCollectionsDataSource }
+    ).flow
+
+    val userDetailLikedPhotosDataSourceFlow = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = false,
+            initialLoadSize = 30
+        ),
+        pagingSourceFactory = { userDetailLikedPhotosDataSource }
+    ).flow
 }

@@ -3,27 +3,27 @@ package com.hyejeanmoon.splashcompose.screen.userdetail
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.ColorRes
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.core.content.ContextCompat
-import com.hyejeanmoon.splashcompose.R
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
+import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 
 class UserDetailActivity : ComponentActivity() {
 
     private val viewModel: UserDetailViewModel by viewModels()
 
+    @ExperimentalAnimationApi
+    @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel.getUserDetailInfo()
-        viewModel.getUsersPhotos()
 
         setContent {
             SetUpStatusBar()
@@ -32,7 +32,10 @@ class UserDetailActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     UserDetailScreen(
                         viewModel = viewModel,
-                        onBackIconClick = { finish() }
+                        onBackIconClick = { finish() },
+                        onCollectionItemsClick = { collectionId, collectionTitle ->
+                            PhotosOfCollectionActivity.start(this, collectionId, collectionTitle)
+                        }
                     )
                 }
             }

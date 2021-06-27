@@ -1,23 +1,20 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,19 +22,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.accompanist.glide.rememberGlidePainter
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
+import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.VerticalPager
+import com.google.accompanist.pager.pagerTabIndicatorOffset
+import com.google.accompanist.pager.rememberPagerState
 import com.hyejeanmoon.splashcompose.R
+import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.UserDetail
+import com.hyejeanmoon.splashcompose.entity.UsersPhotos
+import com.hyejeanmoon.splashcompose.screen.collections.CollectionsItem
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailLocation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
+@ExperimentalPagerApi
 @Composable
 fun UserDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: UserDetailViewModel,
-    onBackIconClick: () -> Unit
+    onBackIconClick: () -> Unit,
+    onCollectionItemsClick: (String, String) -> Unit
 ) {
     val userDetail by viewModel.userDetail.observeAsState()
+    val userDetailPhotos = viewModel.userDetailPhotosFlow.collectAsLazyPagingItems()
+    val userDetailCollections = viewModel.userDetailCollectionsFlow.collectAsLazyPagingItems()
+    val userDetailLikedPhotos =
+        viewModel.userDetailLikedPhotosDataSourceFlow.collectAsLazyPagingItems()
+    val coroutines = rememberCoroutineScope()
 
     Scaffold(
         modifier = modifier,
@@ -62,11 +78,8 @@ fun UserDetailScreen(
             )
         }
     ) {
-        val verticalScrollState = rememberScrollState()
-        ConstraintLayout(
-            modifier = modifier.verticalScroll(verticalScrollState)
-        ) {
-            val (coverPhoto, userName, statics, location, bio, pager) = createRefs()
+        ConstraintLayout {
+            val (coverPhoto, userName, statics, location, bio, tabrow, pager) = createRefs()
 
             Image(
                 modifier = Modifier
@@ -77,12 +90,9 @@ fun UserDetailScreen(
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
                     },
-                painter = rememberGlidePainter(
+                painter = rememberCoilPainter(
                     request = userDetail?.profileImage?.large.orEmpty(),
-                    fadeIn = true,
-                    requestBuilder = {
-                        diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    }
+                    fadeIn = true
                 ),
                 contentDescription = "user cover photo"
             )
@@ -113,7 +123,6 @@ fun UserDetailScreen(
                 userDetail = userDetail
             )
 
-
             // Location
             if (userDetail?.location != null) {
                 PhotoDetailLocation(
@@ -143,7 +152,100 @@ fun UserDetailScreen(
                     fontSize = 14.sp
                 )
             }
+
+
+            // TabRow
+            val pages = listOf(
+                "Photos",
+                "Collections",
+                "LinkedPhotos"
+            )
+
+            val pagerState = rememberPagerState(
+                pageCount = pages.size
+            )
+            TabRow(
+                modifier = Modifier
+                    .constrainAs(tabrow) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        when {
+                            userDetail?.bio != null -> {
+                                top.linkTo(bio.bottom)
+                            }
+                            userDetail?.location != null -> {
+                                top.linkTo(location.bottom)
+                            }
+                            else -> {
+                                top.linkTo(coverPhoto.bottom)
+                            }
+                        }
+                    }
+                    .padding(0.dp, 10.dp, 0.dp, 0.dp),
+                // Our selected tab is our current page
+                selectedTabIndex = pagerState.currentPage,
+                // Override the indicator, using the provided pagerTabIndicatorOffset modifier
+                indicator = { tabPositions ->
+                    TabRowDefaults.Indicator(
+                        modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+                        color = Color.Red
+                    )
+                }
+            ) {
+                // Add tabs for all of our pages
+                pages.forEachIndexed { index, title ->
+                    Tab(
+                        text = {
+                            Text(
+                                text = title,
+                                fontSize = 12.sp,
+                                color = Color.Black,
+                                textAlign = TextAlign.Center
+                            )
+                        },
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            coroutines.launch(Dispatchers.IO) {
+                                pagerState.scrollToPage(
+                                    page = index
+                                )
+                            }
+                        },
+                    )
+                }
+            }
+
+            // Pagers
+            VerticalPager(
+                modifier = Modifier
+                    .constrainAs(pager) {
+                        top.linkTo(tabrow.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
+                state = pagerState
+            ) {
+                when (pagerState.currentPage) {
+                    0 -> {
+                        UserDetailPhotos(
+                            photos = userDetailPhotos
+                        )
+                    }
+                    1 -> {
+                        UserDetailCollections(
+                            collections = userDetailCollections,
+                            onCollectionItemsClick = onCollectionItemsClick
+                        )
+                    }
+                    2 -> {
+                        UserDetailPhotos(
+                            photos = userDetailLikedPhotos
+                        )
+                    }
+                }
+            }
         }
+
     }
 }
 
@@ -228,29 +330,71 @@ fun UserDetailStaticsItem(
     }
 }
 
-//@Composable
-//fun UserDetailPhotos(
-//    modifier: Modifier = Modifier,
-//    photos: List<Photo>
-//) {
-//    LazyColumn(
-//        modifier = modifier.fillMaxSize()
-//    ) {
-//        items(items = photos) { photo ->
-//            Image(
-//                modifier = Modifier.fillMaxWidth(),
-//                painter = rememberGlidePainter(
-//                    request = photo.urls?.regular.orEmpty(),
-//                    fadeIn = true,
-//                    requestBuilder = {
-//                        diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-//                    }
-//                ),
-//                contentDescription = "user's photos"
-//            )
-//        }
-//    }
-//}
+@Composable
+fun UserDetailPhotos(
+    modifier: Modifier = Modifier,
+    photos: LazyPagingItems<UsersPhotos>
+) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        items(lazyPagingItems = photos) { photoItem ->
+            val item by remember {
+                mutableStateOf(photoItem)
+            }
+
+            PhotoDetailImage(
+                modifier = Modifier.fillMaxWidth(),
+                photo = item,
+                onPhotoClick = {}
+            )
+        }
+    }
+}
+
+@Composable
+fun UserDetailCollections(
+    modifier: Modifier = Modifier,
+    collections: LazyPagingItems<Collections>,
+    onCollectionItemsClick: (String, String) -> Unit
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        items(lazyPagingItems = collections) { collectionsItem ->
+            val item by remember {
+                mutableStateOf(collectionsItem)
+            }
+
+            item?.also {
+                CollectionsItem(collections = it) { id, title ->
+                    onCollectionItemsClick(id, title)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PhotoDetailImage(
+    modifier: Modifier = Modifier,
+    photo: UsersPhotos?,
+    onPhotoClick: (UsersPhotos?) -> Unit
+) {
+    Image(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(0.dp, 1.dp)
+            .clickable { onPhotoClick(photo) },
+        painter = rememberCoilPainter(
+            photo?.urls?.regular.orEmpty(),
+            fadeIn = true
+        ),
+        contentDescription = "photo image",
+        contentScale = ContentScale.FillWidth
+    )
+}
 
 @Preview
 @Composable
