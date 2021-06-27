@@ -9,7 +9,7 @@ import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel
-class PhotosViewModel: ViewModel() {
+class PhotosViewModel : ViewModel() {
 
     private val photosApiService =
         ApiServiceHelper.createPhotosApiService(
@@ -25,6 +25,6 @@ class PhotosViewModel: ViewModel() {
             enablePlaceholders = false,
             initialLoadSize = 30
         ),
-        pagingSourceFactory = {photosDataSource}
+        pagingSourceFactory = { photosDataSource }
     ).flow
 }

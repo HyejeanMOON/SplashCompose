@@ -10,6 +10,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -23,6 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.accompanist.glide.rememberGlidePainter
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
 
@@ -39,46 +42,55 @@ fun PhotoDetailScreen(
     val photo by viewModel.photo.observeAsState()
 
     val scrollState = rememberScrollState()
-    Column(
-        modifier = modifier.verticalScroll(state = scrollState)
+
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing),
+        onRefresh = { viewModel.getPhotoById() }
     ) {
-        PhotoDetailImg(photo = photo, onBackIconClick = onBackIconClick)
-        PhotoDetailUserInfo(
-            photo = photo,
-            onDownloadClick = onDownloadClick,
-            onUserInfoClick = onUserInfoClick
-        )
+        Column(
+            modifier = modifier.verticalScroll(state = scrollState)
+        ) {
+            PhotoDetailImg(photo = photo, onBackIconClick = onBackIconClick)
+            PhotoDetailUserInfo(
+                photo = photo,
+                onDownloadClick = onDownloadClick,
+                onUserInfoClick = onUserInfoClick
+            )
 
-        photo?.also {
-            val country = it.location?.country.orEmpty()
-            val city = it.location?.city.orEmpty()
-            if (country.isNotBlank() && city.isNotBlank()) {
-                PhotoDetailLocation(location = "$city, $country")
-            } else if (city.isNotBlank()) {
-                PhotoDetailLocation(location = city)
-            } else if (country.isNotBlank()) {
-                PhotoDetailLocation(location = country)
+            photo?.also {
+                val country = it.location?.country.orEmpty()
+                val city = it.location?.city.orEmpty()
+                if (country.isNotBlank() && city.isNotBlank()) {
+                    PhotoDetailLocation(location = "$city, $country")
+                } else if (city.isNotBlank()) {
+                    PhotoDetailLocation(location = city)
+                } else if (country.isNotBlank()) {
+                    PhotoDetailLocation(location = country)
+                }
             }
+
+            PhotoDetailCreatedTimes(photo = photo)
+
+            Divider(
+                modifier = Modifier.padding(20.dp, 10.dp)
+            )
+
+            PhotoDetailExifInfo(photo = photo)
+
+            Divider(
+                modifier = Modifier.padding(20.dp, 10.dp)
+            )
+
+            PhotoDetailStaticsInfo(photo = photo)
+
+            Divider(
+                modifier = Modifier.padding(20.dp, 10.dp)
+            )
         }
-
-        PhotoDetailCreatedTimes(photo = photo)
-
-        Divider(
-            modifier = Modifier.padding(20.dp, 10.dp)
-        )
-
-        PhotoDetailExifInfo(photo = photo)
-
-        Divider(
-            modifier = Modifier.padding(20.dp, 10.dp)
-        )
-
-        PhotoDetailStaticsInfo(photo = photo)
-
-        Divider(
-            modifier = Modifier.padding(20.dp, 10.dp)
-        )
     }
+
 }
 
 @Composable

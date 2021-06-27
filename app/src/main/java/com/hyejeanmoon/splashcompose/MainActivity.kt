@@ -1,5 +1,7 @@
 package com.hyejeanmoon.splashcompose
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,19 +9,16 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
@@ -31,6 +30,7 @@ import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
+import com.hyejeanmoon.splashcompose.utils.DataManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,24 +53,42 @@ class MainActivity : ComponentActivity() {
                     PhotosOfCollectionActivity.start(this, collectionId, collectionTitle)
                 },
                 onSettingsItemClick = { detail ->
+                    when (detail) {
+                        SETTINGS_ITEM_ABOUT_DEVELOPER -> {
+                            val uri = Uri.parse("https://github.com/HyejeanMOON")
+                            val intent = Intent(Intent.ACTION_VIEW, uri)
+                            startActivity(intent)
+                        }
 
+                        SETTINGS_ITEM_VERSION -> {
+
+                        }
+
+                        SETTINGS_ITEM_CLEAR_CACHE -> {
+//                            DataManager.cleanInternalCache(this)
+                        }
+                    }
                 },
                 settingsItems = listOf(
-                    SettingsItem(
-                        "Account",
-                        listOf("User Account", "Log Out")
-                    ),
+//                    SettingsItem(
+//                        "Account",
+//                        listOf("User Account", "Log Out")
+//                    ),
                     SettingsItem(
                         "Application Settings",
                         listOf(
                             "Change Display Resolution",
                             "Change Download Resolution",
-                            "Change Photo Display Order"
+                            "Change Photo Display Order",
+                            SETTINGS_ITEM_CLEAR_CACHE
                         )
                     ),
                     SettingsItem(
                         "Others",
-                        listOf("Version", "About Me")
+                        listOf(
+                            SETTINGS_ITEM_VERSION,
+                            SETTINGS_ITEM_ABOUT_DEVELOPER
+                        )
                     )
                 ),
                 onPhotoClick = {
@@ -82,6 +100,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onBackPressed() {
         finish()
+    }
+
+    companion object {
+        private const val SETTINGS_ITEM_ABOUT_DEVELOPER = "About Developer"
+        private const val SETTINGS_ITEM_VERSION = "Version"
+        private const val SETTINGS_ITEM_CLEAR_CACHE = "Clear Cache"
     }
 }
 
