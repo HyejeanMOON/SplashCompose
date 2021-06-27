@@ -1,5 +1,6 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -54,6 +55,8 @@ fun UserDetailScreen(
     val userDetailLikedPhotos =
         viewModel.userDetailLikedPhotosDataSourceFlow.collectAsLazyPagingItems()
     val coroutines = rememberCoroutineScope()
+    var visible by remember { mutableStateOf(true) }
+    var clickCount by remember { mutableStateOf(0) }
 
     Scaffold(
         modifier = modifier,
@@ -79,80 +82,93 @@ fun UserDetailScreen(
         }
     ) {
         ConstraintLayout {
-            val (coverPhoto, userName, statics, location, bio, tabrow, pager) = createRefs()
+            val (visibleLayout, tabrow, pager) = createRefs()
 
-            Image(
-                modifier = Modifier
-                    .padding(30.dp, 20.dp, 30.dp, 10.dp)
-                    .size(80.dp)
-                    .clip(CircleShape)
-                    .constrainAs(coverPhoto) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                    },
-                painter = rememberCoilPainter(
-                    request = userDetail?.profileImage?.large.orEmpty(),
-                    fadeIn = true
-                ),
-                contentDescription = "user cover photo"
-            )
+            AnimatedVisibility(
+                modifier = Modifier.constrainAs(visibleLayout) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(tabrow.top)
+                },
+                visible = visible
+            ) {
+                ConstraintLayout {
+                    val (coverPhoto, userName, statics, location, bio) = createRefs()
 
-            Text(
-                modifier = Modifier
-                    .padding(0.dp, 30.dp, 40.dp, 0.dp)
-                    .constrainAs(userName) {
-                        start.linkTo(coverPhoto.end)
-                        top.linkTo(coverPhoto.top)
-                        bottom.linkTo(statics.top)
-                    }
-                    .fillMaxWidth(),
-                text = userDetail?.name.orEmpty(),
-                color = Color.Black,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
+                    Image(
+                        modifier = Modifier
+                            .padding(30.dp, 20.dp, 30.dp, 10.dp)
+                            .size(80.dp)
+                            .clip(CircleShape)
+                            .constrainAs(coverPhoto) {
+                                start.linkTo(parent.start)
+                                top.linkTo(parent.top)
+                            },
+                        painter = rememberCoilPainter(
+                            request = userDetail?.profileImage?.large.orEmpty(),
+                            fadeIn = true
+                        ),
+                        contentDescription = "user cover photo"
+                    )
 
-            UserDetailStatics(
-                modifier = Modifier
-                    .padding(0.dp, 10.dp, 40.dp, 20.dp)
-                    .constrainAs(statics) {
-                        bottom.linkTo(coverPhoto.bottom)
-                        start.linkTo(coverPhoto.end)
-                        top.linkTo(userName.bottom)
-                    },
-                userDetail = userDetail
-            )
-
-            // Location
-            if (userDetail?.location != null) {
-                PhotoDetailLocation(
-                    modifier = Modifier.constrainAs(location) {
-                        start.linkTo(parent.start)
-                        top.linkTo(coverPhoto.bottom)
-                    },
-                    location = userDetail?.location.orEmpty()
-                )
-            }
-
-            // Biography
-            if (userDetail?.bio != null) {
-                Text(
-                    modifier = Modifier
-                        .constrainAs(bio) {
-                            start.linkTo(coverPhoto.start)
-                            if (userDetail?.location != null) {
-                                top.linkTo(location.bottom)
-                            } else {
-                                top.linkTo(coverPhoto.bottom)
+                    Text(
+                        modifier = Modifier
+                            .padding(0.dp, 30.dp, 40.dp, 0.dp)
+                            .constrainAs(userName) {
+                                start.linkTo(coverPhoto.end)
+                                top.linkTo(coverPhoto.top)
+                                bottom.linkTo(statics.top)
                             }
-                        }
-                        .padding(20.dp, 10.dp, 20.dp, 0.dp),
-                    text = userDetail?.bio.orEmpty(),
-                    color = Color.Black,
-                    fontSize = 14.sp
-                )
-            }
+                            .fillMaxWidth(),
+                        text = userDetail?.name.orEmpty(),
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
 
+                    UserDetailStatics(
+                        modifier = Modifier
+                            .padding(0.dp, 10.dp, 40.dp, 20.dp)
+                            .constrainAs(statics) {
+                                bottom.linkTo(coverPhoto.bottom)
+                                start.linkTo(coverPhoto.end)
+                                top.linkTo(userName.bottom)
+                            },
+                        userDetail = userDetail
+                    )
+
+                    // Location
+                    if (userDetail?.location != null) {
+                        PhotoDetailLocation(
+                            modifier = Modifier.constrainAs(location) {
+                                start.linkTo(parent.start)
+                                top.linkTo(coverPhoto.bottom)
+                            },
+                            location = userDetail?.location.orEmpty()
+                        )
+                    }
+
+                    // Biography
+                    if (userDetail?.bio != null) {
+                        Text(
+                            modifier = Modifier
+                                .constrainAs(bio) {
+                                    start.linkTo(coverPhoto.start)
+                                    if (userDetail?.location != null) {
+                                        top.linkTo(location.bottom)
+                                    } else {
+                                        top.linkTo(coverPhoto.bottom)
+                                    }
+                                }
+                                .padding(20.dp, 10.dp, 20.dp, 0.dp),
+                            text = userDetail?.bio.orEmpty(),
+                            color = Color.Black,
+                            fontSize = 14.sp
+                        )
+                    }
+                }
+            }
 
             // TabRow
             val pages = listOf(
@@ -169,16 +185,10 @@ fun UserDetailScreen(
                     .constrainAs(tabrow) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                        when {
-                            userDetail?.bio != null -> {
-                                top.linkTo(bio.bottom)
-                            }
-                            userDetail?.location != null -> {
-                                top.linkTo(location.bottom)
-                            }
-                            else -> {
-                                top.linkTo(coverPhoto.bottom)
-                            }
+                        if (visible) {
+                            top.linkTo(visibleLayout.bottom)
+                        } else {
+                            top.linkTo(parent.top)
                         }
                     }
                     .padding(0.dp, 10.dp, 0.dp, 0.dp),
@@ -209,6 +219,10 @@ fun UserDetailScreen(
                                 pagerState.scrollToPage(
                                     page = index
                                 )
+                            }
+                            if(pagerState.currentPage == index){
+                                clickCount +=1
+                                visible = clickCount%2==0
                             }
                         },
                     )
@@ -360,7 +374,8 @@ fun UserDetailCollections(
     onCollectionItemsClick: (String, String) -> Unit
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
     ) {
         items(lazyPagingItems = collections) { collectionsItem ->
             val item by remember {
