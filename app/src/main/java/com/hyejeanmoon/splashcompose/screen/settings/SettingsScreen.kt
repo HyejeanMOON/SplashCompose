@@ -31,11 +31,14 @@ fun SettingsScreen(
         items(items = settingsItems) {
             SettingsItemTitle(titleName = it.title)
             it.itemDetail.forEachIndexed { index, s ->
-                SettingsItemDetail(itemName = s) {
-                    onSettingsItemClick(s)
+                SettingsItemDetail(itemName = s.title, itemContent = s.content) {
+                    onSettingsItemClick(s.title)
                 }
-                if (index == it.itemDetail.size-1) {
-                    Spacer(modifier = Modifier.background(Color.White).fillMaxWidth().size(30.dp))
+                if (index == it.itemDetail.size - 1) {
+                    Spacer(modifier = Modifier
+                        .background(Color.White)
+                        .fillMaxWidth()
+                        .size(30.dp))
                 }
             }
         }
@@ -44,7 +47,12 @@ fun SettingsScreen(
 
 data class SettingsItem(
     val title: String,
-    val itemDetail: List<String>
+    val itemDetail: List<SettingItemDetail>
+)
+
+data class SettingItemDetail(
+    val title: String,
+    val content: String = ""
 )
 
 @Composable
@@ -87,6 +95,7 @@ fun SettingsItemTitle(
 fun SettingsItemDetail(
     modifier: Modifier = Modifier,
     itemName: String,
+    itemContent: String = "",
     onItemClick: (String) -> Unit
 ) {
     ConstraintLayout(
@@ -95,7 +104,7 @@ fun SettingsItemDetail(
             .requiredHeight(50.dp)
             .clickable { onItemClick(itemName) }
     ) {
-        val (text, icon, divider) = createRefs()
+        val (text, icon, content, divider) = createRefs()
         Text(
             modifier = Modifier
                 .padding(20.dp, 0.dp, 0.dp, 0.dp)
@@ -110,18 +119,33 @@ fun SettingsItemDetail(
             fontSize = 18.sp
         )
 
-        Image(
-            modifier = Modifier
-                .size(24.dp)
-                .constrainAs(icon) {
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }
-                .padding(0.dp,0.dp,10.dp,0.dp),
-            painter = painterResource(id = R.drawable.ic_right),
-            contentDescription = "right icon"
-        )
+        if (itemContent.isNotBlank()) {
+            Text(
+                modifier = Modifier
+                    .constrainAs(content) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(0.dp, 0.dp, 20.dp, 0.dp),
+                text = itemContent,
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+        } else {
+            Image(
+                modifier = Modifier
+                    .size(34.dp)
+                    .constrainAs(icon) {
+                        end.linkTo(parent.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(0.dp, 0.dp, 20.dp, 0.dp),
+                painter = painterResource(id = R.drawable.ic_right),
+                contentDescription = "right icon"
+            )
+        }
 
         Divider(
             modifier = Modifier.constrainAs(divider) {
@@ -152,7 +176,7 @@ fun PreviewSettingsItem() {
 fun PreviewSettings() {
     Column {
         SettingsItemTitle(titleName = "Others")
-        SettingsItemDetail(itemName = "Version") {
+        SettingsItemDetail(itemName = "Version", itemContent = "1.0") {
 
         }
         SettingsItemDetail(itemName = "About me") {
