@@ -47,7 +47,8 @@ fun UserDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: UserDetailViewModel,
     onBackIconClick: () -> Unit,
-    onCollectionItemsClick: (String, String) -> Unit
+    onCollectionItemsClick: (String, String) -> Unit,
+    onPhotoClick: (UsersPhotos?) -> Unit
 ) {
     val userDetail by viewModel.userDetail.observeAsState()
     val userDetailPhotos = viewModel.userDetailPhotosFlow.collectAsLazyPagingItems()
@@ -242,7 +243,8 @@ fun UserDetailScreen(
                 when (pagerState.currentPage) {
                     0 -> {
                         UserDetailPhotos(
-                            photos = userDetailPhotos
+                            photos = userDetailPhotos,
+                            onPhotoClick = onPhotoClick
                         )
                     }
                     1 -> {
@@ -253,7 +255,8 @@ fun UserDetailScreen(
                     }
                     2 -> {
                         UserDetailPhotos(
-                            photos = userDetailLikedPhotos
+                            photos = userDetailLikedPhotos,
+                            onPhotoClick = onPhotoClick
                         )
                     }
                 }
@@ -347,7 +350,8 @@ fun UserDetailStaticsItem(
 @Composable
 fun UserDetailPhotos(
     modifier: Modifier = Modifier,
-    photos: LazyPagingItems<UsersPhotos>
+    photos: LazyPagingItems<UsersPhotos>,
+    onPhotoClick: (UsersPhotos?) -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -361,7 +365,7 @@ fun UserDetailPhotos(
             PhotoDetailImage(
                 modifier = Modifier.fillMaxWidth(),
                 photo = item,
-                onPhotoClick = {}
+                onPhotoClick = {onPhotoClick(it)}
             )
         }
     }
