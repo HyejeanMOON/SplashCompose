@@ -30,7 +30,6 @@ import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
-import com.hyejeanmoon.splashcompose.utils.DataManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -75,16 +74,16 @@ class MainActivity : ComponentActivity() {
 //                        listOf("User Account", "Log Out")
 //                    ),
                     SettingsItem(
-                        "Application Settings",
+                        SETTINGS_TITLE_APPLICATION_SETTINGS,
                         listOf(
-                            "Change Display Resolution",
-                            "Change Download Resolution",
-                            "Change Photo Display Order",
+                            SETTINGS_ITEM_DISPLAY_RESOLUTION,
+                            SETTINGS_ITEM_DOWNLOAD_RESOLUTION,
+                            SETTINGS_ITEM_PHOTO_DISPLAY_ORDER,
                             SETTINGS_ITEM_CLEAR_CACHE
                         )
                     ),
                     SettingsItem(
-                        "Others",
+                        SETTINGS_TITLE_OTHERS,
                         listOf(
                             SETTINGS_ITEM_VERSION,
                             SETTINGS_ITEM_ABOUT_DEVELOPER
@@ -106,6 +105,11 @@ class MainActivity : ComponentActivity() {
         private const val SETTINGS_ITEM_ABOUT_DEVELOPER = "About Developer"
         private const val SETTINGS_ITEM_VERSION = "Version"
         private const val SETTINGS_ITEM_CLEAR_CACHE = "Clear Cache"
+        private const val SETTINGS_ITEM_PHOTO_DISPLAY_ORDER = "Photo Display Order"
+        private const val SETTINGS_ITEM_DOWNLOAD_RESOLUTION = "Download Resolution"
+        private const val SETTINGS_ITEM_DISPLAY_RESOLUTION = "Display Resolution"
+        private const val SETTINGS_TITLE_OTHERS = "Others"
+        private const val SETTINGS_TITLE_APPLICATION_SETTINGS = "Application Settings"
     }
 }
 
