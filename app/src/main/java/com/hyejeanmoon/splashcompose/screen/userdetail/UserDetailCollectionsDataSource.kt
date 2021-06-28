@@ -16,17 +16,23 @@ class UserDetailCollectionsDataSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Collections> {
         val position = params.key ?: START_INDEX
 
-        val collections = userDetailRepository.getUsersCollections(
-            userName,
-            page = position,
-            perPage = params.loadSize
-        )
+        return try {
+            val collections = userDetailRepository.getUsersCollections(
+                userName,
+                page = position,
+                perPage = params.loadSize
+            )
 
-        return LoadResult.Page(
-            collections,
-            if (position <= START_INDEX) null else position - 1,
-            if (collections.isEmpty()) null else position + 1
-        )
+            LoadResult.Page(
+                collections,
+                if (position <= START_INDEX || collections.size < params.loadSize) null else position - 1,
+                if (collections.isEmpty() || collections.size < params.loadSize) null else position + 1
+            )
+        } catch (exception: Exception) {
+            LoadResult.Error(
+                exception
+            )
+        }
     }
 
     companion object {

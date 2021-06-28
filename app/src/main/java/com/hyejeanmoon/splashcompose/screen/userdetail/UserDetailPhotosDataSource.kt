@@ -16,17 +16,23 @@ class UserDetailPhotosDataSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UsersPhotos> {
         val position = params.key ?: START_INDEX
 
-        val photos = userDetailRepository.getUsersPhotos(
-            userName,
-            page = position,
-            perPage = params.loadSize
-        )
+        return try {
+            val photos = userDetailRepository.getUsersPhotos(
+                userName,
+                page = position,
+                perPage = params.loadSize
+            )
 
-        return LoadResult.Page(
-            photos,
-            if (position <= START_INDEX) null else position - 1,
-            if (photos.isEmpty()) null else position + 1
-        )
+            LoadResult.Page(
+                photos,
+                if (position <= START_INDEX || photos.size < params.loadSize) null else position - 1,
+                if (photos.isEmpty() || photos.size < params.loadSize) null else position + 1
+            )
+        } catch (exception: Exception) {
+            LoadResult.Error(
+                exception
+            )
+        }
     }
 
     companion object {

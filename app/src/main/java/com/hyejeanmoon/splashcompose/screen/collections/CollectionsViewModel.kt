@@ -24,9 +24,9 @@ class CollectionsViewModel : ViewModel() {
 
     var collections = Pager(
         config = PagingConfig(
-            pageSize = 10,
+            pageSize = 5,
             enablePlaceholders = false,
-            initialLoadSize = 30
+            initialLoadSize = 5
         ),
         pagingSourceFactory = { collectionsDataSource }
     ).flow

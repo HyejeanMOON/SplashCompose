@@ -65,27 +65,27 @@ class UserDetailViewModel(
 
     val userDetailPhotosFlow = Pager(
         config = PagingConfig(
-            pageSize = 20,
+            pageSize = 5,
             enablePlaceholders = false,
-            initialLoadSize = 30
+            initialLoadSize = 5
         ),
         pagingSourceFactory = { userDetailPhotosDataSource }
     ).flow
 
     val userDetailCollectionsFlow = Pager(
         config = PagingConfig(
-            pageSize = 20,
+            pageSize = 5,
             enablePlaceholders = false,
-            initialLoadSize = 30
+            initialLoadSize = 5
         ),
         pagingSourceFactory = { userDetailCollectionsDataSource }
     ).flow
 
     val userDetailLikedPhotosDataSourceFlow = Pager(
         config = PagingConfig(
-            pageSize = 20,
+            pageSize = 5,
             enablePlaceholders = false,
-            initialLoadSize = 30
+            initialLoadSize = 5
         ),
         pagingSourceFactory = { userDetailLikedPhotosDataSource }
     ).flow
