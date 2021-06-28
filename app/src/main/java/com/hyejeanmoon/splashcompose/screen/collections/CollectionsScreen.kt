@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
@@ -42,6 +43,17 @@ fun CollectionsScreen(
                     collections = item,
                     onCollectionsItemClick = onCollectionsItemClick
                 )
+            }
+        }
+    }
+
+    pagingItems.apply {
+        when {
+            loadState.refresh is LoadState.Error -> {
+
+            }
+            loadState.append is LoadState.Error -> {
+
             }
         }
     }

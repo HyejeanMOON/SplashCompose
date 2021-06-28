@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -221,9 +223,9 @@ fun UserDetailScreen(
                                     page = index
                                 )
                             }
-                            if(pagerState.currentPage == index){
-                                clickCount +=1
-                                visible = clickCount%2==0
+                            if (pagerState.currentPage == index) {
+                                clickCount += 1
+                                visible = clickCount % 2 == 0
                             }
                         },
                     )
@@ -237,7 +239,8 @@ fun UserDetailScreen(
                         top.linkTo(tabrow.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    },
+                    }
+                    .fillMaxHeight(),
                 state = pagerState
             ) {
                 when (pagerState.currentPage) {
@@ -261,8 +264,40 @@ fun UserDetailScreen(
                     }
                 }
             }
-        }
 
+            userDetailPhotos.apply {
+                when {
+                    loadState.refresh is LoadState.Error -> {
+
+                    }
+                    loadState.append is LoadState.Error -> {
+
+                    }
+                }
+            }
+
+            userDetailCollections.apply {
+                when {
+                    loadState.refresh is LoadState.Error -> {
+
+                    }
+                    loadState.append is LoadState.Error -> {
+
+                    }
+                }
+            }
+
+            userDetailLikedPhotos.apply {
+                when {
+                    loadState.refresh is LoadState.Error -> {
+
+                    }
+                    loadState.append is LoadState.Error -> {
+
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -365,7 +400,7 @@ fun UserDetailPhotos(
             PhotoDetailImage(
                 modifier = Modifier.fillMaxWidth(),
                 photo = item,
-                onPhotoClick = {onPhotoClick(it)}
+                onPhotoClick = { onPhotoClick(it) }
             )
         }
     }

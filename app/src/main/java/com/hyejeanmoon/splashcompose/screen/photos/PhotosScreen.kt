@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
@@ -37,6 +38,17 @@ fun PhotoScreen(
                 photo = item,
                 onPhotoClick = onPhotoClick
             )
+        }
+    }
+
+    pagingItems.apply {
+        when {
+            loadState.refresh is LoadState.Error -> {
+
+            }
+            loadState.append is LoadState.Error -> {
+
+            }
         }
     }
 }
