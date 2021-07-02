@@ -4,13 +4,13 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class Likes : Serializable {
+data class Likes(
 
     @Expose
     @SerializedName("total")
-    val total: Int? = null
+    val total: Int? = null,
 
     @Expose
     @SerializedName("historical")
-    val historical: Historical? = null
-}
+    val historical: Historical?
+) : Serializable

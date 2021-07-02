@@ -4,21 +4,21 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class Statistics : Serializable {
+class Statistics(
 
     @Expose
     @SerializedName("username")
-    val userName: String? = null
+    val userName: String? = null,
 
     @Expose
     @SerializedName("downloads")
-    val downloads: Downloads? = null
+    val downloads: Downloads?,
 
     @Expose
     @SerializedName("views")
-    val views: Views? = null
+    val views: Views?,
 
     @Expose
     @SerializedName("likes")
-    val likes: Likes? = null
-}
+    val likes: Likes?
+) : Serializable

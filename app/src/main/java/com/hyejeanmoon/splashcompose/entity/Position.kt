@@ -4,13 +4,13 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class Position : Serializable {
+data class Position(
 
     @Expose
     @SerializedName("latitude")
-    val latitude: Double? = null
+    val latitude: Double? = null,
 
     @Expose
     @SerializedName("longitude")
     val longitude: Double? = null
-}
+) : Serializable

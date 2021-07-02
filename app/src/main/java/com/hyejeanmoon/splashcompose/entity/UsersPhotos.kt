@@ -4,68 +4,68 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class UsersPhotos : Serializable {
+data class UsersPhotos(
     @Expose
     @SerializedName("id")
-    val id: String? = null
+    val id: String? = null,
 
     @Expose
     @SerializedName("created_at")
-    val createdAt: String? = null
+    val createdAt: String? = null,
 
     @Expose
     @SerializedName("updated_at")
-    val updatedAt: String? = null
+    val updatedAt: String? = null,
 
     @Expose
     @SerializedName("width")
-    val width: Int? = null
+    val width: Int? = null,
 
     @Expose
     @SerializedName("height")
-    val height: Int? = null
+    val height: Int? = null,
 
     @Expose
     @SerializedName("color")
-    val color: String? = null
+    val color: String? = null,
 
     @Expose
     @SerializedName("downloads")
-    val downloads: Int? = null
+    val downloads: Int? = null,
 
     @Expose
     @SerializedName("likes")
-    val likes: Int? = null
+    val likes: Int? = null,
 
     @Expose
     @SerializedName("liked_by_user")
-    val likedByUser: Boolean? = null
+    val likedByUser: Boolean? = null,
 
     @Expose
     @SerializedName("description")
-    val description: String? = null
+    val description: String? = null,
 
     @Expose
     @SerializedName("exif")
-    val exif: Exif? = null
+    val exif: Exif?,
 
     @Expose
     @SerializedName("links")
-    val links: Links? = null
+    val links: Links?,
 
     @Expose
     @SerializedName("urls")
-    val urls: Urls? = null
+    val urls: Urls?,
 
     @Expose
     @SerializedName("user")
-    val user: UserDetail? = null
+    val user: UserDetail?,
 
     @Expose
     @SerializedName("current_user_collections")
-    val currentUserCollections: List<CurrentUserCollections>? = null
+    val currentUserCollections: List<CurrentUserCollections>?,
 
     @Expose
     @SerializedName("blur_hash")
-    val blurHash: String? = null
-}
+    val blurHash: String? = null,
+) : Serializable

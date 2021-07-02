@@ -4,52 +4,52 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class Collections : Serializable {
+data class Collections(
     @Expose
     @SerializedName("id")
-    val id: String? = null
+    val id: String? = null,
 
     @Expose
     @SerializedName("title")
-    val title: String? = null
+    val title: String? = null,
 
     @Expose
     @SerializedName("description")
-    val description: String? = null
+    val description: String? = null,
 
     @Expose
     @SerializedName("published_at")
-    val publishedAt: String? = null
+    val publishedAt: String? = null,
 
     @Expose
     @SerializedName("updated_at")
-    val updatedAt: String? = null
+    val updatedAt: String? = null,
 
     @Expose
     @SerializedName("curated")
-    val curated: String? = null
+    val curated: String? = null,
 
     @Expose
     @SerializedName("total_photos")
-    val totalPhotos: String? = null
+    val totalPhotos: String? = null,
 
     @Expose
     @SerializedName("private")
-    val pri: String? = null
+    val pri: String? = null,
 
     @Expose
     @SerializedName("share_key")
-    val shareKey: String? = null
+    val shareKey: String? = null,
 
     @Expose
     @SerializedName("cover_photo")
-    val coverPhoto: CoverPhoto? = null
+    val coverPhoto: CoverPhoto?,
 
     @Expose
     @SerializedName("user")
-    val user: User? = null
+    val user: User?,
 
     @Expose
     @SerializedName("links")
-    val links: Links? = null
-}
+    val links: Links?
+) : Serializable

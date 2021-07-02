@@ -4,30 +4,29 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class Urls : Serializable {
+data class Urls(
 
     @Expose
     @SerializedName("url")
-    val url: String? = null
+    val url: String? = null,
 
     @Expose
     @SerializedName("raw")
-    val raw: String? = null
+    val raw: String? = null,
 
     @Expose
     @SerializedName("full")
-    val full: String? = null
+    val full: String? = null,
 
     @Expose
     @SerializedName("regular")
-    val regular: String? = null
+    val regular: String? = null,
 
     @Expose
     @SerializedName("small")
-    val small: String? = null
+    val small: String? = null,
 
     @Expose
     @SerializedName("thumb")
     val thumb: String? = null
-
-}
+) : Serializable

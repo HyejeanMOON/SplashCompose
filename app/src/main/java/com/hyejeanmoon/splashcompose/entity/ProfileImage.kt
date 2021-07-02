@@ -4,17 +4,16 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class ProfileImage : Serializable {
-
+data class ProfileImage(
     @Expose
     @SerializedName("small")
-    val small: String? = null
+    val small: String? = null,
 
     @Expose
     @SerializedName("medium")
-    val medium: String? = null
+    val medium: String? = null,
 
     @Expose
     @SerializedName("large")
     val large: String? = null
-}
+) : Serializable
