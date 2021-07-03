@@ -164,7 +164,7 @@ fun UserDetailScreen(
                                         top.linkTo(coverPhoto.bottom)
                                     }
                                 }
-                                .padding(20.dp, 10.dp, 20.dp, 0.dp),
+                                .padding(20.dp, 10.dp, 20.dp, 10.dp),
                             text = userDetail?.bio.orEmpty(),
                             color = Color.Black,
                             fontSize = 14.sp
@@ -193,8 +193,7 @@ fun UserDetailScreen(
                         } else {
                             top.linkTo(parent.top)
                         }
-                    }
-                    .padding(0.dp, 10.dp, 0.dp, 0.dp),
+                    },
                 // Our selected tab is our current page
                 selectedTabIndex = pagerState.currentPage,
                 // Override the indicator, using the provided pagerTabIndicatorOffset modifier

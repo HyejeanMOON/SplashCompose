@@ -62,7 +62,6 @@ fun FavoriteScreen(
                             onFavoritePhotoClick = onFavoritePhotoClick
                         )
                     }
-
                 }
             }
         }
