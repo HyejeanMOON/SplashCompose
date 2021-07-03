@@ -14,14 +14,14 @@ object LogUtils {
     }
 
     @JvmStatic
-    fun outputLog(message: String, vararg args: Any, tag: String = "MoonSplash") {
+    fun outputLog(message: String, vararg args: Any, tag: String = "SPLASH_COMPOSE_LOG") {
         Timber.tag(tag)
         Timber.i(message, *args)
     }
 
 
     @JvmStatic
-    fun outputLog(throwable: Throwable, tag: String = "MoonSplash") {
+    fun outputLog(throwable: Throwable, tag: String = "SPLASH_COMPOSE_LOG") {
         Timber.tag(tag)
         Timber.i(throwable)
     }
@@ -31,7 +31,7 @@ object LogUtils {
         throwable: Throwable,
         message: String,
         vararg args: Any,
-        tag: String = "MoonSplash"
+        tag: String = "SPLASH_COMPOSE_LOG"
     ) {
         Timber.tag(tag)
         Timber.w(throwable, message, *args)

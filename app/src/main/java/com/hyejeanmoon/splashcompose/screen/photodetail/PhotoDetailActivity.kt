@@ -2,24 +2,28 @@ package com.hyejeanmoon.splashcompose.screen.photodetail
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.ColorRes
-import androidx.core.content.ContextCompat
-import com.hyejeanmoon.splashcompose.R
+import androidx.lifecycle.ViewModelProvider
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 
 class PhotoDetailActivity : ComponentActivity() {
 
-    private val viewModel: PhotoDetailViewModel by viewModels()
+    private val viewModel:PhotoDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+//        val viewModel: PhotoDetailViewModel =
+//            ViewModelProvider(
+//                this,
+//                ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+//            ).get(PhotoDetailViewModel::class.java)
+
         viewModel.getPhotoById()
+        viewModel.isFavoritePhoto()
 
         setContent {
             SetUpStatusBar()

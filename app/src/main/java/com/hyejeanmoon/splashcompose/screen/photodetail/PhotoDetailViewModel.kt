@@ -1,21 +1,25 @@
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
+import com.hyejeanmoon.splashcompose.db.AppDatabase
+import com.hyejeanmoon.splashcompose.db.FavoritePhoto
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.LogUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class PhotoDetailViewModel(
-    private val state: SavedStateHandle
-) : ViewModel() {
+    app: Application,
+    state: SavedStateHandle
+) : AndroidViewModel(app) {
     private var photoId = ""
 
     init {
@@ -24,6 +28,8 @@ class PhotoDetailViewModel(
 
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
+    private val database = AppDatabase.getInstance(app)
+
     private val photosApiService =
         ApiServiceHelper.createPhotosApiService(
             EnvParameters.BASE_URL,
@@ -31,10 +37,13 @@ class PhotoDetailViewModel(
         )
 
     private val _photo: MutableLiveData<Photo> = MutableLiveData()
-    val photo: LiveData<Photo> = _photo
+    val photo: LiveData<Photo> get() = _photo
 
     private val _exception: MutableLiveData<Exception> = MutableLiveData()
-    val exception: LiveData<Exception> = _exception
+    val exception: LiveData<Exception> get() = _exception
+
+    private val _isFavoritePhoto: MutableLiveData<Boolean> = MutableLiveData()
+    val isFavoritePhoto: LiveData<Boolean> get() = _isFavoritePhoto
 
     fun getPhotoById() {
         isRefreshing.value = true
@@ -49,6 +58,34 @@ class PhotoDetailViewModel(
                     isRefreshing.value = false
                 })
             )
+        }
+    }
+
+    fun isFavoritePhoto() {
+        LogUtils.outputLog("isFavoritePhoto")
+        viewModelScope.launch(Dispatchers.IO) {
+            _isFavoritePhoto.postValue(database.getUserDao().isFavoritePhoto(photoId).isNotEmpty())
+        }
+    }
+
+    fun favoritePhoto() {
+        LogUtils.outputLog("favoritePhoto")
+        viewModelScope.launch(Dispatchers.IO) {
+            if (_isFavoritePhoto.value == true) {
+                database.getUserDao().deleteFavoritePhoto(
+                    FavoritePhoto(
+                        id = _photo.value?.id.orEmpty(),
+                        photoUrl = _photo.value?.urls?.small.orEmpty()
+                    )
+                )
+            } else {
+                database.getUserDao().insertFavoritePhoto(
+                    FavoritePhoto(
+                        id = _photo.value?.id.orEmpty(),
+                        photoUrl = _photo.value?.urls?.small.orEmpty()
+                    )
+                )
+            }
         }
     }
 

@@ -9,9 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,10 +38,9 @@ fun PhotoDetailScreen(
 ) {
 
     val photo by viewModel.photo.observeAsState()
-
     val scrollState = rememberScrollState()
-
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val isFavoritePhoto by viewModel.isFavoritePhoto.observeAsState()
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
@@ -56,7 +53,12 @@ fun PhotoDetailScreen(
             PhotoDetailUserInfo(
                 photo = photo,
                 onDownloadClick = onDownloadClick,
-                onUserInfoClick = onUserInfoClick
+                onUserInfoClick = onUserInfoClick,
+                onFavoriteIconClick = {
+                    viewModel.favoritePhoto()
+                    viewModel.isFavoritePhoto()
+                },
+                isFavoritePhoto = isFavoritePhoto
             )
 
             photo?.also {
@@ -144,8 +146,10 @@ fun PhotoDetailImg(
 fun PhotoDetailUserInfo(
     modifier: Modifier = Modifier,
     photo: Photo?,
+    isFavoritePhoto: Boolean?,
     onDownloadClick: (String) -> Unit,
-    onUserInfoClick: (String) -> Unit
+    onUserInfoClick: (String) -> Unit,
+    onFavoriteIconClick: (String) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -155,16 +159,17 @@ fun PhotoDetailUserInfo(
     ) {
         val (userPhoto, userName, downloadIcon, favoriteIcon) = createRefs()
 
+        // user icon
         Image(
             modifier = Modifier
+                .clickable { onUserInfoClick(photo?.user?.userName.orEmpty()) }
                 .padding(20.dp, 5.dp)
                 .clip(CircleShape)
                 .constrainAs(userPhoto) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                }
-                .clickable { onUserInfoClick(photo?.user?.userName.orEmpty()) },
+                },
             painter = rememberGlidePainter(
                 request = photo?.user?.profileImage?.large.orEmpty(),
                 fadeIn = true,
@@ -174,30 +179,44 @@ fun PhotoDetailUserInfo(
             ),
             contentDescription = "user profile image"
         )
+
+        // user name
         Text(
             modifier = Modifier
+                .clickable {
+                    onUserInfoClick(photo?.user?.userName.orEmpty())
+                }
                 .constrainAs(userName) {
                     start.linkTo(userPhoto.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                }
-                .clickable { onUserInfoClick(photo?.user?.userName.orEmpty()) },
+                },
             text = photo?.user?.name.orEmpty(),
             color = Color.Black,
             fontSize = 16.sp
         )
+
+        // favorite icon
         Image(
             modifier = Modifier
+                .clickable {
+                    onFavoriteIconClick(photo?.id.orEmpty())
+                }
                 .padding(20.dp, 5.dp)
                 .constrainAs(favoriteIcon) {
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 },
-            painter = painterResource(id = R.drawable.ic_favorites),
+            painter = if (isFavoritePhoto == true) {
+                painterResource(id = R.drawable.ic_favorites_filled)
+            } else {
+                painterResource(id = R.drawable.ic_favorites)
+            },
             contentDescription = "favorite icon"
         )
 
+        // download icon
         Image(
             modifier = Modifier
                 .padding(0.dp, 5.dp)
