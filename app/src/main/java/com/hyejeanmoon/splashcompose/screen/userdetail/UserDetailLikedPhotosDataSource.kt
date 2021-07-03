@@ -29,7 +29,6 @@ class UserDetailLikedPhotosDataSource(
                 exception
             )
         }
-
     }
 
     override fun getRefreshKey(state: PagingState<Int, UsersPhotos>): Int? {

@@ -387,20 +387,22 @@ fun UserDetailPhotos(
     photos: LazyPagingItems<UsersPhotos>,
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        items(lazyPagingItems = photos) { photoItem ->
-            val item by remember {
-                mutableStateOf(photoItem)
-            }
+    if (photos.itemCount > 0) {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+        ) {
+            items(lazyPagingItems = photos) { photoItem ->
+                val item by remember {
+                    mutableStateOf(photoItem)
+                }
 
-            PhotoDetailImage(
-                modifier = Modifier.fillMaxWidth(),
-                photo = item,
-                onPhotoClick = { onPhotoClick(it) }
-            )
+                PhotoDetailImage(
+                    modifier = Modifier.fillMaxWidth(),
+                    photo = item,
+                    onPhotoClick = { onPhotoClick(item) }
+                )
+            }
         }
     }
 }
@@ -411,18 +413,20 @@ fun UserDetailCollections(
     collections: LazyPagingItems<Collections>,
     onCollectionItemsClick: (String, String) -> Unit
 ) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        items(lazyPagingItems = collections) { collectionsItem ->
-            val item by remember {
-                mutableStateOf(collectionsItem)
-            }
+    if (collections.itemCount > 0) {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+        ) {
+            items(lazyPagingItems = collections) { collectionsItem ->
+                val item by remember {
+                    mutableStateOf(collectionsItem)
+                }
 
-            item?.also {
-                CollectionsItem(collections = it) { id, title ->
-                    onCollectionItemsClick(id, title)
+                item?.also {
+                    CollectionsItem(collections = it) { id, title ->
+                        onCollectionItemsClick(id, title)
+                    }
                 }
             }
         }
