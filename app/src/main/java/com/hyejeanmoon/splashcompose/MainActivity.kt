@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -23,7 +24,8 @@ import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsViewModel
-import com.hyejeanmoon.splashcompose.screen.favorite.LoveScreen
+import com.hyejeanmoon.splashcompose.screen.favorite.FavoriteScreen
+import com.hyejeanmoon.splashcompose.screen.favorite.FavoriteViewModel
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
@@ -38,7 +40,9 @@ class MainActivity : ComponentActivity() {
 
     private val photosViewModel: PhotosViewModel by viewModels()
     private val collectionsViewModel: CollectionsViewModel by viewModels()
+    private val favoriteViewModel: FavoriteViewModel by viewModels()
 
+    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,9 +82,9 @@ class MainActivity : ComponentActivity() {
                         SETTINGS_TITLE_APPLICATION_SETTINGS,
                         listOf(
                             SettingItemDetail(
-                               title = SETTINGS_ITEM_DISPLAY_RESOLUTION
+                                title = SETTINGS_ITEM_DISPLAY_RESOLUTION
                             ),
-                            SettingItemDetail(title= SETTINGS_ITEM_DOWNLOAD_RESOLUTION),
+                            SettingItemDetail(title = SETTINGS_ITEM_DOWNLOAD_RESOLUTION),
                             SettingItemDetail(title = SETTINGS_ITEM_PHOTO_DISPLAY_ORDER),
                             SettingItemDetail(title = SETTINGS_ITEM_CLEAR_CACHE)
                         )
@@ -88,16 +92,32 @@ class MainActivity : ComponentActivity() {
                     SettingsItem(
                         SETTINGS_TITLE_OTHERS,
                         listOf(
-                            SettingItemDetail(title = SETTINGS_ITEM_VERSION, content = BuildConfig.VERSION_NAME),
+                            SettingItemDetail(
+                                title = SETTINGS_ITEM_VERSION,
+                                content = BuildConfig.VERSION_NAME
+                            ),
                             SettingItemDetail(title = SETTINGS_ITEM_ABOUT_DEVELOPER)
                         )
                     )
                 ),
                 onPhotoClick = {
                     PhotoDetailActivity.start(it?.id.orEmpty(), this)
+                },
+                favoriteViewModel = favoriteViewModel,
+                onFavoritePhotoClick = { photoId ->
+                    PhotoDetailActivity.start(
+                        photoId,
+                        this
+                    )
                 }
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        favoriteViewModel.getAllFavoritePhotos()
     }
 
     override fun onBackPressed() {
@@ -116,13 +136,16 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun SplashComposeApp(
     photoViewModel: PhotosViewModel,
     collectionsViewModel: CollectionsViewModel,
+    favoriteViewModel: FavoriteViewModel,
     onCollectionsItemClick: (String, String) -> Unit,
     onSettingsItemClick: (String) -> Unit,
     onPhotoClick: (Photo?) -> Unit,
+    onFavoritePhotoClick: (String) -> Unit,
     settingsItems: List<SettingsItem>
 ) {
     SplashComposeTheme {
@@ -189,7 +212,12 @@ fun SplashComposeApp(
                             onCollectionsItemClick = onCollectionsItemClick
                         )
                     }
-                    composable(Screen.Love.route) { LoveScreen() }
+                    composable(Screen.Love.route) {
+                        FavoriteScreen(
+                            viewModel = favoriteViewModel,
+                            onFavoritePhotoClick = onFavoritePhotoClick
+                        )
+                    }
                     composable(Screen.Settings.route) {
                         SettingsScreen(
                             settingsItems = settingsItems,

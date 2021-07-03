@@ -12,5 +12,8 @@ interface FavoritePhotoDao {
     suspend fun deleteFavoritePhoto(favoritePhoto: FavoritePhoto)
 
     @Query("SELECT * FROM liked_photo WHERE id == :id")
-    suspend fun isFavoritePhoto(id: String):List<FavoritePhoto>
+    suspend fun isFavoritePhoto(id: String): List<FavoritePhoto>
+
+    @Query("SELECT * FROM liked_photo")
+    suspend fun getAllFavoritePhoto(): List<FavoritePhoto>
 }
