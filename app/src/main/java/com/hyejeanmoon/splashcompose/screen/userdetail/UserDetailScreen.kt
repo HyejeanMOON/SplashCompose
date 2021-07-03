@@ -4,10 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -25,16 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.VerticalPager
-import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.pager.*
 import com.hyejeanmoon.splashcompose.R
-import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsItem
@@ -229,7 +221,7 @@ fun UserDetailScreen(
             }
 
             // Pagers
-            VerticalPager(
+            HorizontalPager(
                 modifier = Modifier
                     .constrainAs(pager) {
                         top.linkTo(tabrow.bottom)
@@ -380,6 +372,8 @@ fun UserDetailPhotos(
                 }
             }
         }
+    } else {
+        NoPhotos(title = "photos")
     }
 }
 
@@ -418,6 +412,8 @@ fun UserDetailCollections(
                 }
             }
         }
+    } else {
+        NoPhotos(title = "collections")
     }
 }
 
@@ -457,6 +453,49 @@ fun UserDetailLikedPhotos(
                 }
             }
         }
+    } else {
+        NoPhotos(title = "liked photos")
+    }
+}
+
+@Composable
+fun NoPhotos(
+    modifier: Modifier = Modifier,
+    title: String
+) {
+    ConstraintLayout(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(0.dp, 50.dp, 0.dp, 0.dp)
+    ) {
+
+        val (img, txt) = createRefs()
+
+        Image(
+            modifier = Modifier
+                .size(128.dp)
+                .constrainAs(img) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(parent.top)
+                },
+            painter = painterResource(id = R.mipmap.ic_no_favorite_photos),
+            contentDescription = "no photos"
+        )
+
+        Text(
+            modifier = Modifier
+                .padding(0.dp, 40.dp, 0.dp, 0.dp)
+                .constrainAs(txt) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(img.bottom)
+                },
+            text = "There are not $title!",
+            textAlign = TextAlign.Center,
+            color = Color.Black,
+            fontSize = 16.sp
+        )
     }
 }
 
