@@ -53,10 +53,7 @@ fun UserDetailScreen(
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
     val userDetail by viewModel.userDetail.observeAsState()
-    val userDetailPhotos = viewModel.userDetailPhotosFlow.collectAsLazyPagingItems()
-    val userDetailCollections = viewModel.userDetailCollectionsFlow.collectAsLazyPagingItems()
-    val userDetailLikedPhotos =
-        viewModel.userDetailLikedPhotosDataSourceFlow.collectAsLazyPagingItems()
+
     val coroutines = rememberCoroutineScope()
     var visible by remember { mutableStateOf(true) }
     var clickCount by remember { mutableStateOf(0) }
@@ -245,54 +242,21 @@ fun UserDetailScreen(
                 when (pagerState.currentPage) {
                     0 -> {
                         UserDetailPhotos(
-                            photos = userDetailPhotos,
+                            viewModel = viewModel,
                             onPhotoClick = onPhotoClick
                         )
                     }
                     1 -> {
                         UserDetailCollections(
-                            collections = userDetailCollections,
+                            viewModel = viewModel,
                             onCollectionItemsClick = onCollectionItemsClick
                         )
                     }
                     2 -> {
-                        UserDetailPhotos(
-                            photos = userDetailLikedPhotos,
+                        UserDetailLikedPhotos(
+                            viewModel = viewModel,
                             onPhotoClick = onPhotoClick
                         )
-                    }
-                }
-            }
-
-            userDetailPhotos.apply {
-                when {
-                    loadState.refresh is LoadState.Error -> {
-
-                    }
-                    loadState.append is LoadState.Error -> {
-
-                    }
-                }
-            }
-
-            userDetailCollections.apply {
-                when {
-                    loadState.refresh is LoadState.Error -> {
-
-                    }
-                    loadState.append is LoadState.Error -> {
-
-                    }
-                }
-            }
-
-            userDetailLikedPhotos.apply {
-                when {
-                    loadState.refresh is LoadState.Error -> {
-
-                    }
-                    loadState.append is LoadState.Error -> {
-
                     }
                 }
             }
@@ -384,9 +348,11 @@ fun UserDetailStaticsItem(
 @Composable
 fun UserDetailPhotos(
     modifier: Modifier = Modifier,
-    photos: LazyPagingItems<UsersPhotos>,
+    viewModel: UserDetailViewModel,
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
+    val photos = viewModel.userDetailPhotosFlow.collectAsLazyPagingItems()
+
     if (photos.itemCount > 0) {
         LazyColumn(
             modifier = modifier
@@ -404,15 +370,27 @@ fun UserDetailPhotos(
                 )
             }
         }
+        photos.apply {
+            when {
+                loadState.refresh is LoadState.Error -> {
+
+                }
+                loadState.append is LoadState.Error -> {
+
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun UserDetailCollections(
     modifier: Modifier = Modifier,
-    collections: LazyPagingItems<Collections>,
+    viewModel: UserDetailViewModel,
     onCollectionItemsClick: (String, String) -> Unit
 ) {
+    val collections = viewModel.userDetailCollectionsFlow.collectAsLazyPagingItems()
+
     if (collections.itemCount > 0) {
         LazyColumn(
             modifier = modifier
@@ -427,6 +405,55 @@ fun UserDetailCollections(
                     CollectionsItem(collections = it) { id, title ->
                         onCollectionItemsClick(id, title)
                     }
+                }
+            }
+        }
+        collections.apply {
+            when {
+                loadState.refresh is LoadState.Error -> {
+
+                }
+                loadState.append is LoadState.Error -> {
+
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun UserDetailLikedPhotos(
+    modifier: Modifier = Modifier,
+    viewModel: UserDetailViewModel,
+    onPhotoClick: (UsersPhotos?) -> Unit
+) {
+    val photos =
+        viewModel.userDetailLikedPhotosDataSourceFlow.collectAsLazyPagingItems()
+
+    if (photos.itemCount > 0) {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxWidth()
+        ) {
+            items(lazyPagingItems = photos) { photoItem ->
+                val item by remember {
+                    mutableStateOf(photoItem)
+                }
+
+                PhotoDetailImage(
+                    modifier = Modifier.fillMaxWidth(),
+                    photo = item,
+                    onPhotoClick = { onPhotoClick(item) }
+                )
+            }
+        }
+        photos.apply {
+            when {
+                loadState.refresh is LoadState.Error -> {
+
+                }
+                loadState.append is LoadState.Error -> {
+
                 }
             }
         }
