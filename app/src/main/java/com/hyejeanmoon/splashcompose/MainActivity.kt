@@ -40,6 +40,7 @@ import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsViewModel
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
+import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,6 +54,8 @@ class MainActivity : ComponentActivity() {
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initPref()
 
         setContent {
 
@@ -73,7 +76,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         SETTINGS_ITEM_VERSION -> {
-
+                            // do nothing
                         }
 
                         SETTINGS_ITEM_CLEAR_CACHE -> {
@@ -93,7 +96,10 @@ class MainActivity : ComponentActivity() {
                                 title = SETTINGS_ITEM_DISPLAY_RESOLUTION
                             ),
                             SettingItemDetail(title = SETTINGS_ITEM_DOWNLOAD_RESOLUTION),
-                            SettingItemDetail(title = SETTINGS_ITEM_PHOTO_DISPLAY_ORDER),
+                            SettingItemDetail(
+                                title = SETTINGS_ITEM_PHOTO_DISPLAY_ORDER,
+                                "This setting will take effect the next time you start the app"
+                            ),
                             SettingItemDetail(title = SETTINGS_ITEM_CLEAR_CACHE)
                         )
                     ),
@@ -119,6 +125,36 @@ class MainActivity : ComponentActivity() {
                     )
                 },
                 settingsViewModel = settingsViewModel
+            )
+        }
+    }
+
+    private fun initPref() {
+        val pref = SharedPreferencesUtils(this)
+
+        //  download resolution
+        val downloadResolution = pref.getString(SharedPreferencesUtils.KEY_DOWNLOAD_RESOLUTION)
+        if (downloadResolution.isBlank()) {
+            pref.putString(
+                SharedPreferencesUtils.KEY_DOWNLOAD_RESOLUTION,
+                Resolution.FULL.name
+            )
+        }
+
+        //  display resolution
+        val displayResolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
+        if (displayResolution.isBlank()) {
+            pref.putString(
+                SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION,
+                Resolution.REGULAR.name
+            )
+        }
+        //  order by
+        val orderBy = pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
+        if (orderBy.isBlank()) {
+            pref.putString(
+                SharedPreferencesUtils.KEY_ORDER_BY,
+                OrderBy.LATEST.name
             )
         }
     }
@@ -321,11 +357,11 @@ fun RadioButtonList(
             initialPosition = settingsViewModel.getOrderByPosition()
         }
         MainActivity.SETTINGS_ITEM_DOWNLOAD_RESOLUTION -> {
-            radioOptionList = settingsViewModel.resolutionList
+            radioOptionList = settingsViewModel.downloadResolutionList
             initialPosition = settingsViewModel.getDownloadResolutionPosition()
         }
         MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
-            radioOptionList = settingsViewModel.resolutionList
+            radioOptionList = settingsViewModel.displayResolutionList
             initialPosition = settingsViewModel.getDisplayResolutionPosition()
         }
     }

@@ -1,15 +1,19 @@
 package com.hyejeanmoon.splashcompose.screen.photos
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel
-class PhotosViewModel : ViewModel() {
+class PhotosViewModel(
+    app: Application
+) : AndroidViewModel(app) {
 
     private val photosApiService =
         ApiServiceHelper.createPhotosApiService(
@@ -17,7 +21,18 @@ class PhotosViewModel : ViewModel() {
             OkHttpClient().splashOkHttpClient
         )
 
-    private val photosDataSource = PhotosDataSource(PhotosRepository(photosApiService))
+    private val pref = SharedPreferencesUtils(app)
+
+    fun getDisplayResolution(): String {
+        return pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
+    }
+
+    private fun getOrderBy(): String {
+        return pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
+    }
+
+    private val photosDataSource =
+        PhotosDataSource(PhotosRepository(photosApiService,getOrderBy()))
 
     var photoList = Pager(
         config = PagingConfig(

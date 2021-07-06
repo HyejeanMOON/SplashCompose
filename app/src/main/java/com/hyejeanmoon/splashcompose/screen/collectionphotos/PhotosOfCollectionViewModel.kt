@@ -1,5 +1,7 @@
 package com.hyejeanmoon.splashcompose.screen.collectionphotos
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
@@ -8,15 +10,23 @@ import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 
 class PhotosOfCollectionViewModel(
+    app:Application,
     private val state: SavedStateHandle
-):ViewModel() {
+):AndroidViewModel(app) {
 
     private var id = ""
 
     init {
         id = state.get<String>(PhotosOfCollectionActivity.COLLECTION_ID).orEmpty()
+    }
+
+    private val pref = SharedPreferencesUtils(app)
+
+    fun getDisplayResolution(): String {
+        return pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
     }
 
     private val collectionsApiService =

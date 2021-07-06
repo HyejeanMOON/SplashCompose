@@ -25,6 +25,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
 import com.hyejeanmoon.splashcompose.entity.Collections
+import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 
 @Composable
 fun CollectionsScreen(
@@ -41,7 +42,8 @@ fun CollectionsScreen(
                 val item by remember { mutableStateOf(collectionsItem) }
                 CollectionsItem(
                     collections = item,
-                    onCollectionsItemClick = onCollectionsItemClick
+                    onCollectionsItemClick = onCollectionsItemClick,
+                    resolution = collectionsViewModel.getDisplayResolution()
                 )
             }
         }
@@ -62,6 +64,7 @@ fun CollectionsScreen(
 @Composable
 fun CollectionsItem(
     modifier: Modifier = Modifier,
+    resolution:String,
     collections: Collections,
     onCollectionsItemClick: (String, String) -> Unit
 ) {
@@ -74,6 +77,11 @@ fun CollectionsItem(
                 onCollectionsItemClick(collections.id.orEmpty(), collections.title.orEmpty())
             }
     ) {
+
+        val coverPhotoUrl = PhotoUtils.getCoverPhotoOfCollectionUrlByResolution(
+            resolution,
+            collections
+        )
 
         val (image, title, photoNumber) = createRefs()
 
@@ -88,7 +96,7 @@ fun CollectionsItem(
                     bottom.linkTo(image.bottom)
                 },
             painter = rememberCoilPainter(
-                collections.coverPhoto?.urls?.regular.orEmpty(),
+                coverPhotoUrl,
                 fadeIn = true
             ),
             contentDescription = "collections cover image",

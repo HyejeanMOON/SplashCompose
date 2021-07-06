@@ -7,7 +7,8 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class PhotosRepository(
-    private val photosApiService: PhotosApiService
+    private val photosApiService: PhotosApiService,
+    val orderBy: String
 ) {
 
     suspend fun getPhoto(id: String): Photo = suspendCoroutine {
@@ -20,8 +21,7 @@ class PhotosRepository(
 
     suspend fun getPhotoList(
         page:Int,
-        perPage:Int,
-        orderBy:String
+        perPage:Int
     ):List<Photo> = suspendCoroutine{
         photosApiService.getPhotos(page, perPage, orderBy).enqueue(
             ApiEnqueueCallback({ response ->

@@ -8,7 +8,8 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class UserDetailRepository(
-    private val userDetailApiService: UserDetailApiService
+    private val userDetailApiService: UserDetailApiService,
+    private val orderBy:String
 ) {
 
     suspend fun getUsersPhotos(
@@ -20,7 +21,7 @@ class UserDetailRepository(
             userName,
             page,
             perPage,
-            ORDER_BY_LATEST
+            orderBy
         ).enqueue(ApiEnqueueCallback({ photos ->
             it.resume(photos)
         }, { exception ->
@@ -37,7 +38,7 @@ class UserDetailRepository(
             userName,
             page,
             perPage,
-            ORDER_BY_LATEST
+            orderBy
         ).enqueue(ApiEnqueueCallback({ photos ->
             it.resume(photos)
         }, { exception ->
@@ -54,7 +55,7 @@ class UserDetailRepository(
             userName,
             page,
             perPage,
-            ORDER_BY_LATEST
+            orderBy
         ).enqueue(ApiEnqueueCallback({ collections ->
             it.resume(collections)
         }, { exception ->

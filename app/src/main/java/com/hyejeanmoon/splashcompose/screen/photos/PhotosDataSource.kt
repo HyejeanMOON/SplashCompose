@@ -2,6 +2,7 @@ package com.hyejeanmoon.splashcompose.screen.photos
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.hyejeanmoon.splashcompose.OrderBy
 import com.hyejeanmoon.splashcompose.entity.Photo
 
 class PhotosDataSource(
@@ -14,8 +15,7 @@ class PhotosDataSource(
         return try {
             val photoList = photosRepository.getPhotoList(
                 page = position,
-                perPage = params.loadSize,
-                orderBy = ORDER_BY_LATEST
+                perPage = params.loadSize
             )
             LoadResult.Page(
                 photoList,
@@ -33,6 +33,5 @@ class PhotosDataSource(
 
     companion object {
         private const val START_INDEX = 0
-        private const val ORDER_BY_LATEST = "latest"
     }
 }

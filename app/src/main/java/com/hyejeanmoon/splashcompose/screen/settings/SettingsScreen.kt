@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.hyejeanmoon.splashcompose.R
+import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
 
 @Composable
 fun SettingsScreen(
@@ -31,14 +32,20 @@ fun SettingsScreen(
         items(items = settingsItems) {
             SettingsItemTitle(titleName = it.title)
             it.itemDetail.forEachIndexed { index, s ->
-                SettingsItemDetail(itemName = s.title, itemContent = s.content) {
+                SettingsItemDetail(
+                    itemName = s.title,
+                    itemContent = s.content,
+                    itemDescription = s.description
+                ) {
                     onSettingsItemClick(s.title)
                 }
                 if (index == it.itemDetail.size - 1) {
-                    Spacer(modifier = Modifier
-                        .background(Color.White)
-                        .fillMaxWidth()
-                        .size(30.dp))
+                    Spacer(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .fillMaxWidth()
+                            .size(30.dp)
+                    )
                 }
             }
         }
@@ -52,6 +59,7 @@ data class SettingsItem(
 
 data class SettingItemDetail(
     val title: String,
+    val description: String = "",
     val content: String = ""
 )
 
@@ -95,6 +103,7 @@ fun SettingsItemTitle(
 fun SettingsItemDetail(
     modifier: Modifier = Modifier,
     itemName: String,
+    itemDescription: String = "",
     itemContent: String = "",
     onItemClick: (String) -> Unit
 ) {
@@ -104,7 +113,7 @@ fun SettingsItemDetail(
             .requiredHeight(50.dp)
             .clickable { onItemClick(itemName) }
     ) {
-        val (text, icon, content, divider) = createRefs()
+        val (text, icon, desc, content, divider) = createRefs()
         Text(
             modifier = Modifier
                 .padding(20.dp, 0.dp, 0.dp, 0.dp)
@@ -144,6 +153,21 @@ fun SettingsItemDetail(
                     .padding(0.dp, 0.dp, 20.dp, 0.dp),
                 painter = painterResource(id = R.drawable.ic_right),
                 contentDescription = "right icon"
+            )
+        }
+
+        if (itemDescription.isNotBlank()) {
+            Text(
+                modifier = Modifier
+                    .constrainAs(desc) {
+                        start.linkTo(parent.start)
+                        top.linkTo(text.bottom)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(20.dp, 0.dp, 0.dp, 5.dp),
+                text = itemDescription,
+                fontSize = 10.sp,
+                color = Color.Gray
             )
         }
 

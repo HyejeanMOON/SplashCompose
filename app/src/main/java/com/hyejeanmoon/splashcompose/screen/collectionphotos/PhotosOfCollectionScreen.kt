@@ -59,7 +59,11 @@ fun PhotosOfCollectionScreen(
                 val item by remember {
                     mutableStateOf(photoItem)
                 }
-                PhotoImage(photo = item, onPhotoClick = onPhotoClick)
+                PhotoImage(
+                    photo = item,
+                    onPhotoClick = onPhotoClick,
+                    resolution = photosOfCollectionViewModel.getDisplayResolution()
+                )
             }
         }
     }

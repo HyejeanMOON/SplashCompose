@@ -12,7 +12,15 @@ class SettingsViewModel(
 
     private val pref = SharedPreferencesUtils(app)
 
-    val resolutionList: List<String> = listOf(
+    val displayResolutionList: List<String> = listOf(
+//        Resolution.THUMB.name,
+        Resolution.SMALL.name,
+        Resolution.REGULAR.name,
+//        Resolution.FULL.name,
+//        Resolution.RAW.name
+    )
+
+    val downloadResolutionList: List<String> = listOf(
         Resolution.THUMB.name,
         Resolution.SMALL.name,
         Resolution.REGULAR.name,
@@ -31,7 +39,7 @@ class SettingsViewModel(
             SharedPreferencesUtils.KEY_DOWNLOAD_RESOLUTION
         )
         var position = 0
-        resolutionList.forEachIndexed { index, s ->
+        downloadResolutionList.forEachIndexed { index, s ->
             if(s == resolution) position = index
         }
         return position
@@ -49,7 +57,7 @@ class SettingsViewModel(
             SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION
         )
         var position = 0
-        resolutionList.forEachIndexed { index, s ->
+        displayResolutionList.forEachIndexed { index, s ->
             if(s == resolution) position = index
         }
         return position

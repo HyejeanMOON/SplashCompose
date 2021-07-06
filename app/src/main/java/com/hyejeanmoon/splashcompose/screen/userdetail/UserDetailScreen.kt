@@ -25,12 +25,16 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
-import com.google.accompanist.pager.*
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.pagerTabIndicatorOffset
+import com.google.accompanist.pager.rememberPagerState
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsItem
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailLocation
+import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -358,7 +362,8 @@ fun UserDetailPhotos(
                 PhotoDetailImage(
                     modifier = Modifier.fillMaxWidth(),
                     photo = item,
-                    onPhotoClick = { onPhotoClick(item) }
+                    onPhotoClick = { onPhotoClick(item) },
+                    resolution = viewModel.getDisplayResolution()
                 )
             }
         }
@@ -396,7 +401,10 @@ fun UserDetailCollections(
                 }
 
                 item?.also {
-                    CollectionsItem(collections = it) { id, title ->
+                    CollectionsItem(
+                        collections = it,
+                        resolution = viewModel.getDisplayResolution()
+                    ) { id, title ->
                         onCollectionItemsClick(id, title)
                     }
                 }
@@ -439,7 +447,8 @@ fun UserDetailLikedPhotos(
                 PhotoDetailImage(
                     modifier = Modifier.fillMaxWidth(),
                     photo = item,
-                    onPhotoClick = { onPhotoClick(item) }
+                    onPhotoClick = { onPhotoClick(item) },
+                    resolution = viewModel.getDisplayResolution()
                 )
             }
         }
@@ -503,15 +512,22 @@ fun NoPhotos(
 fun PhotoDetailImage(
     modifier: Modifier = Modifier,
     photo: UsersPhotos?,
+    resolution: String,
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
+
+    val photoUrl = PhotoUtils.getUserDetailPhotoUrlByResolution(
+        resolution,
+        photo
+    )
+
     Image(
         modifier = modifier
             .fillMaxWidth()
             .padding(0.dp, 1.dp)
             .clickable { onPhotoClick(photo) },
         painter = rememberCoilPainter(
-            photo?.urls?.regular.orEmpty(),
+            photoUrl,
             fadeIn = true
         ),
         contentDescription = "photo image",

@@ -1,9 +1,7 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
@@ -12,13 +10,15 @@ import com.hyejeanmoon.splashcompose.api.OkHttpClient
 import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @HiltViewModel
 class UserDetailViewModel(
+    app: Application,
     private val state: SavedStateHandle
-) : ViewModel() {
+) : AndroidViewModel(app) {
 
     private var userName: String = ""
 
@@ -37,7 +37,7 @@ class UserDetailViewModel(
     private val _exception: MutableLiveData<Exception> = MutableLiveData()
     val exception: LiveData<Exception> get() = _exception
 
-    private val userDetailRepository = UserDetailRepository(userDetailApiService)
+    private val userDetailRepository = UserDetailRepository(userDetailApiService, getOrderBy())
     private val userDetailPhotosDataSource = UserDetailPhotosDataSource(
         userDetailRepository,
         userName
@@ -50,6 +50,16 @@ class UserDetailViewModel(
         userDetailRepository,
         userName
     )
+
+    private val pref = SharedPreferencesUtils(app)
+
+    fun getDisplayResolution(): String {
+        return pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
+    }
+
+    private fun getOrderBy(): String {
+        return pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
+    }
 
     fun getUserDetailInfo() {
         userDetailApiService.getUserDetails(

@@ -119,7 +119,7 @@ fun PhotoDetailImg(
                     end.linkTo(parent.end)
                 },
             painter = rememberGlidePainter(
-                request = photo?.urls?.regular.orEmpty(),
+                request = photo?.urls?.full.orEmpty(),
                 fadeIn = true,
                 requestBuilder = {
                     diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
