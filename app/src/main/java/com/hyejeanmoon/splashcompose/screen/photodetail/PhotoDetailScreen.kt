@@ -36,6 +36,8 @@ fun PhotoDetailScreen(
     onBackIconClick: () -> Unit,
     onUserInfoClick: (String) -> Unit
 ) {
+    viewModel.getPhotoById()
+    viewModel.isFavoritePhoto()
 
     val photo by viewModel.photo.observeAsState()
     val scrollState = rememberScrollState()

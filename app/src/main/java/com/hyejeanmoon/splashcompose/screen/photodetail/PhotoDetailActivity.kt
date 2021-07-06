@@ -16,15 +16,6 @@ class PhotoDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val viewModel: PhotoDetailViewModel =
-//            ViewModelProvider(
-//                this,
-//                ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-//            ).get(PhotoDetailViewModel::class.java)
-
-        viewModel.getPhotoById()
-        viewModel.isFavoritePhoto()
-
         setContent {
             SetUpStatusBar()
 

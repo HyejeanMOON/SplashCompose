@@ -7,10 +7,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -32,6 +38,7 @@ import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
 import com.hyejeanmoon.splashcompose.screen.settings.SettingItemDetail
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
+import com.hyejeanmoon.splashcompose.screen.settings.SettingsViewModel
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,6 +48,7 @@ class MainActivity : ComponentActivity() {
     private val photosViewModel: PhotosViewModel by viewModels()
     private val collectionsViewModel: CollectionsViewModel by viewModels()
     private val favoriteViewModel: FavoriteViewModel by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels()
 
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,7 +117,8 @@ class MainActivity : ComponentActivity() {
                         photoId,
                         this
                     )
-                }
+                },
+                settingsViewModel = settingsViewModel
             )
         }
     }
@@ -125,14 +134,14 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        private const val SETTINGS_ITEM_ABOUT_DEVELOPER = "About Developer"
-        private const val SETTINGS_ITEM_VERSION = "Version"
-        private const val SETTINGS_ITEM_CLEAR_CACHE = "Clear Cache"
-        private const val SETTINGS_ITEM_PHOTO_DISPLAY_ORDER = "Photo Display Order"
-        private const val SETTINGS_ITEM_DOWNLOAD_RESOLUTION = "Download Resolution"
-        private const val SETTINGS_ITEM_DISPLAY_RESOLUTION = "Display Resolution"
-        private const val SETTINGS_TITLE_OTHERS = "Others"
-        private const val SETTINGS_TITLE_APPLICATION_SETTINGS = "Application Settings"
+        const val SETTINGS_ITEM_ABOUT_DEVELOPER = "About Developer"
+        const val SETTINGS_ITEM_VERSION = "Version"
+        const val SETTINGS_ITEM_CLEAR_CACHE = "Clear Cache"
+        const val SETTINGS_ITEM_PHOTO_DISPLAY_ORDER = "Photo Display Order"
+        const val SETTINGS_ITEM_DOWNLOAD_RESOLUTION = "Download Resolution"
+        const val SETTINGS_ITEM_DISPLAY_RESOLUTION = "Display Resolution"
+        const val SETTINGS_TITLE_OTHERS = "Others"
+        const val SETTINGS_TITLE_APPLICATION_SETTINGS = "Application Settings"
     }
 }
 
@@ -142,6 +151,7 @@ fun SplashComposeApp(
     photoViewModel: PhotosViewModel,
     collectionsViewModel: CollectionsViewModel,
     favoriteViewModel: FavoriteViewModel,
+    settingsViewModel: SettingsViewModel,
     onCollectionsItemClick: (String, String) -> Unit,
     onSettingsItemClick: (String) -> Unit,
     onPhotoClick: (Photo?) -> Unit,
@@ -199,6 +209,10 @@ fun SplashComposeApp(
                     )
                 }
             ) {
+
+                var openDialog = remember { mutableStateOf(false) }
+                var settingsItem = remember { mutableStateOf("") }
+
                 NavHost(navController, startDestination = Screen.Photo.route) {
                     composable(Screen.Photo.route) {
                         PhotoScreen(
@@ -221,10 +235,149 @@ fun SplashComposeApp(
                     composable(Screen.Settings.route) {
                         SettingsScreen(
                             settingsItems = settingsItems,
-                            onSettingsItemClick = onSettingsItemClick
+                            onSettingsItemClick = { title ->
+                                when (title) {
+                                    MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION,
+                                    MainActivity.SETTINGS_ITEM_DOWNLOAD_RESOLUTION,
+                                    MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+                                        openDialog.value = true
+                                        settingsItem.value = title
+                                    }
+                                    MainActivity.SETTINGS_ITEM_ABOUT_DEVELOPER,
+                                    MainActivity.SETTINGS_ITEM_VERSION,
+                                    MainActivity.SETTINGS_ITEM_CLEAR_CACHE -> {
+                                        onSettingsItemClick(title)
+                                    }
+                                }
+                            }
                         )
                     }
                 }
+                if (openDialog.value) {
+                    SettingsAlertDialog(
+                        item = settingsItem.value,
+                        onCloseDialog = {
+                            openDialog.value = false
+                        },
+                        settingsViewModel = settingsViewModel
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SettingsAlertDialog(
+    modifier: Modifier = Modifier,
+    settingsViewModel: SettingsViewModel,
+    item: String,
+    onCloseDialog: () -> Unit
+) {
+    AlertDialog(
+        modifier = modifier.padding(40.dp, 0.dp),
+        onDismissRequest = {
+            onCloseDialog()
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onCloseDialog()
+                }
+            ) {
+                Text(
+                    text = "Dismiss",
+                    color = Color.Black,
+                )
+            }
+        },
+        title = {
+            Text(
+                text = item,
+                color = Color.Black
+            )
+        },
+        text = {
+            RadioButtonList(
+                settingsViewModel = settingsViewModel,
+                item = item
+            )
+        }
+    )
+}
+
+@Composable
+fun RadioButtonList(
+    modifier: Modifier = Modifier,
+    settingsViewModel: SettingsViewModel,
+    item: String
+) {
+    var radioOptionList: List<String> = listOf()
+    var initialPosition = 0
+
+    when (item) {
+        MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+            radioOptionList = settingsViewModel.orderByList
+            initialPosition = settingsViewModel.getOrderByPosition()
+        }
+        MainActivity.SETTINGS_ITEM_DOWNLOAD_RESOLUTION -> {
+            radioOptionList = settingsViewModel.resolutionList
+            initialPosition = settingsViewModel.getDownloadResolutionPosition()
+        }
+        MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
+            radioOptionList = settingsViewModel.resolutionList
+            initialPosition = settingsViewModel.getDisplayResolutionPosition()
+        }
+    }
+
+    var selectedOption = remember { mutableStateOf(initialPosition) }
+    Column(
+        modifier = modifier
+    ) {
+        radioOptionList.forEachIndexed { index, text ->
+            Row(
+                Modifier
+                    .selectable(
+                        selected = (text == radioOptionList[selectedOption.value]),
+                        onClick = {
+                            selectedOption.value = index
+                            when (item) {
+                                MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+                                    settingsViewModel.putOrderBy(text)
+                                }
+                                MainActivity.SETTINGS_ITEM_DOWNLOAD_RESOLUTION -> {
+                                    settingsViewModel.putDownloadResolution(text)
+                                }
+                                MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
+                                    settingsViewModel.putDisplayResolution(text)
+                                }
+                            }
+                        }
+                    )
+                    .padding(horizontal = 20.dp)
+            ) {
+                RadioButton(
+                    selected = (text == radioOptionList[selectedOption.value]),
+                    onClick = {
+                        selectedOption.value = index
+                        when (item) {
+                            MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+                                settingsViewModel.putOrderBy(text)
+                            }
+                            MainActivity.SETTINGS_ITEM_DOWNLOAD_RESOLUTION -> {
+                                settingsViewModel.putDownloadResolution(text)
+                            }
+                            MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
+                                settingsViewModel.putDisplayResolution(text)
+                            }
+                        }
+                    }
+                )
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.body1.merge(),
+                    modifier = Modifier.padding(start = 16.dp)
+                )
             }
         }
     }
