@@ -1,5 +1,6 @@
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,7 +10,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +35,6 @@ import com.hyejeanmoon.splashcompose.entity.Photo
 fun PhotoDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: PhotoDetailViewModel,
-    onDownloadClick: (String) -> Unit,
     onBackIconClick: () -> Unit,
     onUserInfoClick: (String) -> Unit
 ) {
@@ -54,7 +56,7 @@ fun PhotoDetailScreen(
             PhotoDetailImg(photo = photo, onBackIconClick = onBackIconClick)
             PhotoDetailUserInfo(
                 photo = photo,
-                onDownloadClick = onDownloadClick,
+                viewModel = viewModel,
                 onUserInfoClick = onUserInfoClick,
                 onFavoriteIconClick = {
                     viewModel.favoritePhoto()
@@ -94,7 +96,6 @@ fun PhotoDetailScreen(
             )
         }
     }
-
 }
 
 @Composable
@@ -148,8 +149,8 @@ fun PhotoDetailImg(
 fun PhotoDetailUserInfo(
     modifier: Modifier = Modifier,
     photo: Photo?,
+    viewModel: PhotoDetailViewModel,
     isFavoritePhoto: Boolean?,
-    onDownloadClick: (String) -> Unit,
     onUserInfoClick: (String) -> Unit,
     onFavoriteIconClick: (String) -> Unit
 ) {
@@ -227,7 +228,13 @@ fun PhotoDetailUserInfo(
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 }
-                .clickable { onDownloadClick(photo?.id.orEmpty()) },
+                .clickable {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        viewModel.downloadPhotoByIdVersionQ()
+                    } else {
+                        viewModel.downloadPhotoById()
+                    }
+                },
             painter = painterResource(id = R.drawable.ic_download),
             contentDescription = "download icon"
         )

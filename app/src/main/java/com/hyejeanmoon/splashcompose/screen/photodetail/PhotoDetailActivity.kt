@@ -5,13 +5,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 
 class PhotoDetailActivity : ComponentActivity() {
 
-    private val viewModel:PhotoDetailViewModel by viewModels()
+    private val viewModel: PhotoDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,9 +20,6 @@ class PhotoDetailActivity : ComponentActivity() {
 
             PhotoDetailScreen(
                 viewModel = viewModel,
-                onDownloadClick = {
-
-                },
                 onBackIconClick = {
                     finish()
                 },

@@ -1,7 +1,11 @@
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
 import android.app.Application
+import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
+import com.bumptech.glide.Glide
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
@@ -9,6 +13,7 @@ import com.hyejeanmoon.splashcompose.db.AppDatabase
 import com.hyejeanmoon.splashcompose.db.FavoritePhoto
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.FileUtils
 import com.hyejeanmoon.splashcompose.utils.LogUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +22,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class PhotoDetailViewModel(
-    app: Application,
+    val app: Application,
     state: SavedStateHandle
 ) : AndroidViewModel(app) {
     private var photoId = ""
@@ -89,7 +94,57 @@ class PhotoDetailViewModel(
         }
     }
 
-    fun downloadPhotoById(id: String) {
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun downloadPhotoByIdVersionQ() {
+        if (photoId.isNotBlank()) {
+            photosApiService.downloadPhoto(photoId).enqueue(
+                ApiEnqueueCallback({
+                    it.url?.also { url ->
+                        saveImageFileVersionQ(url)
+                    }
+                }, {
+                    _exception.value = it
+                })
+            )
+        }
+    }
 
+    fun downloadPhotoById() {
+        if (photoId.isNotBlank()) {
+            photosApiService.downloadPhoto(photoId).enqueue(
+                ApiEnqueueCallback({
+                    it.url?.also { url ->
+                        saveImageFile(url)
+                    }
+                }, {
+                    _exception.value = it
+                })
+            )
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun saveImageFileVersionQ(url: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val bitmap = Glide
+                .with(app)
+                .asBitmap()
+                .load(Uri.parse(url))
+                .submit()
+                .get()
+            FileUtils.saveImageVersionQ(app, bitmap)
+        }
+    }
+
+    private fun saveImageFile(url: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val bitmap = Glide
+                .with(app)
+                .asBitmap()
+                .load(Uri.parse(url))
+                .submit()
+                .get()
+            FileUtils.saveImage(app, bitmap)
+        }
     }
 }
