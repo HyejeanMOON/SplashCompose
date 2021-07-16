@@ -95,7 +95,6 @@ fun SettingsItemTitle(
                 bottom.linkTo(parent.bottom)
             }
         )
-
     }
 }
 

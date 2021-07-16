@@ -50,7 +50,14 @@ class PhotoDetailViewModel(
     private val _isFavoritePhoto: MutableLiveData<Boolean> = MutableLiveData()
     val isFavoritePhoto: LiveData<Boolean> get() = _isFavoritePhoto
 
+    private val _downloadStart: MutableLiveData<Unit> = MutableLiveData()
+    val downloadStart: LiveData<Unit> get() = _downloadStart
+
+    private val _downloadComplete: MutableLiveData<Unit> = MutableLiveData()
+    val downloadComplete: LiveData<Unit> get() = _downloadComplete
+
     fun getPhotoById() {
+        LogUtils.outputLog("getPhotoById")
         isRefreshing.value = true
         if (photoId.isNotBlank()) {
             photosApiService.getPhoto(id = photoId).enqueue(
@@ -91,12 +98,15 @@ class PhotoDetailViewModel(
                     )
                 )
             }
+            _isFavoritePhoto.value != _isFavoritePhoto.value
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     fun downloadPhotoByIdVersionQ() {
+        LogUtils.outputLog("downloadPhotoByIdVersionQ")
         if (photoId.isNotBlank()) {
+            startDownloadToast()
             photosApiService.downloadPhoto(photoId).enqueue(
                 ApiEnqueueCallback({
                     it.url?.also { url ->
@@ -110,7 +120,9 @@ class PhotoDetailViewModel(
     }
 
     fun downloadPhotoById() {
+        LogUtils.outputLog("downloadPhotoById")
         if (photoId.isNotBlank()) {
+            startDownloadToast()
             photosApiService.downloadPhoto(photoId).enqueue(
                 ApiEnqueueCallback({
                     it.url?.also { url ->
@@ -125,6 +137,7 @@ class PhotoDetailViewModel(
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun saveImageFileVersionQ(url: String) {
+        LogUtils.outputLog("saveImageFileVersionQ")
         viewModelScope.launch(Dispatchers.IO) {
             val bitmap = Glide
                 .with(app)
@@ -133,10 +146,12 @@ class PhotoDetailViewModel(
                 .submit()
                 .get()
             FileUtils.saveImageVersionQ(app, bitmap)
+            completeDownloadToast()
         }
     }
 
     private fun saveImageFile(url: String) {
+        LogUtils.outputLog("saveImageFile")
         viewModelScope.launch(Dispatchers.IO) {
             val bitmap = Glide
                 .with(app)
@@ -145,6 +160,15 @@ class PhotoDetailViewModel(
                 .submit()
                 .get()
             FileUtils.saveImage(app, bitmap)
+            completeDownloadToast()
         }
+    }
+
+    private fun startDownloadToast() {
+        _downloadStart.postValue(Unit)
+    }
+
+    private fun completeDownloadToast() {
+        _downloadComplete.postValue(Unit)
     }
 }

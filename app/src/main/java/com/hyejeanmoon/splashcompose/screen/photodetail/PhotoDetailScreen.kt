@@ -58,10 +58,6 @@ fun PhotoDetailScreen(
                 photo = photo,
                 viewModel = viewModel,
                 onUserInfoClick = onUserInfoClick,
-                onFavoriteIconClick = {
-                    viewModel.favoritePhoto()
-                    viewModel.isFavoritePhoto()
-                },
                 isFavoritePhoto = isFavoritePhoto
             )
 
@@ -151,8 +147,7 @@ fun PhotoDetailUserInfo(
     photo: Photo?,
     viewModel: PhotoDetailViewModel,
     isFavoritePhoto: Boolean?,
-    onUserInfoClick: (String) -> Unit,
-    onFavoriteIconClick: (String) -> Unit
+    onUserInfoClick: (String) -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -203,7 +198,7 @@ fun PhotoDetailUserInfo(
         Image(
             modifier = Modifier
                 .clickable {
-                    onFavoriteIconClick(photo?.id.orEmpty())
+                    viewModel.favoritePhoto()
                 }
                 .padding(20.dp, 5.dp)
                 .constrainAs(favoriteIcon) {
@@ -222,18 +217,18 @@ fun PhotoDetailUserInfo(
         // download icon
         Image(
             modifier = Modifier
-                .padding(0.dp, 5.dp)
-                .constrainAs(downloadIcon) {
-                    end.linkTo(favoriteIcon.start)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }
                 .clickable {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         viewModel.downloadPhotoByIdVersionQ()
                     } else {
                         viewModel.downloadPhotoById()
                     }
+                }
+                .padding(0.dp, 5.dp)
+                .constrainAs(downloadIcon) {
+                    end.linkTo(favoriteIcon.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
                 },
             painter = painterResource(id = R.drawable.ic_download),
             contentDescription = "download icon"
