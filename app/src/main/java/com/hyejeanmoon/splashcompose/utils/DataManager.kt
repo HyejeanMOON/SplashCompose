@@ -1,25 +1,30 @@
 package com.hyejeanmoon.splashcompose.utils
 
 import android.content.Context
+import android.os.Build
 import android.os.Environment
 import java.io.File
 
 object DataManager {
 
-    fun cleanInternalCache(context: Context) {
-        deleteFilesByDirectory(context.cacheDir)
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            deleteFilesByDirectory(context.externalCacheDir);
+    fun clearCacheInScopedStorage(context: Context) {
+        val cacheDir = context.cacheDir
+        deleteCacheFile(cacheDir)
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                context.externalCacheDir?.also {
+                    deleteCacheFile(it)
+                }
+            }
         }
     }
 
-    // this function is fit for the Android version under Android11
-    fun deleteFilesByDirectory(directory: File?) {
-        directory?.also {
-            if (directory.exists() && directory.isDirectory) {
-                directory.listFiles().forEach {
-                    it.delete()
-                }
+    private fun deleteCacheFile(file: File) {
+        file.listFiles().forEach {
+            if (it.isDirectory) {
+                deleteCacheFile(it)
+            } else {
+                it.delete()
             }
         }
     }

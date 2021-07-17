@@ -40,6 +40,7 @@ import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsViewModel
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
+import com.hyejeanmoon.splashcompose.utils.DataManager
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -80,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         SETTINGS_ITEM_CLEAR_CACHE -> {
-//                            DataManager.cleanInternalCache(this)
+                            DataManager.clearCacheInScopedStorage(this)
                         }
                     }
                 },
