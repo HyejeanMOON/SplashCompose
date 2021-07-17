@@ -32,6 +32,6 @@ class PhotosDataSource(
     }
 
     companion object {
-        private const val START_INDEX = 0
+        private const val START_INDEX = 1
     }
 }

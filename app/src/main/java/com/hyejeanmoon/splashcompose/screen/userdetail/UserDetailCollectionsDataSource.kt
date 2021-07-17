@@ -6,7 +6,8 @@ import com.hyejeanmoon.splashcompose.entity.Collections
 
 class UserDetailCollectionsDataSource(
     private val userDetailRepository: UserDetailRepository,
-    private val userName: String
+    private val userName: String,
+    private val orderBy: String
 ) : PagingSource<Int, Collections>() {
 
     override fun getRefreshKey(state: PagingState<Int, Collections>): Int? {
@@ -20,7 +21,8 @@ class UserDetailCollectionsDataSource(
             val collections = userDetailRepository.getUsersCollections(
                 userName,
                 page = position,
-                perPage = params.loadSize
+                perPage = params.loadSize,
+                orderBy = orderBy
             )
 
             LoadResult.Page(
@@ -36,6 +38,6 @@ class UserDetailCollectionsDataSource(
     }
 
     companion object {
-        private const val START_INDEX = 0
+        private const val START_INDEX = 1
     }
 }

@@ -3,5 +3,7 @@ package com.hyejeanmoon.splashcompose
 enum class OrderBy(name:String) {
     LATEST("latest"),
     OLDEST("oldest"),
-    POPULAR("popular")
+    POPULAR("popular"),
+    VIEWS("views"),
+    DOWNLOADS("downloads")
 }

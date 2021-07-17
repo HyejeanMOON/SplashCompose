@@ -2,6 +2,7 @@ package com.hyejeanmoon.splashcompose.screen.userdetail
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.hyejeanmoon.splashcompose.OrderBy
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 
 class UserDetailPhotosDataSource(
@@ -20,7 +21,8 @@ class UserDetailPhotosDataSource(
             val photos = userDetailRepository.getUsersPhotos(
                 userName,
                 page = position,
-                perPage = params.loadSize
+                perPage = params.loadSize,
+                orderBy = "latest"
             )
 
             LoadResult.Page(
@@ -36,6 +38,6 @@ class UserDetailPhotosDataSource(
     }
 
     companion object {
-        private const val START_INDEX = 0
+        private const val START_INDEX = 1
     }
 }

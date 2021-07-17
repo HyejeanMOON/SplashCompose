@@ -27,6 +27,8 @@ class UserDetailViewModel(
     }
 
     private val pref = SharedPreferencesUtils(app)
+    private val orderBy = pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
+    val resolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
 
     private val _userDetail: MutableLiveData<UserDetail> = MutableLiveData()
     val userDetail: LiveData<UserDetail> get() = _userDetail
@@ -39,27 +41,21 @@ class UserDetailViewModel(
     private val _exception: MutableLiveData<Exception> = MutableLiveData()
     val exception: LiveData<Exception> get() = _exception
 
-    private val userDetailRepository = UserDetailRepository(userDetailApiService, getOrderBy())
+    private val userDetailRepository = UserDetailRepository(userDetailApiService)
     private val userDetailPhotosDataSource = UserDetailPhotosDataSource(
         userDetailRepository,
         userName
     )
     private val userDetailLikedPhotosDataSource = UserDetailLikedPhotosDataSource(
         userDetailRepository,
-        userName
+        userName,
+        orderBy
     )
     private val userDetailCollectionsDataSource = UserDetailCollectionsDataSource(
         userDetailRepository,
-        userName
+        userName,
+        orderBy
     )
-
-    fun getDisplayResolution(): String {
-        return pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
-    }
-
-    private fun getOrderBy(): String {
-        return pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
-    }
 
     fun getUserDetailInfo() {
         userDetailApiService.getUserDetails(

@@ -8,14 +8,14 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class UserDetailRepository(
-    private val userDetailApiService: UserDetailApiService,
-    private val orderBy:String
+    private val userDetailApiService: UserDetailApiService
 ) {
 
     suspend fun getUsersPhotos(
         userName: String,
         page:Int,
-        perPage:Int
+        perPage:Int,
+        orderBy: String
     ): List<UsersPhotos> = suspendCoroutine {
         userDetailApiService.getPhotosByUserName(
             userName,
@@ -32,7 +32,8 @@ class UserDetailRepository(
     suspend fun getUsersLikedPhotos(
         userName: String,
         page:Int,
-        perPage:Int
+        perPage:Int,
+        orderBy: String
     ): List<UsersPhotos> = suspendCoroutine {
         userDetailApiService.getLikedPhotosByUserName(
             userName,
@@ -49,7 +50,8 @@ class UserDetailRepository(
     suspend fun getUsersCollections(
         userName: String,
         page:Int,
-        perPage:Int
+        perPage:Int,
+        orderBy: String
     ): List<Collections> = suspendCoroutine {
         userDetailApiService.getCollectionsByUserName(
             userName,

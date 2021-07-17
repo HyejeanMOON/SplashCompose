@@ -6,7 +6,8 @@ import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 
 class UserDetailLikedPhotosDataSource(
     private val userDetailRepository: UserDetailRepository,
-    private val userName: String
+    private val userName: String,
+    private val orderBy:String
 ) : PagingSource<Int, UsersPhotos>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UsersPhotos> {
@@ -16,7 +17,8 @@ class UserDetailLikedPhotosDataSource(
             val photos = userDetailRepository.getUsersLikedPhotos(
                 userName,
                 page = position,
-                perPage = params.loadSize
+                perPage = params.loadSize,
+                orderBy = orderBy
             )
 
             LoadResult.Page(
@@ -36,6 +38,6 @@ class UserDetailLikedPhotosDataSource(
     }
 
     companion object {
-        private const val START_INDEX = 0
+        private const val START_INDEX = 1
     }
 }

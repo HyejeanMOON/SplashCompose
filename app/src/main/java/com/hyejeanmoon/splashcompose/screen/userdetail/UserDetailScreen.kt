@@ -365,7 +365,7 @@ fun UserDetailPhotos(
                     modifier = Modifier.fillMaxWidth(),
                     photo = item,
                     onPhotoClick = { onPhotoClick(item) },
-                    resolution = viewModel.getDisplayResolution()
+                    resolution = viewModel.resolution
                 )
             }
         }
@@ -405,7 +405,7 @@ fun UserDetailCollections(
                 item?.also {
                     CollectionsItem(
                         collections = it,
-                        resolution = viewModel.getDisplayResolution()
+                        resolution = viewModel.resolution
                     ) { id, title ->
                         onCollectionItemsClick(id, title)
                     }
@@ -450,7 +450,7 @@ fun UserDetailLikedPhotos(
                     modifier = Modifier.fillMaxWidth(),
                     photo = item,
                     onPhotoClick = { onPhotoClick(item) },
-                    resolution = viewModel.getDisplayResolution()
+                    resolution = viewModel.resolution
                 )
             }
         }
