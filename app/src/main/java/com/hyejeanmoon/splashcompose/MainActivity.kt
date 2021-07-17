@@ -85,17 +85,12 @@ class MainActivity : ComponentActivity() {
                     }
                 },
                 settingsItems = listOf(
-//                    SettingsItem(
-//                        "Account",
-//                        listOf("User Account", "Log Out")
-//                    ),
                     SettingsItem(
                         SETTINGS_TITLE_APPLICATION_SETTINGS,
                         listOf(
                             SettingItemDetail(
                                 title = SETTINGS_ITEM_DISPLAY_RESOLUTION
                             ),
-                            SettingItemDetail(title = SETTINGS_ITEM_DOWNLOAD_RESOLUTION),
                             SettingItemDetail(
                                 title = SETTINGS_ITEM_PHOTO_DISPLAY_ORDER,
                                 "This setting will take effect the next time you start the app"
@@ -174,7 +169,6 @@ class MainActivity : ComponentActivity() {
         const val SETTINGS_ITEM_VERSION = "Version"
         const val SETTINGS_ITEM_CLEAR_CACHE = "Clear Cache"
         const val SETTINGS_ITEM_PHOTO_DISPLAY_ORDER = "Photo Display Order"
-        const val SETTINGS_ITEM_DOWNLOAD_RESOLUTION = "Download Resolution"
         const val SETTINGS_ITEM_DISPLAY_RESOLUTION = "Display Resolution"
         const val SETTINGS_TITLE_OTHERS = "Others"
         const val SETTINGS_TITLE_APPLICATION_SETTINGS = "Application Settings"
@@ -274,7 +268,6 @@ fun SplashComposeApp(
                             onSettingsItemClick = { title ->
                                 when (title) {
                                     MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION,
-                                    MainActivity.SETTINGS_ITEM_DOWNLOAD_RESOLUTION,
                                     MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
                                         openDialog.value = true
                                         settingsItem.value = title
@@ -356,10 +349,6 @@ fun RadioButtonList(
             radioOptionList = settingsViewModel.orderByList
             initialPosition = settingsViewModel.getOrderByPosition()
         }
-        MainActivity.SETTINGS_ITEM_DOWNLOAD_RESOLUTION -> {
-            radioOptionList = settingsViewModel.downloadResolutionList
-            initialPosition = settingsViewModel.getDownloadResolutionPosition()
-        }
         MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
             radioOptionList = settingsViewModel.displayResolutionList
             initialPosition = settingsViewModel.getDisplayResolutionPosition()
@@ -381,9 +370,6 @@ fun RadioButtonList(
                                 MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
                                     settingsViewModel.putOrderBy(text)
                                 }
-                                MainActivity.SETTINGS_ITEM_DOWNLOAD_RESOLUTION -> {
-                                    settingsViewModel.putDownloadResolution(text)
-                                }
                                 MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
                                     settingsViewModel.putDisplayResolution(text)
                                 }
@@ -399,9 +385,6 @@ fun RadioButtonList(
                         when (item) {
                             MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
                                 settingsViewModel.putOrderBy(text)
-                            }
-                            MainActivity.SETTINGS_ITEM_DOWNLOAD_RESOLUTION -> {
-                                settingsViewModel.putDownloadResolution(text)
                             }
                             MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
                                 settingsViewModel.putDisplayResolution(text)
