@@ -34,13 +34,6 @@ class SettingsViewModel(
         OrderBy.POPULAR.name
     )
 
-    fun putDownloadResolution(data: String) {
-        pref.putString(
-            SharedPreferencesUtils.KEY_DOWNLOAD_RESOLUTION,
-            data
-        )
-    }
-
     fun getDisplayResolutionPosition(): Int {
         val resolution = pref.getString(
             SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION

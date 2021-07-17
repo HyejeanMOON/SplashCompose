@@ -142,6 +142,7 @@ class PhotoDetailViewModel(
     private fun downloadImage(
         url: String
     ): Bitmap {
+        LogUtils.outputLog("downloadImage")
         return Glide
             .with(app)
             .asBitmap()

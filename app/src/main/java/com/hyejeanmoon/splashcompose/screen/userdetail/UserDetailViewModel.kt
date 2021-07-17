@@ -12,6 +12,7 @@ import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
 import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.LogUtils
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 
@@ -58,6 +59,7 @@ class UserDetailViewModel(
     )
 
     fun getUserDetailInfo() {
+        LogUtils.outputLog("getUserDetailInfo")
         userDetailApiService.getUserDetails(
             userName = userName
         ).enqueue(ApiEnqueueCallback(

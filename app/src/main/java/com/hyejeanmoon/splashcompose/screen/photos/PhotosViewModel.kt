@@ -22,17 +22,11 @@ class PhotosViewModel(
         )
 
     private val pref = SharedPreferencesUtils(app)
-
-    fun getDisplayResolution(): String {
-        return pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
-    }
-
-    private fun getOrderBy(): String {
-        return pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
-    }
+    val resolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
+    val orderBy = pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
 
     private val photosDataSource =
-        PhotosDataSource(PhotosRepository(photosApiService,getOrderBy()))
+        PhotosDataSource(PhotosRepository(photosApiService,orderBy))
 
     var photoList = Pager(
         config = PagingConfig(

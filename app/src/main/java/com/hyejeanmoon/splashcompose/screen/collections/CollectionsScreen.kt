@@ -43,7 +43,7 @@ fun CollectionsScreen(
                 CollectionsItem(
                     collections = item,
                     onCollectionsItemClick = onCollectionsItemClick,
-                    resolution = collectionsViewModel.getDisplayResolution()
+                    resolution = collectionsViewModel.resolution
                 )
             }
         }

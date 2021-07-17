@@ -37,7 +37,7 @@ fun PhotoScreen(
             }
             PhotoImage(
                 photo = item,
-                resolution = viewModel.getDisplayResolution(),
+                resolution = viewModel.resolution,
                 onPhotoClick = onPhotoClick
             )
         }

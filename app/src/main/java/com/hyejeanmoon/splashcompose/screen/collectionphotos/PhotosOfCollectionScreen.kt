@@ -62,7 +62,7 @@ fun PhotosOfCollectionScreen(
                 PhotoImage(
                     photo = item,
                     onPhotoClick = onPhotoClick,
-                    resolution = photosOfCollectionViewModel.getDisplayResolution()
+                    resolution = photosOfCollectionViewModel.resolution
                 )
             }
         }

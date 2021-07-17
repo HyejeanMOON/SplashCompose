@@ -24,10 +24,7 @@ class CollectionsViewModel(
     private val collectionRepository = CollectionsRepository(collectionsApiService)
 
     private val pref = SharedPreferencesUtils(app)
-
-    fun getDisplayResolution(): String {
-        return pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
-    }
+    val resolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
 
     private val collectionsDataSource =
         CollectionsDataSource(collectionRepository)
