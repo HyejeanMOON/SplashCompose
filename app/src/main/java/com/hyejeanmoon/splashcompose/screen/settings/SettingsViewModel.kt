@@ -5,7 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import com.hyejeanmoon.splashcompose.OrderBy
 import com.hyejeanmoon.splashcompose.Resolution
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class SettingsViewModel(
     app: Application
 ) : AndroidViewModel(app) {

@@ -16,6 +16,7 @@ import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UserDetailActivity : ComponentActivity() {
 
     private val viewModel: UserDetailViewModel by viewModels()

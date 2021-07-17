@@ -7,10 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.hyejeanmoon.splashcompose.db.AppDatabase
 import com.hyejeanmoon.splashcompose.db.FavoritePhoto
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class FavoriteViewModel(
     app: Application
 ) : AndroidViewModel(app) {

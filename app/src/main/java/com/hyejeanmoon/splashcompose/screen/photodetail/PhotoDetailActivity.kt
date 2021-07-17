@@ -10,7 +10,9 @@ import androidx.lifecycle.Observer
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PhotoDetailActivity : ComponentActivity() {
 
     private val viewModel: PhotoDetailViewModel by viewModels()

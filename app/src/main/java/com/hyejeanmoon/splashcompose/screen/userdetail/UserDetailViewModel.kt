@@ -16,6 +16,7 @@ import com.hyejeanmoon.splashcompose.utils.LogUtils
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class UserDetailViewModel(
     val app: Application,
     val state: SavedStateHandle
