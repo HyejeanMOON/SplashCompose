@@ -4,8 +4,9 @@
     <string name="screen_collections">Collections</string>
     <string name="screen_favorite">Favorite</string>
     <string name="screen_settings">Settings</string>
-    <string name="toast_start_download">start download</string>
-    <string name="toast_complete_download">complete download</string>
+    <string name="toast_start_download">download started!</string>
+    <string name="toast_complete_download">download completed!</string>
+    <string name="toast_clear_cache_completed">clear cache completed!</string>
     <string name="tabrow_photos">Photos</string>
     <string name="tabrow_collections">Collections</string>
     <string name="tabrow_liked_photos">Liked Photos</string>

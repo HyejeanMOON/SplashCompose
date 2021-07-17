@@ -3,6 +3,8 @@ package com.hyejeanmoon.splashcompose.utils
 import android.content.Context
 import android.os.Build
 import android.os.Environment
+import android.widget.Toast
+import com.hyejeanmoon.splashcompose.R
 import java.io.File
 
 object DataManager {
@@ -17,6 +19,7 @@ object DataManager {
                 }
             }
         }
+        Toast.makeText(context,context.getString(R.string.toast_clear_cache_completed),Toast.LENGTH_LONG).show()
     }
 
     private fun deleteCacheFile(file: File) {
