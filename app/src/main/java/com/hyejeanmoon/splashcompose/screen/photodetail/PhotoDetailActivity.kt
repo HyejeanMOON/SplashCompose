@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 
@@ -34,14 +35,16 @@ class PhotoDetailActivity : ComponentActivity() {
         viewModel.downloadStart.observe(
             this,
             Observer {
-                Toast.makeText(this,"start download",Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.toast_start_download), Toast.LENGTH_LONG)
+                    .show()
             }
         )
 
         viewModel.downloadComplete.observe(
             this,
             Observer {
-                Toast.makeText(this,"complete download",Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.toast_complete_download), Toast.LENGTH_LONG)
+                    .show()
             }
         )
     }

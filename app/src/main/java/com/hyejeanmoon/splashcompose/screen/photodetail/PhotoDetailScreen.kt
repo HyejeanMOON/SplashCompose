@@ -29,7 +29,6 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
 
-
 @Composable
 fun PhotoDetailScreen(
     modifier: Modifier = Modifier,
@@ -236,7 +235,6 @@ fun PhotoDetailCreatedTimes(
     modifier: Modifier = Modifier,
     photo: Photo?
 ) {
-
     Row(
         modifier = modifier
             .requiredHeight(30.dp)
