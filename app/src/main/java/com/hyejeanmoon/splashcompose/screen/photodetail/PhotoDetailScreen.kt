@@ -234,8 +234,8 @@ fun PhotoDetailCreatedTimes(
 ) {
     Row(
         modifier = modifier
-            .requiredHeight(30.dp)
-            .padding(20.dp, 10.dp, 0.dp, 0.dp),
+            .requiredHeight(20.dp)
+            .padding(20.dp, 0.dp, 0.dp, 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -253,7 +253,7 @@ fun PhotoDetailLocation(
 ) {
     Row(
         modifier = modifier
-            .requiredHeight(40.dp)
+            .requiredHeight(30.dp)
             .padding(20.dp, 10.dp, 0.dp, 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
