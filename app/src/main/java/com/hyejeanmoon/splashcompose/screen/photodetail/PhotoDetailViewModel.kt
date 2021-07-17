@@ -1,6 +1,7 @@
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
 import android.app.Application
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -107,15 +108,7 @@ class PhotoDetailViewModel(
         LogUtils.outputLog("downloadPhotoByIdVersionQ")
         if (photoId.isNotBlank()) {
             startDownloadToast()
-            photosApiService.downloadPhoto(photoId).enqueue(
-                ApiEnqueueCallback({
-                    it.url?.also { url ->
-                        saveImageFileVersionQ(url)
-                    }
-                }, {
-                    _exception.value = it
-                })
-            )
+
         }
     }
 
@@ -123,45 +116,47 @@ class PhotoDetailViewModel(
         LogUtils.outputLog("downloadPhotoById")
         if (photoId.isNotBlank()) {
             startDownloadToast()
-            photosApiService.downloadPhoto(photoId).enqueue(
-                ApiEnqueueCallback({
-                    it.url?.also { url ->
-                        saveImageFile(url)
-                    }
-                }, {
-                    _exception.value = it
-                })
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                photosApiService.downloadPhoto(photoId).enqueue(
+                    ApiEnqueueCallback({
+                        it.url?.also { url ->
+                            viewModelScope.launch(Dispatchers.IO) {
+                                val bitmap = downloadImage(url)
+                                FileUtils.saveImageVersionQ(app, bitmap)
+                                completeDownloadToast()
+                            }
+                        }
+                    }, {
+                        _exception.value = it
+                    })
+                )
+            } else {
+                photosApiService.downloadPhoto(photoId).enqueue(
+                    ApiEnqueueCallback({
+                        it.url?.also { url ->
+                            viewModelScope.launch(Dispatchers.IO) {
+                                val bitmap = downloadImage(url)
+                                FileUtils.saveImage(app, bitmap)
+                                completeDownloadToast()
+                            }
+                        }
+                    }, {
+                        _exception.value = it
+                    })
+                )
+            }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun saveImageFileVersionQ(url: String) {
-        LogUtils.outputLog("saveImageFileVersionQ")
-        viewModelScope.launch(Dispatchers.IO) {
-            val bitmap = Glide
-                .with(app)
-                .asBitmap()
-                .load(Uri.parse(url))
-                .submit()
-                .get()
-            FileUtils.saveImageVersionQ(app, bitmap)
-            completeDownloadToast()
-        }
-    }
-
-    private fun saveImageFile(url: String) {
-        LogUtils.outputLog("saveImageFile")
-        viewModelScope.launch(Dispatchers.IO) {
-            val bitmap = Glide
-                .with(app)
-                .asBitmap()
-                .load(Uri.parse(url))
-                .submit()
-                .get()
-            FileUtils.saveImage(app, bitmap)
-            completeDownloadToast()
-        }
+    private fun downloadImage(
+        url: String
+    ): Bitmap {
+        return Glide
+            .with(app)
+            .asBitmap()
+            .load(Uri.parse(url))
+            .submit()
+            .get()
     }
 
     private fun startDownloadToast() {

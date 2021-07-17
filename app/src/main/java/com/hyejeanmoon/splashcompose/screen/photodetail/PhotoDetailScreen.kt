@@ -1,6 +1,5 @@
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
-import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -218,11 +217,7 @@ fun PhotoDetailUserInfo(
         Image(
             modifier = Modifier
                 .clickable {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        viewModel.downloadPhotoByIdVersionQ()
-                    } else {
-                        viewModel.downloadPhotoById()
-                    }
+                    viewModel.downloadPhotoById()
                 }
                 .padding(0.dp, 5.dp)
                 .constrainAs(downloadIcon) {
