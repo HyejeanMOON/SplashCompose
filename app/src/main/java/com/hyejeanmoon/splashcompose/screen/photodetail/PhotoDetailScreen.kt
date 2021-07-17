@@ -259,7 +259,7 @@ fun PhotoDetailLocation(
     Row(
         modifier = modifier
             .requiredHeight(40.dp)
-            .padding(20.dp, 10.dp, 0.dp, 10.dp),
+            .padding(20.dp, 10.dp, 0.dp, 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // icon
