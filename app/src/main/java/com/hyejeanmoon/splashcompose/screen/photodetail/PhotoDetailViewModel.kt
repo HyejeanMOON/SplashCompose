@@ -4,7 +4,6 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
@@ -100,6 +99,7 @@ class PhotoDetailViewModel(
                 )
             }
             _isFavoritePhoto.value != _isFavoritePhoto.value
+            isFavoritePhoto()
         }
     }
 

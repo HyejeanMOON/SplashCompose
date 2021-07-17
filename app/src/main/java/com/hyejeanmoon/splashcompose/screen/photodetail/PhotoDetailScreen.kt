@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -193,14 +192,14 @@ fun PhotoDetailUserInfo(
         // favorite icon
         Image(
             modifier = Modifier
-                .clickable {
-                    viewModel.favoritePhoto()
-                }
                 .padding(20.dp, 5.dp)
                 .constrainAs(favoriteIcon) {
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
+                }
+                .clickable {
+                    viewModel.favoritePhoto()
                 },
             painter = if (isFavoritePhoto == true) {
                 painterResource(id = R.drawable.ic_favorites_filled)
@@ -213,14 +212,14 @@ fun PhotoDetailUserInfo(
         // download icon
         Image(
             modifier = Modifier
-                .clickable {
-                    viewModel.downloadPhotoById()
-                }
                 .padding(0.dp, 5.dp)
                 .constrainAs(downloadIcon) {
                     end.linkTo(favoriteIcon.start)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
+                }
+                .clickable {
+                    viewModel.downloadPhotoById()
                 },
             painter = painterResource(id = R.drawable.ic_download),
             contentDescription = "download icon"
