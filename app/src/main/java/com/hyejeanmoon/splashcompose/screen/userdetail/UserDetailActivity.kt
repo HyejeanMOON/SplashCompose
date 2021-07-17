@@ -14,6 +14,7 @@ import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 class UserDetailActivity : ComponentActivity() {
 
@@ -23,8 +24,6 @@ class UserDetailActivity : ComponentActivity() {
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel.getUserDetailInfo()
 
         setContent {
             SetUpStatusBar()

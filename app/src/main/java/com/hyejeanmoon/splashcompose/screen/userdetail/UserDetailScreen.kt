@@ -48,6 +48,8 @@ fun UserDetailScreen(
     onCollectionItemsClick: (String, String) -> Unit,
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
+    viewModel.getUserDetailInfo()
+
     val userDetail by viewModel.userDetail.observeAsState()
 
     val coroutines = rememberCoroutineScope()

@@ -46,24 +46,20 @@ data class UsersPhotos(
     val description: String? = null,
 
     @Expose
-    @SerializedName("exif")
-    val exif: Exif?,
-
-    @Expose
     @SerializedName("links")
-    val links: Links?,
+    val links: Links? = null,
 
     @Expose
     @SerializedName("urls")
-    val urls: Urls?,
+    val urls: Urls? = null,
 
     @Expose
     @SerializedName("user")
-    val user: UserDetail?,
+    val user: UserDetail? = null,
 
     @Expose
     @SerializedName("current_user_collections")
-    val currentUserCollections: List<CurrentUserCollections>?,
+    val currentUserCollections: List<CurrentUserCollections>? = null,
 
     @Expose
     @SerializedName("blur_hash")

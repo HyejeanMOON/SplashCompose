@@ -1,23 +1,23 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.OkHttpClient
 import com.hyejeanmoon.splashcompose.entity.UserDetail
-import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 
-@HiltViewModel
 class UserDetailViewModel(
-    app: Application,
-    private val state: SavedStateHandle
+    val app: Application,
+    val state: SavedStateHandle
 ) : AndroidViewModel(app) {
 
     private var userName: String = ""
@@ -25,6 +25,8 @@ class UserDetailViewModel(
     init {
         userName = state.get<String>(UserDetailActivity.INTENT_USER_NAME).orEmpty()
     }
+
+    private val pref = SharedPreferencesUtils(app)
 
     private val _userDetail: MutableLiveData<UserDetail> = MutableLiveData()
     val userDetail: LiveData<UserDetail> get() = _userDetail
@@ -51,8 +53,6 @@ class UserDetailViewModel(
         userName
     )
 
-    private val pref = SharedPreferencesUtils(app)
-
     fun getDisplayResolution(): String {
         return pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
     }
@@ -75,28 +75,33 @@ class UserDetailViewModel(
 
     val userDetailPhotosFlow = Pager(
         config = PagingConfig(
-            pageSize = 5,
+            pageSize = PAGE_SIZE,
             enablePlaceholders = false,
-            initialLoadSize = 5
+            initialLoadSize = INITIAL_LOAD_SIZE
         ),
         pagingSourceFactory = { userDetailPhotosDataSource }
     ).flow
 
     val userDetailCollectionsFlow = Pager(
         config = PagingConfig(
-            pageSize = 5,
+            pageSize = PAGE_SIZE,
             enablePlaceholders = false,
-            initialLoadSize = 5
+            initialLoadSize = INITIAL_LOAD_SIZE
         ),
         pagingSourceFactory = { userDetailCollectionsDataSource }
     ).flow
 
     val userDetailLikedPhotosDataSourceFlow = Pager(
         config = PagingConfig(
-            pageSize = 5,
+            pageSize = PAGE_SIZE,
             enablePlaceholders = false,
-            initialLoadSize = 5
+            initialLoadSize = INITIAL_LOAD_SIZE
         ),
         pagingSourceFactory = { userDetailLikedPhotosDataSource }
     ).flow
+
+    companion object {
+        private const val PAGE_SIZE = 5
+        private const val INITIAL_LOAD_SIZE = 5
+    }
 }
