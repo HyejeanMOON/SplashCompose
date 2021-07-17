@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
  *
  * It's a okHttpClient of retrofit.
  */
-class OkHttpClient {
+class SplashOkHttpClient {
     private var okHttpClient: OkHttpClient
 
     init {

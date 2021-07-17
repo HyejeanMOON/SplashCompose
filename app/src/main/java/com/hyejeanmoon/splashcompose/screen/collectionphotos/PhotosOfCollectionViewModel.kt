@@ -3,11 +3,10 @@ package com.hyejeanmoon.splashcompose.screen.collectionphotos
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
-import com.hyejeanmoon.splashcompose.api.OkHttpClient
+import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
@@ -32,7 +31,7 @@ class PhotosOfCollectionViewModel(
     private val collectionsApiService =
         ApiServiceHelper.createCollectionsApiService(
             EnvParameters.BASE_URL,
-            OkHttpClient().splashOkHttpClient
+            SplashOkHttpClient().splashOkHttpClient
         )
 
     private val collectionRepository = CollectionsRepository(collectionsApiService)

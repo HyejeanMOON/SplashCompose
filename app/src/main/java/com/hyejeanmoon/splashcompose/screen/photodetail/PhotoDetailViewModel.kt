@@ -8,7 +8,7 @@ import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
-import com.hyejeanmoon.splashcompose.api.OkHttpClient
+import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.db.AppDatabase
 import com.hyejeanmoon.splashcompose.db.FavoritePhoto
 import com.hyejeanmoon.splashcompose.entity.Photo
@@ -39,7 +39,7 @@ class PhotoDetailViewModel(
     private val photosApiService =
         ApiServiceHelper.createPhotosApiService(
             EnvParameters.BASE_URL,
-            OkHttpClient().splashOkHttpClient
+            SplashOkHttpClient().splashOkHttpClient
         )
 
     private val _photo: MutableLiveData<Photo> = MutableLiveData()

@@ -9,7 +9,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
-import com.hyejeanmoon.splashcompose.api.OkHttpClient
+import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.LogUtils
@@ -38,7 +38,7 @@ class UserDetailViewModel(
 
     private val userDetailApiService = ApiServiceHelper.createUserDetailApiService(
         EnvParameters.BASE_URL,
-        OkHttpClient().splashOkHttpClient
+        SplashOkHttpClient().splashOkHttpClient
     )
 
     private val _exception: MutableLiveData<Exception> = MutableLiveData()

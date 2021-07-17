@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
-import com.hyejeanmoon.splashcompose.api.OkHttpClient
+import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +18,7 @@ class PhotosViewModel(
     private val photosApiService =
         ApiServiceHelper.createPhotosApiService(
             EnvParameters.BASE_URL,
-            OkHttpClient().splashOkHttpClient
+            SplashOkHttpClient().splashOkHttpClient
         )
 
     private val pref = SharedPreferencesUtils(app)
