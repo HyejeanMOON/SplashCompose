@@ -103,15 +103,6 @@ class PhotoDetailViewModel(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    fun downloadPhotoByIdVersionQ() {
-        LogUtils.outputLog("downloadPhotoByIdVersionQ")
-        if (photoId.isNotBlank()) {
-            startDownloadToast()
-
-        }
-    }
-
     fun downloadPhotoById() {
         LogUtils.outputLog("downloadPhotoById")
         if (photoId.isNotBlank()) {
