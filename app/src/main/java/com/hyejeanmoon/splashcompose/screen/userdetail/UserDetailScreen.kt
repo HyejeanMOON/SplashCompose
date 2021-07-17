@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,8 +49,6 @@ fun UserDetailScreen(
     onCollectionItemsClick: (String, String) -> Unit,
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
-    viewModel.getUserDetailInfo()
-
     val userDetail by viewModel.userDetail.observeAsState()
 
     val coroutines = rememberCoroutineScope()
@@ -170,9 +169,9 @@ fun UserDetailScreen(
 
             // TabRow
             val pages = listOf(
-                "Photos",
-                "Collections",
-                "LinkedPhotos"
+                stringResource(id = R.string.tabrow_photos),
+                stringResource(id = R.string.tabrow_collections),
+                stringResource(id = R.string.tabrow_liked_photos)
             )
 
             val pagerState = rememberPagerState(

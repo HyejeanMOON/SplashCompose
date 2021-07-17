@@ -36,7 +36,6 @@ fun FavoriteScreen(
     viewModel: FavoriteViewModel,
     onFavoritePhotoClick: (String) -> Unit
 ) {
-
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val favoritePhotoList by viewModel.favoritePhotoList.observeAsState()
 

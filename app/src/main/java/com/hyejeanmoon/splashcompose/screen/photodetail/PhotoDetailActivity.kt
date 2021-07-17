@@ -18,6 +18,9 @@ class PhotoDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.getPhotoById()
+        viewModel.isFavoritePhoto()
+
         setContent {
             SetUpStatusBar()
 

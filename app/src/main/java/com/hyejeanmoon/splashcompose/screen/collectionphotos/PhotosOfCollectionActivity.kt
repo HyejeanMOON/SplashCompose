@@ -2,16 +2,12 @@ package com.hyejeanmoon.splashcompose.screen.collectionphotos
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.ColorRes
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.core.content.ContextCompat
-import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
@@ -29,14 +25,16 @@ class PhotosOfCollectionActivity : ComponentActivity() {
         setContent {
             SetUpStatusBar()
 
-            PhotosOfCollectionsApp(
-                viewModel = viewModel,
-                onPhotoClick = {
-                    PhotoDetailActivity.start(it?.id.orEmpty(), this)
-                },
-                onBackIconClick = { finish() },
-                collectionTitle = collectionTitle
-            )
+            SplashComposeTheme {
+                Surface(color = MaterialTheme.colors.background) {
+                    PhotosOfCollectionScreen(
+                        photosOfCollectionViewModel = viewModel,
+                        onPhotoClick = { PhotoDetailActivity.start(it?.id.orEmpty(), this) },
+                        onBackIconClick = { finish() },
+                        collectionTitle = collectionTitle
+                    )
+                }
+            }
         }
     }
 
@@ -50,25 +48,6 @@ class PhotosOfCollectionActivity : ComponentActivity() {
             intent.putExtra(COLLECTION_ID, collectionId)
             intent.putExtra(COLLECTION_TITLE, collectionTitle)
             activity.startActivity(intent)
-        }
-    }
-}
-
-@Composable
-fun PhotosOfCollectionsApp(
-    viewModel: PhotosOfCollectionViewModel,
-    onPhotoClick: (Photo?) -> Unit,
-    onBackIconClick: () -> Unit,
-    collectionTitle: String
-) {
-    SplashComposeTheme {
-        Surface(color = MaterialTheme.colors.background) {
-            PhotosOfCollectionScreen(
-                photosOfCollectionViewModel = viewModel,
-                onPhotoClick = onPhotoClick,
-                onBackIconClick = onBackIconClick,
-                collectionTitle = collectionTitle
-            )
         }
     }
 }

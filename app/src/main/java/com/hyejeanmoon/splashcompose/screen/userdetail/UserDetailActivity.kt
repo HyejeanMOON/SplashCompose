@@ -25,6 +25,8 @@ class UserDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.getUserDetailInfo()
+
         setContent {
             SetUpStatusBar()
 
