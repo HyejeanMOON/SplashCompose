@@ -15,6 +15,7 @@ import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.FileUtils
 import com.hyejeanmoon.splashcompose.utils.LogUtils
+import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class PhotoDetailViewModel(
     val app: Application,
-    state: SavedStateHandle
+    @Assisted state: SavedStateHandle
 ) : AndroidViewModel(app) {
     private var photoId = ""
 

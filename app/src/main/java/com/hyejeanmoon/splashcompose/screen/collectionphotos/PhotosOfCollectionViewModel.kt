@@ -11,12 +11,13 @@ import com.hyejeanmoon.splashcompose.api.OkHttpClient
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
+import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel
 class PhotosOfCollectionViewModel(
     app:Application,
-    private val state: SavedStateHandle
+    @Assisted private val state: SavedStateHandle
 ):AndroidViewModel(app) {
 
     private var id = ""
