@@ -31,7 +31,7 @@ fun PhotoScreen(
     LazyColumn(
         modifier = modifier.fillMaxSize()
     ) {
-        items(lazyPagingItems = pagingItems) { photoItem ->
+        items(pagingItems) { photoItem ->
             val item by remember {
                 mutableStateOf(photoItem)
             }

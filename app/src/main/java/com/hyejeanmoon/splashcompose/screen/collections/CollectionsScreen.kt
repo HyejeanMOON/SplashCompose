@@ -37,7 +37,7 @@ fun CollectionsScreen(
     LazyColumn(
         modifier = modifier.fillMaxSize()
     ) {
-        items(lazyPagingItems = pagingItems) { collectionsItem ->
+        items(pagingItems) { collectionsItem ->
             collectionsItem?.also {
                 val item by remember { mutableStateOf(collectionsItem) }
                 CollectionsItem(

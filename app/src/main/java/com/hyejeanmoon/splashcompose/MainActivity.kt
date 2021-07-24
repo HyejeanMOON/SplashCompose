@@ -80,6 +80,14 @@ class MainActivity : ComponentActivity() {
                             // do nothing
                         }
 
+                        SETTINGS_ITEM_LICENSES -> {
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("file:///android_asset/licenses.html")
+                            )
+                            startActivity(intent)
+                        }
+
                         SETTINGS_ITEM_CLEAR_CACHE -> {
                             DataManager.clearCacheInScopedStorage(this)
                         }
@@ -105,6 +113,9 @@ class MainActivity : ComponentActivity() {
                             SettingItemDetail(
                                 title = SETTINGS_ITEM_VERSION,
                                 content = BuildConfig.VERSION_NAME
+                            ),
+                            SettingItemDetail(
+                              title = SETTINGS_ITEM_LICENSES
                             ),
                             SettingItemDetail(title = SETTINGS_ITEM_ABOUT_DEVELOPER)
                         )
@@ -171,6 +182,7 @@ class MainActivity : ComponentActivity() {
         const val SETTINGS_ITEM_CLEAR_CACHE = "Clear Cache"
         const val SETTINGS_ITEM_PHOTO_DISPLAY_ORDER = "Photo Display Order"
         const val SETTINGS_ITEM_DISPLAY_RESOLUTION = "Display Resolution"
+        const val SETTINGS_ITEM_LICENSES = "Licenses"
         const val SETTINGS_TITLE_OTHERS = "Others"
         const val SETTINGS_TITLE_APPLICATION_SETTINGS = "Application Settings"
     }

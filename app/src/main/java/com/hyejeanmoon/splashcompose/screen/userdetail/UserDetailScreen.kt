@@ -355,7 +355,7 @@ fun UserDetailPhotos(
             modifier = modifier
                 .fillMaxWidth()
         ) {
-            items(lazyPagingItems = photos) { photoItem ->
+            items(photos) { photoItem ->
                 val item by remember {
                     mutableStateOf(photoItem)
                 }
@@ -396,7 +396,7 @@ fun UserDetailCollections(
             modifier = modifier
                 .fillMaxWidth()
         ) {
-            items(lazyPagingItems = collections) { collectionsItem ->
+            items(collections) { collectionsItem ->
                 val item by remember {
                     mutableStateOf(collectionsItem)
                 }
@@ -440,7 +440,7 @@ fun UserDetailLikedPhotos(
             modifier = modifier
                 .fillMaxWidth()
         ) {
-            items(lazyPagingItems = photos) { photoItem ->
+            items(photos) { photoItem ->
                 val item by remember {
                     mutableStateOf(photoItem)
                 }
