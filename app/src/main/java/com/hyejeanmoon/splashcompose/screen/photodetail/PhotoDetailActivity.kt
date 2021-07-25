@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
@@ -36,7 +37,10 @@ class PhotoDetailActivity : ComponentActivity() {
                 }
             )
         }
+        observeLiveData()
+    }
 
+    private fun observeLiveData() {
         viewModel.downloadStart.observe(
             this,
             Observer {

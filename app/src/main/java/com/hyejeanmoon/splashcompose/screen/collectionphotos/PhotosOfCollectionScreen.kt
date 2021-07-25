@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoImage
@@ -71,10 +72,10 @@ fun PhotosOfCollectionScreen(
     pagingItems.apply {
         when {
             loadState.refresh is LoadState.Error -> {
-
+                ErrorAlert()
             }
             loadState.append is LoadState.Error -> {
-
+                ErrorAlert()
             }
         }
     }

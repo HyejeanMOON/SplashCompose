@@ -26,6 +26,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
 
@@ -40,6 +41,7 @@ fun PhotoDetailScreen(
     val scrollState = rememberScrollState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val isFavoritePhoto by viewModel.isFavoritePhoto.observeAsState()
+    val exception by viewModel.exception.observeAsState()
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing),
@@ -86,6 +88,9 @@ fun PhotoDetailScreen(
                 modifier = Modifier.padding(20.dp, 10.dp)
             )
         }
+    }
+    exception?.also {
+        ErrorAlert()
     }
 }
 

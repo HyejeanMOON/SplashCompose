@@ -10,4 +10,7 @@
     <string name="tabrow_photos">Photos</string>
     <string name="tabrow_collections">Collections</string>
     <string name="tabrow_liked_photos">Liked Photos</string>
+    <string name="alert_error_title">Error</string>
+    <string name="alert_error_message">There is an error, please restart the application.</string>
+    <string name="alert_error_button">OK</string>
 </resources>

@@ -30,6 +30,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
+import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
@@ -50,6 +51,7 @@ fun UserDetailScreen(
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
     val userDetail by viewModel.userDetail.observeAsState()
+    val exception by viewModel.exception.observeAsState()
 
     val coroutines = rememberCoroutineScope()
     var visible by remember { mutableStateOf(true) }
@@ -258,6 +260,10 @@ fun UserDetailScreen(
                 }
             }
         }
+
+        exception?.also {
+            ErrorAlert()
+        }
     }
 }
 
@@ -371,10 +377,10 @@ fun UserDetailPhotos(
         photos.apply {
             when {
                 loadState.refresh is LoadState.Error -> {
-
+                    ErrorAlert()
                 }
                 loadState.append is LoadState.Error -> {
-
+                    ErrorAlert()
                 }
             }
         }
@@ -414,10 +420,10 @@ fun UserDetailCollections(
         collections.apply {
             when {
                 loadState.refresh is LoadState.Error -> {
-
+                    ErrorAlert()
                 }
                 loadState.append is LoadState.Error -> {
-
+                    ErrorAlert()
                 }
             }
         }
@@ -456,10 +462,10 @@ fun UserDetailLikedPhotos(
         photos.apply {
             when {
                 loadState.refresh is LoadState.Error -> {
-
+                    ErrorAlert()
                 }
                 loadState.append is LoadState.Error -> {
-
+                    ErrorAlert()
                 }
             }
         }
