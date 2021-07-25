@@ -1,9 +1,26 @@
+/*
+ * Copyright (C) 2021 HyejeanMOON.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.hyejeanmoon.splashcompose
 
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
 
@@ -25,17 +42,17 @@ fun SetUpStatusBar() {
 
 @Composable
 fun ErrorAlert(
-    onDismissCallback: () -> Unit
+    showAlert: Boolean = true
 ) {
-    var showDialog by remember {
-        mutableStateOf(true)
+    var openAlert by remember {
+        mutableStateOf(showAlert)
     }
-    if (showDialog) {
+    if (openAlert) {
         AlertDialog(
-            title = { Text(text = "Error") },
-            text = { Text(text = "There are some errors!\nPlease retry later.") },
-            onDismissRequest = onDismissCallback,
-            buttons = { showDialog = false }
+            onDismissRequest = { openAlert = false },
+            buttons = { Text(text = stringResource(id = R.string.alert_error_button)) },
+            title = { Text(text = stringResource(id = R.string.alert_error_title)) },
+            text = { Text(text = stringResource(id = R.string.alert_error_message)) }
         )
     }
 }
