@@ -192,8 +192,8 @@ fun PhotoDetailUserInfo(
         // favorite icon
         Image(
             modifier = Modifier
-                .size(32.dp)
-                .padding(20.dp, 5.dp)
+                .size(52.dp, 32.dp)
+                .padding(0.dp, 5.dp, 20.dp, 5.dp)
                 .constrainAs(favoriteIcon) {
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
@@ -213,8 +213,8 @@ fun PhotoDetailUserInfo(
         // download icon
         Image(
             modifier = Modifier
-                .size(32.dp)
-                .padding(0.dp, 5.dp)
+                .size(42.dp, 32.dp)
+                .padding(0.dp, 5.dp, 10.dp, 5.dp)
                 .constrainAs(downloadIcon) {
                     end.linkTo(favoriteIcon.start)
                     top.linkTo(parent.top)
