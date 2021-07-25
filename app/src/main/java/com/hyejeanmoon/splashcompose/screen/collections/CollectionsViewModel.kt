@@ -18,8 +18,10 @@ package com.hyejeanmoon.splashcompose.screen.collections
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
@@ -52,5 +54,5 @@ class CollectionsViewModel(
             initialLoadSize = 5
         ),
         pagingSourceFactory = { collectionsDataSource }
-    ).flow
+    ).flow.cachedIn(viewModelScope)
 }

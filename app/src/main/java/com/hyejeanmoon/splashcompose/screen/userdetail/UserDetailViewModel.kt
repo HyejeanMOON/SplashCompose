@@ -17,12 +17,10 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
@@ -96,7 +94,7 @@ class UserDetailViewModel(
             initialLoadSize = INITIAL_LOAD_SIZE
         ),
         pagingSourceFactory = { userDetailPhotosDataSource }
-    ).flow
+    ).flow.cachedIn(viewModelScope)
 
     val userDetailCollectionsFlow = Pager(
         config = PagingConfig(
@@ -105,7 +103,7 @@ class UserDetailViewModel(
             initialLoadSize = INITIAL_LOAD_SIZE
         ),
         pagingSourceFactory = { userDetailCollectionsDataSource }
-    ).flow
+    ).flow.cachedIn(viewModelScope)
 
     val userDetailLikedPhotosDataSourceFlow = Pager(
         config = PagingConfig(
@@ -114,7 +112,7 @@ class UserDetailViewModel(
             initialLoadSize = INITIAL_LOAD_SIZE
         ),
         pagingSourceFactory = { userDetailLikedPhotosDataSource }
-    ).flow
+    ).flow.cachedIn(viewModelScope)
 
     companion object {
         private const val PAGE_SIZE = 5
