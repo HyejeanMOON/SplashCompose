@@ -40,6 +40,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
+import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 
@@ -68,10 +69,13 @@ fun CollectionsScreen(
     pagingItems.apply {
         when {
             loadState.refresh is LoadState.Error -> {
-
+                ErrorAlert()
             }
             loadState.append is LoadState.Error -> {
-
+                ErrorAlert()
+            }
+            loadState.prepend is LoadState.Error -> {
+                ErrorAlert()
             }
         }
     }

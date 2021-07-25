@@ -93,6 +93,9 @@ fun PhotosOfCollectionScreen(
             loadState.append is LoadState.Error -> {
                 ErrorAlert()
             }
+            loadState.prepend is LoadState.Error -> {
+                ErrorAlert()
+            }
         }
     }
 }

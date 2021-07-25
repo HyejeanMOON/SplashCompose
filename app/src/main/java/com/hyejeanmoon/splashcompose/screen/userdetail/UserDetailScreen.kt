@@ -398,6 +398,9 @@ fun UserDetailPhotos(
                 loadState.append is LoadState.Error -> {
                     ErrorAlert()
                 }
+                loadState.prepend is LoadState.Error -> {
+                    ErrorAlert()
+                }
             }
         }
     } else {
@@ -441,6 +444,9 @@ fun UserDetailCollections(
                 loadState.append is LoadState.Error -> {
                     ErrorAlert()
                 }
+                loadState.prepend is LoadState.Error -> {
+                    ErrorAlert()
+                }
             }
         }
     } else {
@@ -481,6 +487,9 @@ fun UserDetailLikedPhotos(
                     ErrorAlert()
                 }
                 loadState.append is LoadState.Error -> {
+                    ErrorAlert()
+                }
+                loadState.prepend is LoadState.Error -> {
                     ErrorAlert()
                 }
             }

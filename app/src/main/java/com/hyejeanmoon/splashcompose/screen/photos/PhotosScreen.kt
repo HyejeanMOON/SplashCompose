@@ -68,6 +68,9 @@ fun PhotoScreen(
             loadState.append is LoadState.Error -> {
                 ErrorAlert()
             }
+            loadState.prepend is LoadState.Error -> {
+                ErrorAlert()
+            }
         }
     }
 }
@@ -76,7 +79,7 @@ fun PhotoScreen(
 fun PhotoImage(
     modifier: Modifier = Modifier,
     photo: Photo?,
-    resolution:String,
+    resolution: String,
     onPhotoClick: (Photo?) -> Unit
 ) {
 
