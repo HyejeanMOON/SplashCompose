@@ -8,6 +8,6 @@ package com.hyejeanmoon.splashcompose.utils
 class EnvParameters {
     companion object {
         const val BASE_URL = "https://api.unsplash.com"
-        const val CLIENT_ID = "hVAykcWQEgJZ0hH24m3R-T03gk_hxUYfoU-5sGwoJZ0"
+        const val CLIENT_ID = ""
     }
 }
