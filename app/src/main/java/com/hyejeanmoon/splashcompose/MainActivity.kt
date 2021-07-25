@@ -39,6 +39,7 @@ import com.hyejeanmoon.splashcompose.screen.settings.SettingItemDetail
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsViewModel
+import com.hyejeanmoon.splashcompose.screen.webview.WebViewActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import com.hyejeanmoon.splashcompose.utils.DataManager
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
@@ -81,11 +82,11 @@ class MainActivity : ComponentActivity() {
                         }
 
                         SETTINGS_ITEM_LICENSES -> {
-                            val intent = Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("file:///android_asset/licenses.html")
+                            WebViewActivity.start(
+                                "file:///android_asset/licenses.html",
+                                SETTINGS_ITEM_LICENSES,
+                                this
                             )
-                            startActivity(intent)
                         }
 
                         SETTINGS_ITEM_CLEAR_CACHE -> {
@@ -115,7 +116,7 @@ class MainActivity : ComponentActivity() {
                                 content = BuildConfig.VERSION_NAME
                             ),
                             SettingItemDetail(
-                              title = SETTINGS_ITEM_LICENSES
+                                title = SETTINGS_ITEM_LICENSES
                             ),
                             SettingItemDetail(title = SETTINGS_ITEM_ABOUT_DEVELOPER)
                         )
@@ -287,7 +288,8 @@ fun SplashComposeApp(
                                     }
                                     MainActivity.SETTINGS_ITEM_ABOUT_DEVELOPER,
                                     MainActivity.SETTINGS_ITEM_VERSION,
-                                    MainActivity.SETTINGS_ITEM_CLEAR_CACHE -> {
+                                    MainActivity.SETTINGS_ITEM_CLEAR_CACHE,
+                                    MainActivity.SETTINGS_ITEM_LICENSES -> {
                                         onSettingsItemClick(title)
                                     }
                                 }
