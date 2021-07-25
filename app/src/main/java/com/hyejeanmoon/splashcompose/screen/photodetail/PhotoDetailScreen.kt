@@ -255,7 +255,7 @@ fun PhotoDetailLocation(
 ) {
     Row(
         modifier = modifier
-            .requiredHeight(25.dp)
+            .requiredHeight(28.dp)
             .padding(20.dp, 10.dp, 0.dp, 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
