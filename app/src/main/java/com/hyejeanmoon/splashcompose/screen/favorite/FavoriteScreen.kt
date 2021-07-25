@@ -128,7 +128,7 @@ fun NoFavoritePhoto(
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
                 },
-            painter = painterResource(id = R.mipmap.ic_no_favorite_photos),
+            painter = painterResource(id = R.drawable.ic_none_picture),
             contentDescription = "no favorite photos"
         )
 

@@ -17,6 +17,7 @@
         <entry key="../../../../layout/compose-model-1625375272284.xml" value="0.44986449864498645" />
         <entry key="../../../../layout/compose-model-1627138254583.xml" value="0.1" />
         <entry key="../../../../layout/compose-model-1627205179658.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1627208762832.xml" value="0.24239864864864866" />
         <entry key="app/src/main/res/drawable/ic_aperture.xml" value="0.275" />
         <entry key="app/src/main/res/drawable/ic_camera.xml" value="0.275" />
         <entry key="app/src/main/res/drawable/ic_download.xml" value="0.275" />
@@ -28,6 +29,8 @@
         <entry key="app/src/main/res/drawable/ic_right.xml" value="0.27870370370370373" />
         <entry key="app/src/main/res/drawable/ic_size.xml" value="0.275" />
         <entry key="app/src/main/res/drawable/ic_times.xml" value="0.275" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.169" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.169" />
       </map>
     </option>
   </component>
