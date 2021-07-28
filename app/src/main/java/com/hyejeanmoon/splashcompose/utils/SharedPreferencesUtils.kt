@@ -53,6 +53,5 @@ class SharedPreferencesUtils {
 
         const val KEY_ORDER_BY = "SPLASH_COMPOSE_ORDER_BY"
         const val KEY_DISPLAY_RESOLUTION = "SPLASH_COMPOSE_DISPLAY_RESOLUTION"
-        const val KEY_DOWNLOAD_RESOLUTION = "SPLASH_COMPOSE_DOWNLOAD_RESOLUTION"
     }
 }

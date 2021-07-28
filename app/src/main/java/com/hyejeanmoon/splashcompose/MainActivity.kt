@@ -156,15 +156,6 @@ class MainActivity : ComponentActivity() {
     private fun initPref() {
         val pref = SharedPreferencesUtils(this)
 
-        //  download resolution
-        val downloadResolution = pref.getString(SharedPreferencesUtils.KEY_DOWNLOAD_RESOLUTION)
-        if (downloadResolution.isBlank()) {
-            pref.putString(
-                SharedPreferencesUtils.KEY_DOWNLOAD_RESOLUTION,
-                Resolution.FULL.name
-            )
-        }
-
         //  display resolution
         val displayResolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
         if (displayResolution.isBlank()) {
