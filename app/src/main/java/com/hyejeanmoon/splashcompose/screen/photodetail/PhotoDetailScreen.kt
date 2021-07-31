@@ -16,6 +16,7 @@
 
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -51,7 +52,8 @@ fun PhotoDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: PhotoDetailViewModel,
     onBackIconClick: () -> Unit,
-    onUserInfoClick: (String) -> Unit
+    onUserInfoClick: (String) -> Unit,
+    onDownloadImage: () -> Unit
 ) {
     val photo by viewModel.photo.observeAsState()
     val scrollState = rememberScrollState()
@@ -71,7 +73,8 @@ fun PhotoDetailScreen(
                 photo = photo,
                 viewModel = viewModel,
                 onUserInfoClick = onUserInfoClick,
-                isFavoritePhoto = isFavoritePhoto
+                isFavoritePhoto = isFavoritePhoto,
+                onDownloadImage = onDownloadImage
             )
 
             photo?.also {
@@ -163,7 +166,8 @@ fun PhotoDetailUserInfo(
     photo: Photo?,
     viewModel: PhotoDetailViewModel,
     isFavoritePhoto: Boolean?,
-    onUserInfoClick: (String) -> Unit
+    onUserInfoClick: (String) -> Unit,
+    onDownloadImage:() -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -242,6 +246,11 @@ fun PhotoDetailUserInfo(
                     bottom.linkTo(parent.bottom)
                 }
                 .clickable {
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                        viewModel.downloadPhotoByIdVersionQ()
+                    }else{
+                        onDownloadImage()
+                    }
                     viewModel.downloadPhotoById()
                 },
             painter = painterResource(id = R.drawable.ic_download),

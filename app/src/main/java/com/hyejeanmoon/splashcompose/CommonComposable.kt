@@ -16,10 +16,12 @@
 
 package com.hyejeanmoon.splashcompose
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
@@ -49,8 +51,13 @@ fun ErrorAlert(
     }
     if (openAlert) {
         AlertDialog(
-            onDismissRequest = { openAlert = false },
-            buttons = { Text(text = stringResource(id = R.string.alert_error_button)) },
+            onDismissRequest = { },
+            confirmButton = {
+                Text(
+                    modifier = Modifier.clickable { openAlert = false },
+                    text = stringResource(id = R.string.alert_error_button)
+                )
+            },
             title = { Text(text = stringResource(id = R.string.alert_error_title)) },
             text = { Text(text = stringResource(id = R.string.alert_error_message)) }
         )

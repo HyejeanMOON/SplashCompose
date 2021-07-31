@@ -17,13 +17,14 @@
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
-import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
@@ -50,6 +51,22 @@ class PhotoDetailActivity : ComponentActivity() {
                 },
                 onUserInfoClick = { userName ->
                     UserDetailActivity.startUserDetailActivity(this, userName = userName)
+                },
+                onDownloadImage = {
+                    val permission = ActivityCompat.checkSelfPermission(
+                        this,
+                        "android.permission.WRITE_EXTERNAL_STORAGE"
+                    )
+                    val requestPermission = arrayOf("android.permission.WRITE_EXTERNAL_STORAGE")
+                    if (permission != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(
+                            this,
+                            requestPermission,
+                            REQUEST_CODE
+                        )
+                    } else {
+                        viewModel.downloadPhotoById()
+                    }
                 }
             )
         }
@@ -74,8 +91,17 @@ class PhotoDetailActivity : ComponentActivity() {
         )
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            viewModel.downloadPhotoById()
+        }
+    }
+
     companion object {
         const val INTENT_PHOTO_ID = "INTENT_PHOTO_ID"
+        private const val REQUEST_CODE = 1
 
         fun start(photoId: String, activity: ComponentActivity) {
             val intent = Intent()

@@ -20,6 +20,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
@@ -120,39 +121,44 @@ class PhotoDetailViewModel(
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun downloadPhotoByIdVersionQ() {
+        if (photoId.isNotBlank()) {
+            startDownloadToast()
+            photosApiService.downloadPhoto(photoId).enqueue(
+                ApiEnqueueCallback({
+                    it.url?.also { url ->
+                        viewModelScope.launch(Dispatchers.IO) {
+                            val bitmap = downloadImage(url)
+                            FileUtils.saveImageVersionQ(app, bitmap)
+                            completeDownloadToast()
+                        }
+                    }
+                }, {
+                    _exception.value = it
+                })
+            )
+        }
+    }
+
     fun downloadPhotoById() {
         LogUtils.outputLog("downloadPhotoById")
         if (photoId.isNotBlank()) {
             startDownloadToast()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                photosApiService.downloadPhoto(photoId).enqueue(
-                    ApiEnqueueCallback({
-                        it.url?.also { url ->
-                            viewModelScope.launch(Dispatchers.IO) {
-                                val bitmap = downloadImage(url)
-                                FileUtils.saveImageVersionQ(app, bitmap)
-                                completeDownloadToast()
-                            }
+            photosApiService.downloadPhoto(photoId).enqueue(
+                ApiEnqueueCallback({
+                    it.url?.also { url ->
+                        viewModelScope.launch(Dispatchers.IO) {
+                            val bitmap = downloadImage(url)
+                            FileUtils.saveImage(app, bitmap)
+                            completeDownloadToast()
                         }
-                    }, {
-                        _exception.value = it
-                    })
-                )
-            } else {
-                photosApiService.downloadPhoto(photoId).enqueue(
-                    ApiEnqueueCallback({
-                        it.url?.also { url ->
-                            viewModelScope.launch(Dispatchers.IO) {
-                                val bitmap = downloadImage(url)
-                                FileUtils.saveImage(app, bitmap)
-                                completeDownloadToast()
-                            }
-                        }
-                    }, {
-                        _exception.value = it
-                    })
-                )
-            }
+                    }
+                }, {
+                    _exception.value = it
+                })
+            )
         }
     }
 
