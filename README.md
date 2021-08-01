@@ -1,6 +1,10 @@
 # SplashCompose
 This is a Wallpaper Android application by Jetpack Compose. WIP!
 
+## Screenshot
+<img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/splash_wallpaper_1.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/splash_wallpaper_2.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/splash_wallpaper_6.png"/>
+<img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/splash_wallpaper_3.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/splash_wallpaper_4.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/splash_wallpaper_5.png"/>
+
 
 ## Libraries
 
