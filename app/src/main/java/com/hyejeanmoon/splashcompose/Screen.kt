@@ -24,7 +24,7 @@ sealed class Screen(
     @StringRes val stringId: Int,
     @DrawableRes val drawableId: Int
 ) {
-    object Photo : Screen("Photo", R.string.screen_photo, R.drawable.ic_photo)
+    object Photos : Screen("Photos", R.string.screen_photos, R.drawable.ic_photos)
     object Collections :
         Screen("Collections", R.string.screen_collections, R.drawable.ic_collections)
 

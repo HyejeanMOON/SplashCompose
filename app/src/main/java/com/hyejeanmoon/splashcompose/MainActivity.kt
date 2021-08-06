@@ -218,7 +218,7 @@ fun SplashComposeApp(
                 bottomBar = {
                     BottomNavigation {
                         val screenList = listOf(
-                            Screen.Photo,
+                            Screen.Photos,
                             Screen.Collections,
                             Screen.Love,
                             Screen.Settings,
@@ -265,8 +265,8 @@ fun SplashComposeApp(
                 var openDialog = remember { mutableStateOf(false) }
                 var settingsItem = remember { mutableStateOf("") }
 
-                NavHost(navController, startDestination = Screen.Photo.route) {
-                    composable(Screen.Photo.route) {
+                NavHost(navController, startDestination = Screen.Photos.route) {
+                    composable(Screen.Photos.route) {
                         PhotoScreen(
                             viewModel = photoViewModel,
                             onPhotoClick = onPhotoClick
