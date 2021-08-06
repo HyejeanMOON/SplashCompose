@@ -193,7 +193,7 @@ class MainActivity : ComponentActivity() {
         const val SETTINGS_ITEM_LICENSES = "Licenses"
         const val SETTINGS_TITLE_OTHERS = "Others"
         const val SETTINGS_TITLE_APPLICATION_SETTINGS = "Application Settings"
-        const val APPLICATION_TITLE = "Splash Wallpaper"
+        const val APPLICATION_TITLE = "Splash Pictures"
     }
 }
 
