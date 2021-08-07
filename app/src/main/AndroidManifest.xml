@@ -27,6 +27,7 @@
         <activity android:name=".screen.photodetail.PhotoDetailActivity" />
         <activity android:name=".screen.userdetail.UserDetailActivity" />
         <activity android:name=".screen.webview.WebViewActivity" />
+        <activity android:name=".screen.favorite.FavoritesActivity" />
     </application>
 
 </manifest>

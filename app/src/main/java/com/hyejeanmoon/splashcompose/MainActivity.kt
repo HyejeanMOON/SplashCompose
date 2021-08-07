@@ -29,10 +29,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -42,12 +41,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsViewModel
-import com.hyejeanmoon.splashcompose.screen.favorite.FavoriteScreen
-import com.hyejeanmoon.splashcompose.screen.favorite.FavoriteViewModel
+import com.hyejeanmoon.splashcompose.screen.favorite.FavoritesActivity
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
@@ -68,7 +65,6 @@ class MainActivity : ComponentActivity() {
 
     private val photosViewModel: PhotosViewModel by viewModels()
     private val collectionsViewModel: CollectionsViewModel by viewModels()
-    private val favoriteViewModel: FavoriteViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
     private val randomPhotoViewModel: RandomPhotoViewModel by viewModels()
 
@@ -82,83 +78,214 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
+            var expanded by remember { mutableStateOf(false) }
+
             SetUpStatusBar()
 
-            SplashComposeApp(
-                photosViewModel,
-                collectionsViewModel,
-                onCollectionsItemClick = { collectionId, collectionTitle ->
-                    PhotosOfCollectionActivity.start(this, collectionId, collectionTitle)
-                },
-                onSettingsItemClick = { detail ->
-                    when (detail) {
-                        SETTINGS_ITEM_ABOUT_DEVELOPER -> {
-                            val uri = Uri.parse("https://github.com/HyejeanMOON")
-                            val intent = Intent(Intent.ACTION_VIEW, uri)
-                            startActivity(intent)
-                        }
+            SplashComposeTheme {
+                Surface(color = MaterialTheme.colors.background) {
+                    val navController = rememberNavController()
+                    Scaffold(
+                        modifier = Modifier,
+                        bottomBar = {
+                            BottomNavigation {
+                                val screenList = listOf(
+                                    Screen.Random,
+                                    Screen.Photos,
+                                    Screen.Collections,
+                                    Screen.Settings,
+                                )
 
-                        SETTINGS_ITEM_VERSION -> {
-                            // do nothing
-                        }
+                                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                                val currentRoute = navBackStackEntry?.destination?.route
 
-                        SETTINGS_ITEM_LICENSES -> {
-                            WebViewActivity.start(
-                                "file:///android_asset/licenses.html",
-                                SETTINGS_ITEM_LICENSES,
-                                this
+                                screenList.forEach { screen ->
+                                    BottomNavigationItem(
+                                        selected = currentRoute == screen.route,
+                                        onClick = {
+                                            navController.navigate(screen.route) {
+                                                launchSingleTop = true
+                                            }
+                                        },
+                                        icon = {
+                                            Icon(
+                                                modifier = Modifier.size(28.dp),
+                                                painter = painterResource(id = screen.drawableId),
+                                                contentDescription = stringResource(
+                                                    id = screen.stringId
+                                                ),
+                                                tint = if (currentRoute == screen.route) Color.Red else Color.Black
+                                            )
+                                        },
+                                        label = {
+                                            Text(
+                                                text = stringResource(id = screen.stringId),
+                                                color = if (currentRoute == screen.route) Color.Red else Color.Black
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                        },
+                        topBar = {
+                            TopAppBar(
+                                title = {
+                                    Text(
+                                        text = APPLICATION_TITLE,
+                                        color = Color.Black
+                                    )
+                                },
+                                actions = {
+                                    IconButton(
+                                        onClick = {
+                                            expanded = true
+                                        },
+                                        content = {
+                                            Icon(
+                                                imageVector = Icons.Filled.MoreVert,
+                                                contentDescription = "More Icon",
+                                                tint = Color.Black
+                                            )
+                                        }
+                                    )
+                                    DropdownMenu(
+                                        expanded = expanded,
+                                        onDismissRequest = { expanded = false },
+                                        content = {
+                                            Column {
+                                                DropdownMenuItem(onClick = {
+                                                    expanded = false
+                                                    FavoritesActivity.start(this@MainActivity)
+                                                }) {
+                                                    Text(text = getString(R.string.title_favorites))
+                                                }
+                                            }
+                                        }
+                                    )
+                                }
                             )
                         }
+                    ) {
 
-                        SETTINGS_ITEM_CLEAR_CACHE -> {
-                            DataManager.clearCacheInScopedStorage(this)
+                        var openDialog = remember { mutableStateOf(false) }
+                        var settingsItem = remember { mutableStateOf("") }
+
+                        NavHost(navController, startDestination = Screen.Random.route) {
+                            composable(Screen.Random.route) {
+                                RandomPhotoScreen(
+                                    viewModel = randomPhotoViewModel,
+                                    onRandomPhotoClick = {
+                                        PhotoDetailActivity.start(it, this@MainActivity)
+                                    }
+                                )
+                            }
+                            composable(Screen.Photos.route) {
+                                PhotoScreen(
+                                    viewModel = photosViewModel,
+                                    onPhotoClick = {
+                                        PhotoDetailActivity.start(
+                                            it?.id.orEmpty(),
+                                            this@MainActivity
+                                        )
+                                    }
+                                )
+                            }
+                            composable(Screen.Collections.route) {
+                                CollectionsScreen(
+                                    collectionsViewModel = collectionsViewModel,
+                                    onCollectionsItemClick = { collectionId, collectionTitle ->
+                                        PhotosOfCollectionActivity.start(
+                                            this@MainActivity,
+                                            collectionId,
+                                            collectionTitle
+                                        )
+                                    }
+                                )
+                            }
+                            composable(Screen.Settings.route) {
+                                SettingsScreen(
+                                    settingsItems = listOf(
+                                        SettingsItem(
+                                            SETTINGS_TITLE_APPLICATION_SETTINGS,
+                                            listOf(
+                                                SettingItemDetail(
+                                                    title = SETTINGS_ITEM_DISPLAY_RESOLUTION
+                                                ),
+                                                SettingItemDetail(
+                                                    title = SETTINGS_ITEM_PHOTO_DISPLAY_ORDER,
+                                                    "This setting will take effect the next time you start the app"
+                                                ),
+                                                SettingItemDetail(title = SETTINGS_ITEM_CLEAR_CACHE)
+                                            )
+                                        ),
+                                        SettingsItem(
+                                            SETTINGS_TITLE_OTHERS,
+                                            listOf(
+                                                SettingItemDetail(
+                                                    title = SETTINGS_ITEM_VERSION,
+                                                    content = BuildConfig.VERSION_NAME
+                                                ),
+                                                SettingItemDetail(
+                                                    title = SETTINGS_ITEM_LICENSES
+                                                ),
+                                                SettingItemDetail(title = SETTINGS_ITEM_ABOUT_DEVELOPER)
+                                            )
+                                        )
+                                    ),
+                                    onSettingsItemClick = { title ->
+                                        when (title) {
+                                            SETTINGS_ITEM_DISPLAY_RESOLUTION,
+                                            SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+                                                openDialog.value = true
+                                                settingsItem.value = title
+                                            }
+                                            SETTINGS_ITEM_ABOUT_DEVELOPER,
+                                            SETTINGS_ITEM_VERSION,
+                                            SETTINGS_ITEM_CLEAR_CACHE,
+                                            SETTINGS_ITEM_LICENSES -> {
+                                                when (title) {
+                                                    SETTINGS_ITEM_ABOUT_DEVELOPER -> {
+                                                        val uri =
+                                                            Uri.parse("https://github.com/HyejeanMOON")
+                                                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                                                        startActivity(intent)
+                                                    }
+
+                                                    SETTINGS_ITEM_VERSION -> {
+                                                        // do nothing
+                                                    }
+
+                                                    SETTINGS_ITEM_LICENSES -> {
+                                                        WebViewActivity.start(
+                                                            "file:///android_asset/licenses.html",
+                                                            SETTINGS_ITEM_LICENSES,
+                                                            this@MainActivity
+                                                        )
+                                                    }
+
+                                                    SETTINGS_ITEM_CLEAR_CACHE -> {
+                                                        DataManager.clearCacheInScopedStorage(this@MainActivity)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                        if (openDialog.value) {
+                            SettingsAlertDialog(
+                                item = settingsItem.value,
+                                onCloseDialog = {
+                                    openDialog.value = false
+                                },
+                                settingsViewModel = settingsViewModel
+                            )
                         }
                     }
-                },
-                settingsItems = listOf(
-                    SettingsItem(
-                        SETTINGS_TITLE_APPLICATION_SETTINGS,
-                        listOf(
-                            SettingItemDetail(
-                                title = SETTINGS_ITEM_DISPLAY_RESOLUTION
-                            ),
-                            SettingItemDetail(
-                                title = SETTINGS_ITEM_PHOTO_DISPLAY_ORDER,
-                                "This setting will take effect the next time you start the app"
-                            ),
-                            SettingItemDetail(title = SETTINGS_ITEM_CLEAR_CACHE)
-                        )
-                    ),
-                    SettingsItem(
-                        SETTINGS_TITLE_OTHERS,
-                        listOf(
-                            SettingItemDetail(
-                                title = SETTINGS_ITEM_VERSION,
-                                content = BuildConfig.VERSION_NAME
-                            ),
-                            SettingItemDetail(
-                                title = SETTINGS_ITEM_LICENSES
-                            ),
-                            SettingItemDetail(title = SETTINGS_ITEM_ABOUT_DEVELOPER)
-                        )
-                    )
-                ),
-                onPhotoClick = {
-                    PhotoDetailActivity.start(it?.id.orEmpty(), this)
-                },
-                favoriteViewModel = favoriteViewModel,
-                onFavoritePhotoClick = { photoId ->
-                    PhotoDetailActivity.start(
-                        photoId,
-                        this
-                    )
-                },
-                settingsViewModel = settingsViewModel,
-                randomPhotoViewModel = randomPhotoViewModel,
-                onRandomPhotosClick = {
-                    PhotoDetailActivity.start(it, this)
                 }
-            )
+            }
+
         }
     }
 
@@ -183,12 +310,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        favoriteViewModel.getAllFavoritePhotos()
-    }
-
     override fun onBackPressed() {
         finish()
     }
@@ -203,137 +324,6 @@ class MainActivity : ComponentActivity() {
         const val SETTINGS_TITLE_OTHERS = "Others"
         const val SETTINGS_TITLE_APPLICATION_SETTINGS = "Application Settings"
         const val APPLICATION_TITLE = "Splash Pictures"
-    }
-}
-
-@ExperimentalFoundationApi
-@Composable
-fun SplashComposeApp(
-    photoViewModel: PhotosViewModel,
-    collectionsViewModel: CollectionsViewModel,
-    favoriteViewModel: FavoriteViewModel,
-    settingsViewModel: SettingsViewModel,
-    randomPhotoViewModel: RandomPhotoViewModel,
-    onCollectionsItemClick: (String, String) -> Unit,
-    onSettingsItemClick: (String) -> Unit,
-    onPhotoClick: (Photo?) -> Unit,
-    onFavoritePhotoClick: (String) -> Unit,
-    onRandomPhotosClick: (String) -> Unit,
-    settingsItems: List<SettingsItem>
-) {
-    SplashComposeTheme {
-        Surface(color = MaterialTheme.colors.background) {
-            val navController = rememberNavController()
-            Scaffold(
-                modifier = Modifier,
-                bottomBar = {
-                    BottomNavigation {
-                        val screenList = listOf(
-                            Screen.Random,
-                            Screen.Photos,
-                            Screen.Collects,
-                            Screen.Favorites,
-                            Screen.Settings,
-                        )
-
-                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentRoute = navBackStackEntry?.destination?.route
-
-                        screenList.forEach { screen ->
-                            BottomNavigationItem(
-                                selected = currentRoute == screen.route,
-                                onClick = {
-                                    navController.navigate(screen.route) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                                icon = {
-                                    Icon(
-                                        modifier = Modifier.size(28.dp),
-                                        painter = painterResource(id = screen.drawableId),
-                                        contentDescription = stringResource(
-                                            id = screen.stringId
-                                        ),
-                                        tint = if (currentRoute == screen.route) Color.Red else Color.Black
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(id = screen.stringId),
-                                        color = if (currentRoute == screen.route) Color.Red else Color.Black
-                                    )
-                                }
-                            )
-                        }
-                    }
-                },
-                topBar = {
-                    TopAppBar(
-                        title = { Text(text = MainActivity.APPLICATION_TITLE, color = Color.Black) }
-                    )
-                }
-            ) {
-
-                var openDialog = remember { mutableStateOf(false) }
-                var settingsItem = remember { mutableStateOf("") }
-
-                NavHost(navController, startDestination = Screen.Random.route) {
-                    composable(Screen.Random.route) {
-                        RandomPhotoScreen(
-                            viewModel = randomPhotoViewModel,
-                            onRandomPhotoClick = onRandomPhotosClick
-                        )
-                    }
-                    composable(Screen.Photos.route) {
-                        PhotoScreen(
-                            viewModel = photoViewModel,
-                            onPhotoClick = onPhotoClick
-                        )
-                    }
-                    composable(Screen.Collects.route) {
-                        CollectionsScreen(
-                            collectionsViewModel = collectionsViewModel,
-                            onCollectionsItemClick = onCollectionsItemClick
-                        )
-                    }
-                    composable(Screen.Favorites.route) {
-                        FavoriteScreen(
-                            viewModel = favoriteViewModel,
-                            onFavoritePhotoClick = onFavoritePhotoClick
-                        )
-                    }
-                    composable(Screen.Settings.route) {
-                        SettingsScreen(
-                            settingsItems = settingsItems,
-                            onSettingsItemClick = { title ->
-                                when (title) {
-                                    MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION,
-                                    MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
-                                        openDialog.value = true
-                                        settingsItem.value = title
-                                    }
-                                    MainActivity.SETTINGS_ITEM_ABOUT_DEVELOPER,
-                                    MainActivity.SETTINGS_ITEM_VERSION,
-                                    MainActivity.SETTINGS_ITEM_CLEAR_CACHE,
-                                    MainActivity.SETTINGS_ITEM_LICENSES -> {
-                                        onSettingsItemClick(title)
-                                    }
-                                }
-                            }
-                        )
-                    }
-                }
-                if (openDialog.value) {
-                    SettingsAlertDialog(
-                        item = settingsItem.value,
-                        onCloseDialog = {
-                            openDialog.value = false
-                        },
-                        settingsViewModel = settingsViewModel
-                    )
-                }
-            }
-        }
     }
 }
 

@@ -1,13 +1,17 @@
 package com.hyejeanmoon.splashcompose.screen.random
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -29,6 +33,30 @@ fun RandomPhotoScreen(
     ConstraintLayout(modifier = modifier) {
 
         val (image, info, refresh) = createRefs()
+
+        var isRotated by remember { mutableStateOf(false) }
+
+        val angle: Float by animateFloatAsState(
+            targetValue = if (isRotated) 360F else 0F,
+            animationSpec = tween(
+                durationMillis = 800,
+                easing = FastOutSlowInEasing
+            ),
+            finishedListener = {
+                isRotated = false
+            }
+        )
+
+        val color: Color by animateColorAsState(
+            targetValue = if (isRotated) Color.Red  else Color.White,
+            animationSpec = tween(
+                durationMillis = 800,
+                easing = FastOutSlowInEasing
+            ),
+            finishedListener = {
+                isRotated = false
+            }
+        )
 
         Image(
             modifier = Modifier
@@ -70,11 +98,13 @@ fun RandomPhotoScreen(
                     end.linkTo(info.start)
                 }
                 .clickable {
+                    isRotated = true
                     viewModel.getRandomPhoto()
-                },
+                }
+                .rotate(angle),
             painter = painterResource(id = R.drawable.ic_refresh),
             contentDescription = "Refresh Icon",
-            tint = Color.White
+            tint = color
         )
     }
 }
