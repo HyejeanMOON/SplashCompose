@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hyejeanmoon.splashcompose.screen.favorite
+package com.hyejeanmoon.splashcompose.screen.favorites
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class FavoriteViewModel(
+class FavoritesViewModel(
     app: Application
 ) : AndroidViewModel(app) {
 

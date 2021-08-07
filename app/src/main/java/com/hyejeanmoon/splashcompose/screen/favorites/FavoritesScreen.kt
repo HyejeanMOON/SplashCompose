@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hyejeanmoon.splashcompose.screen.favorite
+package com.hyejeanmoon.splashcompose.screen.favorites
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -47,9 +47,9 @@ import com.hyejeanmoon.splashcompose.db.FavoritePhoto
 
 @ExperimentalFoundationApi
 @Composable
-fun FavoriteScreen(
+fun FavoritesScreen(
     modifier: Modifier = Modifier,
-    viewModel: FavoriteViewModel,
+    viewModel: FavoritesViewModel,
     onFavoritePhotoClick: (String) -> Unit
 ) {
     val isRefreshing by viewModel.isRefreshing.collectAsState()

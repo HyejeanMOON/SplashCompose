@@ -44,7 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsViewModel
-import com.hyejeanmoon.splashcompose.screen.favorite.FavoritesActivity
+import com.hyejeanmoon.splashcompose.screen.favorites.FavoritesActivity
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel

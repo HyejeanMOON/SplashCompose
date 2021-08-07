@@ -1,4 +1,20 @@
-package com.hyejeanmoon.splashcompose.screen.favorite
+/*
+ * Copyright (C) 2021 HyejeanMOON.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.hyejeanmoon.splashcompose.screen.favorites
 
 import android.content.Intent
 import android.os.Bundle
@@ -20,7 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FavoritesActivity : ComponentActivity() {
 
-    private val favoriteViewModel: FavoriteViewModel by viewModels()
+    private val favoritesViewModel: FavoritesViewModel by viewModels()
 
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,8 +69,8 @@ class FavoritesActivity : ComponentActivity() {
                             )
                         }
                     ) {
-                        FavoriteScreen(
-                            viewModel = favoriteViewModel,
+                        FavoritesScreen(
+                            viewModel = favoritesViewModel,
                             onFavoritePhotoClick = { photoId ->
                                 PhotoDetailActivity.start(photoId, this)
                             }
@@ -68,7 +84,7 @@ class FavoritesActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
 
-        favoriteViewModel.getAllFavoritePhotos()
+        favoritesViewModel.getAllFavoritePhotos()
     }
 
     companion object {
