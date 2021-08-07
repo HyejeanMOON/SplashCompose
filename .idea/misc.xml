@@ -20,13 +20,16 @@
         <entry key="../../../../layout/compose-model-1627208762832.xml" value="0.24239864864864866" />
         <entry key="app/src/main/res/drawable/ic_aperture.xml" value="0.275" />
         <entry key="app/src/main/res/drawable/ic_camera.xml" value="0.275" />
+        <entry key="app/src/main/res/drawable/ic_collections.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_download.xml" value="0.275" />
         <entry key="app/src/main/res/drawable/ic_exposure.xml" value="0.275" />
         <entry key="app/src/main/res/drawable/ic_favorites.xml" value="0.275" />
         <entry key="app/src/main/res/drawable/ic_favorites_filled.xml" value="0.178" />
         <entry key="app/src/main/res/drawable/ic_iso.xml" value="0.275" />
+        <entry key="app/src/main/res/drawable/ic_love.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_none_picture.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_photo.xml" value="0.169" />
+        <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_right.xml" value="0.27870370370370373" />
         <entry key="app/src/main/res/drawable/ic_size.xml" value="0.275" />
         <entry key="app/src/main/res/drawable/ic_times.xml" value="0.275" />

@@ -24,10 +24,11 @@ sealed class Screen(
     @StringRes val stringId: Int,
     @DrawableRes val drawableId: Int
 ) {
+    object Random: Screen("Random",R.string.screen_random,R.drawable.ic_random)
     object Photos : Screen("Photos", R.string.screen_photos, R.drawable.ic_photos)
-    object Collections :
-        Screen("Collections", R.string.screen_collections, R.drawable.ic_collections)
+    object Collects :
+        Screen("Collects", R.string.screen_collects, R.drawable.ic_collections)
 
-    object Love : Screen("Favorite", R.string.screen_favorite, R.drawable.ic_love)
+    object Favorites : Screen("Favorite", R.string.screen_favorite, R.drawable.ic_favorites)
     object Settings : Screen("Settings", R.string.screen_settings, R.drawable.ic_settings)
 }

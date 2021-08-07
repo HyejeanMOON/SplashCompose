@@ -51,6 +51,8 @@ import com.hyejeanmoon.splashcompose.screen.favorite.FavoriteViewModel
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
+import com.hyejeanmoon.splashcompose.screen.random.RandomPhotoScreen
+import com.hyejeanmoon.splashcompose.screen.random.RandomPhotoViewModel
 import com.hyejeanmoon.splashcompose.screen.settings.SettingItemDetail
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
@@ -68,12 +70,15 @@ class MainActivity : ComponentActivity() {
     private val collectionsViewModel: CollectionsViewModel by viewModels()
     private val favoriteViewModel: FavoriteViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
+    private val randomPhotoViewModel: RandomPhotoViewModel by viewModels()
 
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initPref()
+
+        randomPhotoViewModel.getRandomPhoto()
 
         setContent {
 
@@ -148,7 +153,11 @@ class MainActivity : ComponentActivity() {
                         this
                     )
                 },
-                settingsViewModel = settingsViewModel
+                settingsViewModel = settingsViewModel,
+                randomPhotoViewModel = randomPhotoViewModel,
+                onRandomPhotosClick = {
+                    PhotoDetailActivity.start(it, this)
+                }
             )
         }
     }
@@ -204,10 +213,12 @@ fun SplashComposeApp(
     collectionsViewModel: CollectionsViewModel,
     favoriteViewModel: FavoriteViewModel,
     settingsViewModel: SettingsViewModel,
+    randomPhotoViewModel: RandomPhotoViewModel,
     onCollectionsItemClick: (String, String) -> Unit,
     onSettingsItemClick: (String) -> Unit,
     onPhotoClick: (Photo?) -> Unit,
     onFavoritePhotoClick: (String) -> Unit,
+    onRandomPhotosClick: (String) -> Unit,
     settingsItems: List<SettingsItem>
 ) {
     SplashComposeTheme {
@@ -218,9 +229,10 @@ fun SplashComposeApp(
                 bottomBar = {
                     BottomNavigation {
                         val screenList = listOf(
+                            Screen.Random,
                             Screen.Photos,
-                            Screen.Collections,
-                            Screen.Love,
+                            Screen.Collects,
+                            Screen.Favorites,
                             Screen.Settings,
                         )
 
@@ -265,20 +277,26 @@ fun SplashComposeApp(
                 var openDialog = remember { mutableStateOf(false) }
                 var settingsItem = remember { mutableStateOf("") }
 
-                NavHost(navController, startDestination = Screen.Photos.route) {
+                NavHost(navController, startDestination = Screen.Random.route) {
+                    composable(Screen.Random.route) {
+                        RandomPhotoScreen(
+                            viewModel = randomPhotoViewModel,
+                            onRandomPhotoClick = onRandomPhotosClick
+                        )
+                    }
                     composable(Screen.Photos.route) {
                         PhotoScreen(
                             viewModel = photoViewModel,
                             onPhotoClick = onPhotoClick
                         )
                     }
-                    composable(Screen.Collections.route) {
+                    composable(Screen.Collects.route) {
                         CollectionsScreen(
                             collectionsViewModel = collectionsViewModel,
                             onCollectionsItemClick = onCollectionsItemClick
                         )
                     }
-                    composable(Screen.Love.route) {
+                    composable(Screen.Favorites.route) {
                         FavoriteScreen(
                             viewModel = favoriteViewModel,
                             onFavoritePhotoClick = onFavoritePhotoClick
