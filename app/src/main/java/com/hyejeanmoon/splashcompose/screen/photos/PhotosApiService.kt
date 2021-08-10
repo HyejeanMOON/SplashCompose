@@ -27,13 +27,13 @@ interface PhotosApiService {
     /**
      * get a photo from server by id.
      */
-    @GET("/photos/{id}")
+    @GET("/photos/{id}?utm_source=Splash_Pictures&utm_medium=referral")
     fun getPhoto(@Path("id") id: String): Call<Photo>
 
     /**
      * get a list of photos from server.
      */
-    @GET("/photos")
+    @GET("/photos?utm_source=Splash_Pictures&utm_medium=referral")
     fun getPhotos(
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
@@ -51,7 +51,7 @@ interface PhotosApiService {
      * orientation: Filter search results by photo orientation. Valid values are landscape, portrait, and squarish.
      * count: The number of photos to return. (Default: 1; max: 30)
      */
-    @GET("/photos/random")
+    @GET("/photos/random?utm_source=Splash_Pictures&utm_medium=referral")
     fun getRandomPhotos(
         @Query("collections") collections: String,
         @Query("featured") featured: String,
@@ -64,13 +64,13 @@ interface PhotosApiService {
     /**
      * get a photo from server by random, without any parameters.
      */
-    @GET("/photos/random")
+    @GET("/photos/random?utm_source=Splash_Pictures&utm_medium=referral")
     fun getRandomPhoto(): Call<Photo>
 
     /**
      * download a photo by id.
      */
-    @GET("/photos/{id}/download")
+    @GET("/photos/{id}/download?utm_source=Splash_Pictures&utm_medium=referral")
     fun downloadPhoto(
         @Path("id") id: String
     ):Call<DownloadPhoto>

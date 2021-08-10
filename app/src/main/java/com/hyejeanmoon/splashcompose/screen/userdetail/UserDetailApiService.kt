@@ -30,7 +30,7 @@ interface UserDetailApiService {
     /**
      * get an user's details from server by UserName
      */
-    @GET("/users/{userName}")
+    @GET("/users/{userName}?utm_source=Splash_Pictures&utm_medium=referral")
     fun getUserDetails(
         @Path("userName") userName: String
     ): Call<UserDetail>
@@ -38,7 +38,7 @@ interface UserDetailApiService {
     /**
      * get a list of an user's photos by UserName
      */
-    @GET("/users/{userName}/photos")
+    @GET("/users/{userName}/photos?utm_source=Splash_Pictures&utm_medium=referral")
     fun getPhotosByUserName(
         @Path("userName") userName: String,
         @Query("page") page: Int,
@@ -49,7 +49,7 @@ interface UserDetailApiService {
     /**
      * get a list of an user's liked photos by UserName
      */
-    @GET("/users/{userName}/likes")
+    @GET("/users/{userName}/likes?utm_source=Splash_Pictures&utm_medium=referral")
     fun getLikedPhotosByUserName(
         @Path("userName") userName: String,
         @Query("page") page: Int,
@@ -60,7 +60,7 @@ interface UserDetailApiService {
     /**
      * get a list of an user's collections by UserName
      */
-    @GET("/users/{userName}/collections")
+    @GET("/users/{userName}/collections?utm_source=Splash_Pictures&utm_medium=referral")
     fun getCollectionsByUserName(
         @Path("userName") userName: String,
         @Query("page") page: Int,

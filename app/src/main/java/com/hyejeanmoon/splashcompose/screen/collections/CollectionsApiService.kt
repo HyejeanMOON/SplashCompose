@@ -31,7 +31,7 @@ interface CollectionsApiService {
      * page: optional, default 1;
      * per_page: optional, default 10;
      */
-    @GET("/collections")
+    @GET("/collections?utm_source=Splash_Pictures&utm_medium=referral")
     fun getCollections(
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
@@ -45,7 +45,7 @@ interface CollectionsApiService {
      * page: optional, default 1;
      * per_page: optional, default 10;
      */
-    @GET("/collections/{id}/photos")
+    @GET("/collections/{id}/photos?utm_source=Splash_Pictures&utm_medium=referral")
     fun getPhotosOfCollection(
         @Path("id") id: String,
         @Query("page") page: Int,
