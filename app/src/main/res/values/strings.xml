@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Splash Pictures</string>
+    <string name="app_name">Moonlight Pictures</string>
     <string name="screen_random">Random</string>
     <string name="screen_photos">Photos</string>
     <string name="screen_collections">Collections</string>
