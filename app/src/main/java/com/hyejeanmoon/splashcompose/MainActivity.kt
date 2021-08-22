@@ -54,6 +54,7 @@ import com.hyejeanmoon.splashcompose.screen.settings.SettingItemDetail
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsViewModel
+import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 import com.hyejeanmoon.splashcompose.screen.webview.WebViewActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import com.hyejeanmoon.splashcompose.utils.DataManager
@@ -176,6 +177,12 @@ class MainActivity : ComponentActivity() {
                                     viewModel = randomPhotoViewModel,
                                     onRandomPhotoClick = {
                                         PhotoDetailActivity.start(it, this@MainActivity)
+                                    },
+                                    onUserInfoClick = { userName ->
+                                        UserDetailActivity.startUserDetailActivity(
+                                            this@MainActivity,
+                                            userName
+                                        )
                                     }
                                 )
                             }
@@ -186,6 +193,12 @@ class MainActivity : ComponentActivity() {
                                         PhotoDetailActivity.start(
                                             it?.id.orEmpty(),
                                             this@MainActivity
+                                        )
+                                    },
+                                    onUserInfoClick = { userName ->
+                                        UserDetailActivity.startUserDetailActivity(
+                                            this@MainActivity,
+                                            userName
                                         )
                                     }
                                 )

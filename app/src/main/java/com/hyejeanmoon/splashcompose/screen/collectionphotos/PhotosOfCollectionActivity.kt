@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
+import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -49,7 +50,13 @@ class PhotosOfCollectionActivity : ComponentActivity() {
                         photosOfCollectionViewModel = viewModel,
                         onPhotoClick = { PhotoDetailActivity.start(it?.id.orEmpty(), this) },
                         onBackIconClick = { finish() },
-                        collectionTitle = collectionTitle
+                        collectionTitle = collectionTitle,
+                        onUserInfoClick = { userName ->
+                            UserDetailActivity.startUserDetailActivity(
+                                this,
+                                userName
+                            )
+                        }
                     )
                 }
             }

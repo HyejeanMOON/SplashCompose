@@ -44,6 +44,7 @@ fun PhotosOfCollectionScreen(
     photosOfCollectionViewModel: PhotosOfCollectionViewModel,
     onPhotoClick: (Photo?) -> Unit,
     onBackIconClick: () -> Unit,
+    onUserInfoClick:(String) -> Unit,
     collectionTitle: String
 ) {
     val pagingItems = photosOfCollectionViewModel.photosOfCollections.collectAsLazyPagingItems()
@@ -76,11 +77,14 @@ fun PhotosOfCollectionScreen(
                 val item by remember {
                     mutableStateOf(photoItem)
                 }
-                PhotoImage(
-                    photo = item,
-                    onPhotoClick = onPhotoClick,
-                    resolution = photosOfCollectionViewModel.resolution
-                )
+                item?.also { photo ->
+                    PhotoImage(
+                        photo = photo,
+                        onPhotoClick = onPhotoClick,
+                        resolution = photosOfCollectionViewModel.resolution,
+                        onUserInfoClick = {onUserInfoClick(photo.user?.userName.orEmpty())}
+                    )
+                }
             }
         }
     }
