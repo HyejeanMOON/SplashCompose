@@ -59,10 +59,15 @@ class PhotosOfCollectionViewModel(
 
     var photosOfCollections = Pager(
         config = PagingConfig(
-            pageSize = 15,
+            pageSize = PAGE_SIZE,
             enablePlaceholders = false,
-            initialLoadSize = 30
+            initialLoadSize = INITIAL_LOAD_SIZE
         ),
         pagingSourceFactory = { photosOfCollectionDataSource }
     ).flow.cachedIn(viewModelScope)
+
+    companion object{
+        private const val PAGE_SIZE = 10
+        private const val INITIAL_LOAD_SIZE = 10
+    }
 }

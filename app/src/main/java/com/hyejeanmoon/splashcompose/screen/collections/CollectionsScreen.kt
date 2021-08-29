@@ -18,17 +18,16 @@ package com.hyejeanmoon.splashcompose.screen.collections
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -42,13 +41,15 @@ import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.entity.Collections
+import com.hyejeanmoon.splashcompose.screen.photos.PhotoUserInfo
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 
 @Composable
 fun CollectionsScreen(
     modifier: Modifier = Modifier,
     collectionsViewModel: CollectionsViewModel,
-    onCollectionsItemClick: (String, String) -> Unit
+    onCollectionsItemClick: (String, String) -> Unit,
+    onUserInfoClick: (String) -> Unit
 ) {
     val pagingItems = collectionsViewModel.collections.collectAsLazyPagingItems()
     LazyColumn(
@@ -60,7 +61,8 @@ fun CollectionsScreen(
                 CollectionsItem(
                     collections = item,
                     onCollectionsItemClick = onCollectionsItemClick,
-                    resolution = collectionsViewModel.resolution
+                    resolution = collectionsViewModel.resolution,
+                    onUserInfoClick = onUserInfoClick
                 )
             }
         }
@@ -84,71 +86,84 @@ fun CollectionsScreen(
 @Composable
 fun CollectionsItem(
     modifier: Modifier = Modifier,
-    resolution:String,
+    isShowUserInfo: Boolean = true,
+    resolution: String,
     collections: Collections,
-    onCollectionsItemClick: (String, String) -> Unit
+    onCollectionsItemClick: (String, String) -> Unit,
+    onUserInfoClick: (String) -> Unit,
 ) {
-    ConstraintLayout(
-        modifier = modifier
-            .padding(0.dp, 1.dp)
-            .fillMaxWidth()
-            .requiredHeight(300.dp)
-            .clickable {
-                onCollectionsItemClick(collections.id.orEmpty(), collections.title.orEmpty())
-            }
-    ) {
+    Column(modifier = modifier) {
+        if (isShowUserInfo) {
+            PhotoUserInfo(
+                userName = collections.user?.userName.orEmpty(),
+                userPhoto = collections.user?.profileImage?.large.orEmpty(),
+                onUserInfoClick = onUserInfoClick
+            )
+        }
 
-        val coverPhotoUrl = PhotoUtils.getCoverPhotoOfCollectionUrlByResolution(
-            resolution,
-            collections
-        )
-
-        val (image, title, photoNumber) = createRefs()
-
-        Image(
-            modifier = Modifier
+        ConstraintLayout(
+            modifier = modifier
+                .padding(20.dp, 10.dp, 20.dp, 0.dp)
                 .fillMaxWidth()
                 .requiredHeight(300.dp)
-                .constrainAs(image) {
-                    start.linkTo(image.start)
-                    end.linkTo(image.end)
-                    top.linkTo(image.top)
-                    bottom.linkTo(image.bottom)
-                },
-            painter = rememberCoilPainter(
-                coverPhotoUrl,
-                fadeIn = true
-            ),
-            contentDescription = "collections cover image",
-            contentScale = ContentScale.Crop
-        )
-
-        Text(
-            modifier = Modifier
-                .constrainAs(title) {
-                    start.linkTo(image.start)
-                    end.linkTo(image.end)
-                    top.linkTo(image.top)
-                    bottom.linkTo(image.bottom)
-                },
-            text = collections.title.orEmpty(),
-            fontSize = 24.sp,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            modifier = Modifier
-                .constrainAs(photoNumber) {
-                    end.linkTo(image.end)
-                    bottom.linkTo(image.bottom)
+                .clickable {
+                    onCollectionsItemClick(collections.id.orEmpty(), collections.title.orEmpty())
                 }
-                .padding(20.dp),
-            text = "${collections.totalPhotos.orEmpty()} photos",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color = Color.White
-        )
+        ) {
+
+            val coverPhotoUrl = PhotoUtils.getCoverPhotoOfCollectionUrlByResolution(
+                resolution,
+                collections
+            )
+
+            val (image, title, photoNumber, userInfo) = createRefs()
+
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .requiredHeight(300.dp)
+                    .constrainAs(image) {
+                        start.linkTo(image.start)
+                        end.linkTo(image.end)
+                        top.linkTo(userInfo.bottom)
+                        bottom.linkTo(image.bottom)
+                    }
+                    .clip(RoundedCornerShape(10.dp)),
+                painter = rememberCoilPainter(
+                    coverPhotoUrl,
+                    fadeIn = true
+                ),
+                contentDescription = "collections cover image",
+                contentScale = ContentScale.Crop
+            )
+
+            Text(
+                modifier = Modifier
+                    .constrainAs(title) {
+                        start.linkTo(image.start)
+                        end.linkTo(image.end)
+                        top.linkTo(image.top)
+                        bottom.linkTo(image.bottom)
+                    },
+                text = collections.title.orEmpty(),
+                fontSize = 24.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+
+            Text(
+                modifier = Modifier
+                    .constrainAs(photoNumber) {
+                        end.linkTo(image.end)
+                        bottom.linkTo(image.bottom)
+                    }
+                    .padding(20.dp),
+                text = "${collections.totalPhotos.orEmpty()} photos",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = Color.White
+            )
+        }
     }
 }

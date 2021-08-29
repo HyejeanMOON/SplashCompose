@@ -23,6 +23,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -52,6 +53,7 @@ import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsItem
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailLocation
+import com.hyejeanmoon.splashcompose.screen.photos.PhotoUserInfo
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,7 +66,8 @@ fun UserDetailScreen(
     viewModel: UserDetailViewModel,
     onBackIconClick: () -> Unit,
     onCollectionItemsClick: (String, String) -> Unit,
-    onPhotoClick: (UsersPhotos?) -> Unit
+    onPhotoClick: (UsersPhotos?) -> Unit,
+    onUserInfoClick: (String) -> Unit
 ) {
     val userDetail by viewModel.userDetail.observeAsState()
     val exception by viewModel.exception.observeAsState()
@@ -270,7 +273,8 @@ fun UserDetailScreen(
                     2 -> {
                         UserDetailLikedPhotos(
                             viewModel = viewModel,
-                            onPhotoClick = onPhotoClick
+                            onPhotoClick = onPhotoClick,
+                            onUserInfoClick = onUserInfoClick
                         )
                     }
                 }
@@ -386,7 +390,11 @@ fun UserDetailPhotos(
                     modifier = Modifier.fillMaxWidth(),
                     photo = item,
                     onPhotoClick = { onPhotoClick(item) },
-                    resolution = viewModel.resolution
+                    resolution = viewModel.resolution,
+                    onUserInfoClick = {
+                        // do nothing
+                    },
+                    isShowUserInfo = false
                 )
             }
         }
@@ -429,10 +437,15 @@ fun UserDetailCollections(
                 item?.also {
                     CollectionsItem(
                         collections = it,
-                        resolution = viewModel.resolution
-                    ) { id, title ->
-                        onCollectionItemsClick(id, title)
-                    }
+                        resolution = viewModel.resolution,
+                        onCollectionsItemClick = { id, title ->
+                            onCollectionItemsClick(id, title)
+                        },
+                        onUserInfoClick = {
+                            // do nothing
+                        },
+                        isShowUserInfo = false
+                    )
                 }
             }
         }
@@ -458,7 +471,8 @@ fun UserDetailCollections(
 fun UserDetailLikedPhotos(
     modifier: Modifier = Modifier,
     viewModel: UserDetailViewModel,
-    onPhotoClick: (UsersPhotos?) -> Unit
+    onPhotoClick: (UsersPhotos?) -> Unit,
+    onUserInfoClick: (String) -> Unit
 ) {
     val photos =
         viewModel.userDetailLikedPhotosDataSourceFlow.collectAsLazyPagingItems()
@@ -477,7 +491,8 @@ fun UserDetailLikedPhotos(
                     modifier = Modifier.fillMaxWidth(),
                     photo = item,
                     onPhotoClick = { onPhotoClick(item) },
-                    resolution = viewModel.resolution
+                    resolution = viewModel.resolution,
+                    onUserInfoClick = onUserInfoClick
                 )
             }
         }
@@ -543,9 +558,11 @@ fun NoPhotos(
 @Composable
 fun PhotoDetailImage(
     modifier: Modifier = Modifier,
+    isShowUserInfo: Boolean = true,
     photo: UsersPhotos?,
     resolution: String,
-    onPhotoClick: (UsersPhotos?) -> Unit
+    onPhotoClick: (UsersPhotos?) -> Unit,
+    onUserInfoClick: (String) -> Unit,
 ) {
 
     val photoUrl = PhotoUtils.getUserDetailPhotoUrlByResolution(
@@ -553,18 +570,31 @@ fun PhotoDetailImage(
         photo
     )
 
-    Image(
+    Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(0.dp, 1.dp)
-            .clickable { onPhotoClick(photo) },
-        painter = rememberCoilPainter(
-            photoUrl,
-            fadeIn = true
-        ),
-        contentDescription = "photo image",
-        contentScale = ContentScale.FillWidth
-    )
+    ) {
+        if (isShowUserInfo) {
+            PhotoUserInfo(
+                userName = photo?.user?.userName.orEmpty(),
+                userPhoto = photo?.user?.profileImage?.large.orEmpty(),
+                onUserInfoClick = onUserInfoClick,
+            )
+        }
+
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp, 10.dp, 20.dp, 0.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .clickable { onPhotoClick(photo) },
+            painter = rememberCoilPainter(
+                photoUrl,
+                fadeIn = true
+            ),
+            contentDescription = "photo image",
+            contentScale = ContentScale.FillWidth
+        )
+    }
 }
 
 @Preview

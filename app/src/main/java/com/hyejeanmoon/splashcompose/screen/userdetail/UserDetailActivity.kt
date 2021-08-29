@@ -37,8 +37,8 @@ class UserDetailActivity : ComponentActivity() {
 
     private val viewModel: UserDetailViewModel by viewModels()
 
-    @ExperimentalAnimationApi
     @ExperimentalPagerApi
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,6 +57,13 @@ class UserDetailActivity : ComponentActivity() {
                         },
                         onPhotoClick = {
                             PhotoDetailActivity.start(it?.id.orEmpty(), this)
+                        },
+                        onUserInfoClick = { userName ->
+                            UserDetailActivity.startUserDetailActivity(
+                                this,
+                                userName
+                            )
+                            finish()
                         }
                     )
                 }

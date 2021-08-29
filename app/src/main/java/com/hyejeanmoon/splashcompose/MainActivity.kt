@@ -212,6 +212,12 @@ class MainActivity : ComponentActivity() {
                                             collectionId,
                                             collectionTitle
                                         )
+                                    },
+                                    onUserInfoClick = { userName ->
+                                        UserDetailActivity.startUserDetailActivity(
+                                            this@MainActivity,
+                                            userName
+                                        )
                                     }
                                 )
                             }

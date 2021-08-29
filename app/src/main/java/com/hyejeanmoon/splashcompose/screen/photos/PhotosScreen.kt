@@ -106,15 +106,18 @@ fun PhotoImage(
     )
 
     ConstraintLayout(modifier = modifier) {
-        val (photoRef, userInfo, divider) = createRefs()
+        val (photoRef, userInfo) = createRefs()
 
         PhotoUserInfo(
-            modifier = Modifier.constrainAs(userInfo) {
+            modifier = Modifier
+                .constrainAs(userInfo) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-            },
-            photo = photo,
+            }
+                .padding(0.dp,10.dp,0.dp,10.dp),
+            userName = photo.user?.userName.orEmpty(),
+            userPhoto = photo.user?.profileImage?.large.orEmpty(),
             onUserInfoClick = onUserInfoClick
         )
 
@@ -127,7 +130,6 @@ fun PhotoImage(
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 }
-                .requiredHeight(450.dp)
                 .padding(20.dp, 0.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .clickable { onPhotoClick(photo) },
@@ -138,23 +140,15 @@ fun PhotoImage(
             contentDescription = "photo image",
             contentScale = ContentScale.Crop
         )
-
-        Divider(modifier = Modifier
-            .constrainAs(divider){
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(photoRef.bottom)
-            }
-            .padding(20.dp, 10.dp,20.dp,0.dp)
-            .background(MoonGray)
-        )
     }
 }
 
 @Composable
 fun PhotoUserInfo(
     modifier: Modifier = Modifier,
-    photo: Photo,
+    userName: String,
+    userPhoto: String,
+    textColor: Color = Color.Black,
     onUserInfoClick: (String) -> Unit
 ) {
     ConstraintLayout(
@@ -162,23 +156,24 @@ fun PhotoUserInfo(
             .fillMaxSize()
             .requiredHeight(50.dp)
     ) {
-        val (userPhoto, userName) = createRefs()
+        val (userPhotoRef, userNameRef) = createRefs()
 
         // user icon
         Image(
             modifier = Modifier
-                .clickable {
-                    onUserInfoClick(photo.user?.userName.orEmpty())
-                }
-                .padding(20.dp, 20.dp,20.dp,0.dp)
+
+                .padding(20.dp, 20.dp, 20.dp, 0.dp)
                 .clip(CircleShape)
-                .constrainAs(userPhoto) {
+                .constrainAs(userPhotoRef) {
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
+                }
+                .clickable {
+                    onUserInfoClick(userName)
                 },
             painter = rememberGlidePainter(
-                request = photo.user?.profileImage?.large.orEmpty(),
+                request = userPhoto,
                 fadeIn = true,
                 requestBuilder = {
                     diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -190,17 +185,17 @@ fun PhotoUserInfo(
         // user name
         Text(
             modifier = Modifier
+                .constrainAs(userNameRef) {
+                    start.linkTo(userPhotoRef.end)
+                    top.linkTo(userPhotoRef.top)
+                    bottom.linkTo(userPhotoRef.bottom)
+                }
+                .padding(0.dp, 20.dp, 0.dp, 0.dp)
                 .clickable {
-                    onUserInfoClick(photo.user?.userName.orEmpty())
-                }
-                .constrainAs(userName) {
-                    start.linkTo(userPhoto.end)
-                    top.linkTo(userPhoto.top)
-                    bottom.linkTo(userPhoto.bottom)
-                }
-                .padding(0.dp,20.dp,0.dp,0.dp),
-            text = photo.user?.userName.orEmpty(),
-            color = Color.Black,
+                    onUserInfoClick(userName)
+                },
+            text = userName,
+            color = textColor,
             fontSize = 16.sp
         )
     }
