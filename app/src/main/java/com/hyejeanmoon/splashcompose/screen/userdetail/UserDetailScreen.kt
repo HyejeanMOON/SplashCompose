@@ -114,6 +114,7 @@ fun UserDetailScreen(
                 ConstraintLayout {
                     val (coverPhoto, userName, statics, location, bio) = createRefs()
 
+                    // profile image
                     Image(
                         modifier = Modifier
                             .padding(30.dp, 20.dp, 30.dp, 10.dp)
@@ -130,6 +131,7 @@ fun UserDetailScreen(
                         contentDescription = "user cover photo"
                     )
 
+                    // name text
                     Text(
                         modifier = Modifier
                             .padding(0.dp, 30.dp, 40.dp, 0.dp)
@@ -159,10 +161,12 @@ fun UserDetailScreen(
                     // Location
                     if (userDetail?.location != null) {
                         PhotoDetailLocation(
-                            modifier = Modifier.constrainAs(location) {
-                                start.linkTo(parent.start)
-                                top.linkTo(coverPhoto.bottom)
-                            },
+                            modifier = Modifier
+                                .constrainAs(location) {
+                                    start.linkTo(parent.start)
+                                    top.linkTo(coverPhoto.bottom)
+                                }
+                                .padding(0.dp, 0.dp, 0.dp, 10.dp),
                             location = userDetail?.location.orEmpty()
                         )
                     }
@@ -179,7 +183,7 @@ fun UserDetailScreen(
                                         top.linkTo(coverPhoto.bottom)
                                     }
                                 }
-                                .padding(20.dp, 10.dp, 20.dp, 10.dp),
+                                .padding(20.dp, 0.dp, 20.dp, 10.dp),
                             text = userDetail?.bio.orEmpty(),
                             color = Color.Black,
                             fontSize = 14.sp
@@ -188,92 +192,97 @@ fun UserDetailScreen(
                 }
             }
 
-            // TabRow
-            val pages = listOf(
-                stringResource(id = R.string.tabrow_photos),
-                stringResource(id = R.string.tabrow_collections),
-                stringResource(id = R.string.tabrow_liked_photos)
-            )
+            userDetail?.also {
+                // TabRow
+                val pagesMutableList: MutableList<String> = mutableListOf()
 
-            val pagerState = rememberPagerState(
-                pageCount = pages.size
-            )
-            TabRow(
-                modifier = Modifier
-                    .constrainAs(tabrow) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        if (visible) {
-                            top.linkTo(visibleLayout.bottom)
-                        } else {
-                            top.linkTo(parent.top)
-                        }
-                    },
-                // Our selected tab is our current page
-                selectedTabIndex = pagerState.currentPage,
-                // Override the indicator, using the provided pagerTabIndicatorOffset modifier
-                indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(
-                        modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                        color = Color.Red
-                    )
+                if (userDetail?.totalPhotos ?: 0 > 0) {
+                    pagesMutableList.add(stringResource(id = R.string.tabrow_photos))
                 }
-            ) {
-                // Add tabs for all of our pages
-                pages.forEachIndexed { index, title ->
-                    Tab(
-                        text = {
-                            Text(
-                                text = title,
-                                fontSize = 12.sp,
-                                color = Color.Black,
-                                textAlign = TextAlign.Center
+
+                if (userDetail?.totalCollections ?: 0 > 0) {
+                    pagesMutableList.add(stringResource(id = R.string.tabrow_collections))
+                }
+
+                if (userDetail?.totalLikes ?: 0 > 0) {
+                    pagesMutableList.add(stringResource(id = R.string.tabrow_liked_photos))
+                }
+
+                val pages: List<String> = pagesMutableList.toList()
+
+                val pagerState = rememberPagerState(
+                    pageCount = pages.size
+                )
+
+                if (pagerState.pageCount > 0) {
+                    TabRow(
+                        modifier = Modifier
+                            .constrainAs(tabrow) {
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                                if (visible) {
+                                    top.linkTo(visibleLayout.bottom)
+                                } else {
+                                    top.linkTo(parent.top)
+                                }
+                            },
+                        // Our selected tab is our current page
+                        selectedTabIndex = pagerState.currentPage,
+                        // Override the indicator, using the provided pagerTabIndicatorOffset modifier
+                        indicator = { tabPositions ->
+                            TabRowDefaults.Indicator(
+                                modifier = Modifier.pagerTabIndicatorOffset(
+                                    pagerState,
+                                    tabPositions
+                                ),
+                                color = Color.Red
                             )
-                        },
-                        selected = pagerState.currentPage == index,
-                        onClick = {
-                            coroutines.launch(Dispatchers.IO) {
-                                pagerState.scrollToPage(
-                                    page = index
-                                )
-                            }
-                            if (pagerState.currentPage == index) {
-                                clickCount += 1
-                                visible = clickCount % 2 == 0
-                            }
-                        },
-                    )
-                }
-            }
+                        }
+                    ) {
+                        // Add tabs for all of our pages
+                        pages.forEachIndexed { index, title ->
+                            Tab(
+                                text = {
+                                    Text(
+                                        text = title,
+                                        fontSize = 12.sp,
+                                        color = Color.Black,
+                                        textAlign = TextAlign.Center
+                                    )
+                                },
+                                selected = pagerState.currentPage == index,
+                                onClick = {
+                                    coroutines.launch(Dispatchers.IO) {
+                                        pagerState.scrollToPage(
+                                            page = index
+                                        )
+                                    }
+                                    if (pagerState.currentPage == index) {
+                                        clickCount += 1
+                                        visible = clickCount % 2 == 0
+                                    }
+                                },
+                            )
+                        }
+                    }
 
-            // Pagers
-            HorizontalPager(
-                modifier = Modifier
-                    .constrainAs(pager) {
-                        top.linkTo(tabrow.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                    .fillMaxHeight(),
-                state = pagerState
-            ) {
-                when (pagerState.currentPage) {
-                    0 -> {
-                        UserDetailPhotos(
-                            viewModel = viewModel,
-                            onPhotoClick = onPhotoClick
-                        )
-                    }
-                    1 -> {
-                        UserDetailCollections(
-                            viewModel = viewModel,
-                            onCollectionItemsClick = onCollectionItemsClick
-                        )
-                    }
-                    2 -> {
-                        UserDetailLikedPhotos(
+                    // Pagers
+                    HorizontalPager(
+                        modifier = Modifier
+                            .constrainAs(pager) {
+                                top.linkTo(tabrow.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }
+                            .fillMaxHeight(),
+                        state = pagerState
+                    ) {
+                        PageContent(
+                            currentPage = pagerState.currentPage,
+                            pages = pages,
                             viewModel = viewModel,
                             onPhotoClick = onPhotoClick,
+                            onCollectionItemsClick = onCollectionItemsClick,
                             onUserInfoClick = onUserInfoClick
                         )
                     }
@@ -283,6 +292,38 @@ fun UserDetailScreen(
 
         exception?.also {
             ErrorAlert()
+        }
+    }
+}
+
+@Composable
+fun PageContent(
+    currentPage: Int,
+    pages: List<String>,
+    viewModel: UserDetailViewModel,
+    onPhotoClick: (UsersPhotos?) -> Unit,
+    onCollectionItemsClick: (String, String) -> Unit,
+    onUserInfoClick: (String) -> Unit
+) {
+    when (pages[currentPage]) {
+        stringResource(id = R.string.tabrow_photos) -> {
+            UserDetailPhotos(
+                viewModel = viewModel,
+                onPhotoClick = onPhotoClick
+            )
+        }
+        stringResource(id = R.string.tabrow_collections) -> {
+            UserDetailCollections(
+                viewModel = viewModel,
+                onCollectionItemsClick = onCollectionItemsClick
+            )
+        }
+        stringResource(id = R.string.tabrow_liked_photos) -> {
+            UserDetailLikedPhotos(
+                viewModel = viewModel,
+                onPhotoClick = onPhotoClick,
+                onUserInfoClick = onUserInfoClick
+            )
         }
     }
 }
@@ -376,43 +417,39 @@ fun UserDetailPhotos(
 ) {
     val photos = viewModel.userDetailPhotosFlow.collectAsLazyPagingItems()
 
-    if (photos.itemCount > 0) {
-        LazyColumn(
-            modifier = modifier
-                .fillMaxWidth()
-        ) {
-            items(photos) { photoItem ->
-                val item by remember {
-                    mutableStateOf(photoItem)
-                }
+    LazyColumn(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        items(photos) { photoItem ->
+            val item by remember {
+                mutableStateOf(photoItem)
+            }
 
-                PhotoDetailImage(
-                    modifier = Modifier.fillMaxWidth(),
-                    photo = item,
-                    onPhotoClick = { onPhotoClick(item) },
-                    resolution = viewModel.resolution,
-                    onUserInfoClick = {
-                        // do nothing
-                    },
-                    isShowUserInfo = false
-                )
+            PhotoDetailImage(
+                modifier = Modifier.fillMaxWidth(),
+                photo = item,
+                onPhotoClick = { onPhotoClick(item) },
+                resolution = viewModel.resolution,
+                onUserInfoClick = {
+                    // do nothing
+                },
+                isShowUserInfo = false
+            )
+        }
+    }
+    photos.apply {
+        when {
+            loadState.refresh is LoadState.Error -> {
+                ErrorAlert()
+            }
+            loadState.append is LoadState.Error -> {
+                ErrorAlert()
+            }
+            loadState.prepend is LoadState.Error -> {
+                ErrorAlert()
             }
         }
-        photos.apply {
-            when {
-                loadState.refresh is LoadState.Error -> {
-                    ErrorAlert()
-                }
-                loadState.append is LoadState.Error -> {
-                    ErrorAlert()
-                }
-                loadState.prepend is LoadState.Error -> {
-                    ErrorAlert()
-                }
-            }
-        }
-    } else {
-        NoPhotos(title = "photos")
     }
 }
 
@@ -424,47 +461,44 @@ fun UserDetailCollections(
 ) {
     val collections = viewModel.userDetailCollectionsFlow.collectAsLazyPagingItems()
 
-    if (collections.itemCount > 0) {
-        LazyColumn(
-            modifier = modifier
-                .fillMaxWidth()
-        ) {
-            items(collections) { collectionsItem ->
-                val item by remember {
-                    mutableStateOf(collectionsItem)
-                }
+    LazyColumn(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        items(collections) { collectionsItem ->
+            val item by remember {
+                mutableStateOf(collectionsItem)
+            }
 
-                item?.also {
-                    CollectionsItem(
-                        collections = it,
-                        resolution = viewModel.resolution,
-                        onCollectionsItemClick = { id, title ->
-                            onCollectionItemsClick(id, title)
-                        },
-                        onUserInfoClick = {
-                            // do nothing
-                        },
-                        isShowUserInfo = false
-                    )
-                }
+            item?.also {
+                CollectionsItem(
+                    collections = it,
+                    resolution = viewModel.resolution,
+                    onCollectionsItemClick = { id, title ->
+                        onCollectionItemsClick(id, title)
+                    },
+                    onUserInfoClick = {
+                        // do nothing
+                    },
+                    isShowUserInfo = false
+                )
             }
         }
-        collections.apply {
-            when {
-                loadState.refresh is LoadState.Error -> {
-                    ErrorAlert()
-                }
-                loadState.append is LoadState.Error -> {
-                    ErrorAlert()
-                }
-                loadState.prepend is LoadState.Error -> {
-                    ErrorAlert()
-                }
-            }
-        }
-    } else {
-        NoPhotos(title = "collections")
     }
+    collections.apply {
+        when {
+            loadState.refresh is LoadState.Error -> {
+                ErrorAlert()
+            }
+            loadState.append is LoadState.Error -> {
+                ErrorAlert()
+            }
+            loadState.prepend is LoadState.Error -> {
+                ErrorAlert()
+            }
+        }
+    }
+
 }
 
 @Composable
@@ -477,81 +511,36 @@ fun UserDetailLikedPhotos(
     val photos =
         viewModel.userDetailLikedPhotosDataSourceFlow.collectAsLazyPagingItems()
 
-    if (photos.itemCount > 0) {
-        LazyColumn(
-            modifier = modifier
-                .fillMaxWidth()
-        ) {
-            items(photos) { photoItem ->
-                val item by remember {
-                    mutableStateOf(photoItem)
-                }
-
-                PhotoDetailImage(
-                    modifier = Modifier.fillMaxWidth(),
-                    photo = item,
-                    onPhotoClick = { onPhotoClick(item) },
-                    resolution = viewModel.resolution,
-                    onUserInfoClick = onUserInfoClick
-                )
-            }
-        }
-        photos.apply {
-            when {
-                loadState.refresh is LoadState.Error -> {
-                    ErrorAlert()
-                }
-                loadState.append is LoadState.Error -> {
-                    ErrorAlert()
-                }
-                loadState.prepend is LoadState.Error -> {
-                    ErrorAlert()
-                }
-            }
-        }
-    } else {
-        NoPhotos(title = "liked photos")
-    }
-}
-
-@Composable
-fun NoPhotos(
-    modifier: Modifier = Modifier,
-    title: String
-) {
-    ConstraintLayout(
+    LazyColumn(
         modifier = modifier
-            .fillMaxSize()
-            .padding(0.dp, 50.dp, 0.dp, 0.dp)
+            .fillMaxWidth()
     ) {
+        items(photos) { photoItem ->
+            val item by remember {
+                mutableStateOf(photoItem)
+            }
 
-        val (img, txt) = createRefs()
-
-        Image(
-            modifier = Modifier
-                .size(128.dp)
-                .constrainAs(img) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                },
-            painter = painterResource(id = R.drawable.ic_none_picture),
-            contentDescription = "no photos"
-        )
-
-        Text(
-            modifier = Modifier
-                .padding(0.dp, 40.dp, 0.dp, 0.dp)
-                .constrainAs(txt) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(img.bottom)
-                },
-            text = "There are not $title!",
-            textAlign = TextAlign.Center,
-            color = Color.Black,
-            fontSize = 16.sp
-        )
+            PhotoDetailImage(
+                modifier = Modifier.fillMaxWidth(),
+                photo = item,
+                onPhotoClick = { onPhotoClick(item) },
+                resolution = viewModel.resolution,
+                onUserInfoClick = onUserInfoClick
+            )
+        }
+    }
+    photos.apply {
+        when {
+            loadState.refresh is LoadState.Error -> {
+                ErrorAlert()
+            }
+            loadState.append is LoadState.Error -> {
+                ErrorAlert()
+            }
+            loadState.prepend is LoadState.Error -> {
+                ErrorAlert()
+            }
+        }
     }
 }
 
