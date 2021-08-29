@@ -20,5 +20,5 @@ import androidx.compose.ui.graphics.Color
 
 val Ivory = Color(0xFFEEEDE7)
 val MoonGray = Color(0xfff1f1f1)
-val TransparentMoonGray = Color(0x8cf1f1f1)
+val TransparentMoonGray = Color(0x99f1f1f1)
 val Pewter = Color(0xFFB9B7BD)

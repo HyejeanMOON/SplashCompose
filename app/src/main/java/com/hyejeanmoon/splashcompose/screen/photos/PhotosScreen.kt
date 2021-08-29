@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,7 +47,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.glide.rememberGlidePainter
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.entity.Photo
-import com.hyejeanmoon.splashcompose.ui.theme.TransparentMoonGray
+import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 
 @Composable
@@ -104,18 +106,30 @@ fun PhotoImage(
     )
 
     ConstraintLayout(modifier = modifier) {
-        val (photoRef, userInfo) = createRefs()
+        val (photoRef, userInfo, divider) = createRefs()
+
+        PhotoUserInfo(
+            modifier = Modifier.constrainAs(userInfo) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            },
+            photo = photo,
+            onUserInfoClick = onUserInfoClick
+        )
 
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-                .requiredHeight(450.dp)
                 .constrainAs(photoRef) {
-                    top.linkTo(parent.top)
+                    top.linkTo(userInfo.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
                 }
-                .padding(0.dp, 1.dp)
+                .requiredHeight(450.dp)
+                .padding(20.dp, 0.dp)
+                .clip(RoundedCornerShape(10.dp))
                 .clickable { onPhotoClick(photo) },
             painter = rememberCoilPainter(
                 photoUrl,
@@ -125,13 +139,14 @@ fun PhotoImage(
             contentScale = ContentScale.Crop
         )
 
-        PhotoUserInfo(
-            modifier = Modifier.constrainAs(userInfo) {
-                top.linkTo(photoRef.top)
-                start.linkTo(photoRef.start)
-            },
-            photo = photo,
-            onUserInfoClick = onUserInfoClick
+        Divider(modifier = Modifier
+            .constrainAs(divider){
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(photoRef.bottom)
+            }
+            .padding(20.dp, 10.dp,20.dp,0.dp)
+            .background(MoonGray)
         )
     }
 }
@@ -146,7 +161,6 @@ fun PhotoUserInfo(
         modifier = modifier
             .fillMaxSize()
             .requiredHeight(50.dp)
-            .background(TransparentMoonGray)
     ) {
         val (userPhoto, userName) = createRefs()
 
@@ -156,7 +170,7 @@ fun PhotoUserInfo(
                 .clickable {
                     onUserInfoClick(photo.user?.userName.orEmpty())
                 }
-                .padding(20.dp, 10.dp)
+                .padding(20.dp, 20.dp,20.dp,0.dp)
                 .clip(CircleShape)
                 .constrainAs(userPhoto) {
                     start.linkTo(parent.start)
@@ -181,9 +195,10 @@ fun PhotoUserInfo(
                 }
                 .constrainAs(userName) {
                     start.linkTo(userPhoto.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                },
+                    top.linkTo(userPhoto.top)
+                    bottom.linkTo(userPhoto.bottom)
+                }
+                .padding(0.dp,20.dp,0.dp,0.dp),
             text = photo.user?.userName.orEmpty(),
             color = Color.Black,
             fontSize = 16.sp
