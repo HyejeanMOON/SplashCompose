@@ -6,7 +6,7 @@ https://play.google.com/store/apps/details?id=com.hyejeanmoon.splashcompose
 
 ## Screenshots
 <img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/1.2/moonlight_pictures_1.2_1.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/1.2/moonlight_pictures_1.2_2.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/1.2/moonlight_pictures_1.2_3.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/1.2/moonlight_pictures_1.2_4.png"/>
-<img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/1.2/moonlight_pictures_1.2_5.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/1.2/moonlight_pictures_1.2_6.png"/>
+<img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/1.2/moonlight_pictures_1.2_5.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/1.2/moonlight_pictures_1.2_6.png"/><img width="269" height="472" src="https://github.com/HyejeanMOON/SplashCompose/blob/main/screenshot/1.1.2/moonlight_pictures_5.png"/>
 
 ## Libraries
 
