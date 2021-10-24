@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.accompanist.glide.rememberGlidePainter
+import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.ui.theme.TransparentMoonGray
@@ -56,6 +57,7 @@ fun RandomPhotoScreen(
 ) {
 
     val randomPhoto by viewModel.randomPhoto.observeAsState()
+    val exception by viewModel.exception.observeAsState()
 
     ConstraintLayout(modifier = modifier) {
 
@@ -94,6 +96,11 @@ fun RandomPhotoScreen(
             onUserInfoClick = onUserInfoClick,
             randomPhoto = randomPhoto
         )
+
+        // showing error dialog
+        exception?.also {
+            ErrorAlert()
+        }
     }
 }
 

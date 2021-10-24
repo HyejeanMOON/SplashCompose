@@ -38,12 +38,19 @@ class ApiEnqueueCallback<T>(
     override fun onResponse(call: Call<T>, response: Response<T>) {
         this.call = call
 
-        val body = response.body() ?: throw MoonException(
-            message = "code = ${response.code().toString()} , message = ${
-                response.errorBody()
-                    .toString()
-            }"
-        )
+        val body = response.body()
+
+        if (body == null) {
+            onError(
+                MoonException(
+                    message = "code = $response.code().toString() , message = ${
+                        response.errorBody()
+                            .toString()
+                    }"
+                )
+            )
+            return
+        }
 
         if (response.isSuccessful) {
             LogUtils.outputLog("response body: ${response.body()}")
