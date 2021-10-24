@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
@@ -56,29 +56,29 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.3.1'
     testImplementation 'junit:junit:4.13.2'
 
-    implementation 'androidx.compose.ui:ui:1.0.1'
+    implementation 'androidx.compose.ui:ui:1.0.4'
     // Tooling support (Previews, etc.)
-    implementation 'androidx.compose.ui:ui-tooling:1.0.1'
+    implementation 'androidx.compose.ui:ui-tooling:1.0.4'
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation 'androidx.compose.foundation:foundation:1.0.1'
+    implementation 'androidx.compose.foundation:foundation:1.0.4'
     // Material Design
-    implementation 'androidx.compose.material:material:1.0.1'
+    implementation 'androidx.compose.material:material:1.0.4'
     // Material design icons
-    implementation 'androidx.compose.material:material-icons-core:1.0.1'
-    implementation 'androidx.compose.material:material-icons-extended:1.0.1'
+    implementation 'androidx.compose.material:material-icons-core:1.0.4'
+    implementation 'androidx.compose.material:material-icons-extended:1.0.4'
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.3.1'
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01'
     // Integration with observables
-    implementation 'androidx.compose.runtime:runtime-livedata:1.0.1'
-    implementation 'androidx.compose.runtime:runtime-rxjava2:1.0.1'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.0.4'
+    implementation 'androidx.compose.runtime:runtime-rxjava2:1.0.4'
 
     // constraintLayout
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
 
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.1'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.4'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -100,10 +100,10 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Jetpack Navigation
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha06"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"
 
     // Jetpack Paging3
-    implementation "androidx.paging:paging-compose:1.0.0-alpha12"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha14"
 
     // Jetpack Hilt
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
@@ -120,7 +120,7 @@ dependencies {
     implementation "androidx.room:room-ktx:2.3.0"
 
     // Kotlin + coroutines
-    implementation "androidx.work:work-runtime-ktx:2.6.0-rc01"
+    implementation "androidx.work:work-runtime-ktx:2.7.0"
 
     // Pager
     implementation "com.google.accompanist:accompanist-pager:0.12.0"
