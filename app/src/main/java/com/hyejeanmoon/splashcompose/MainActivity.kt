@@ -41,6 +41,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hyejeanmoon.splashcompose.db.AppDatabase
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsViewModel
@@ -330,6 +331,8 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() {
+        // inorder to avoid memory leaks
+        AppDatabase.destroyInstance()
         finish()
     }
 

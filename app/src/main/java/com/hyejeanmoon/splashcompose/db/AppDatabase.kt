@@ -24,7 +24,7 @@ import androidx.room.RoomDatabase
 @Database(version = 1, entities = [FavoritePhoto::class])
 abstract class AppDatabase : RoomDatabase() {
     companion object {
-        private const val DB_NAME = "user_database.db"
+        private const val DB_NAME = "SplashCompose.db"
 
         private var INSTANCE: AppDatabase? = null
         private var lock = Any()
@@ -33,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
             synchronized(lock) {
                 if (INSTANCE == null) {
                     INSTANCE =
-                        Room.databaseBuilder(context, AppDatabase::class.java, "SplashCompose.db")
+                        Room.databaseBuilder(context, AppDatabase::class.java, DB_NAME)
                             .build()
 
                     return INSTANCE!!

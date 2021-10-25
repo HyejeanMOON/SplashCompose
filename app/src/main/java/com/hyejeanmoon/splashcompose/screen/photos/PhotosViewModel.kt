@@ -56,7 +56,7 @@ class PhotosViewModel(
     ).flow.cachedIn(viewModelScope)
 
     companion object{
-        private const val PAGE_SIZE = 10
-        private const val INITIAL_LOAD_SIZE = 10
+        private const val PAGE_SIZE = 15
+        private const val INITIAL_LOAD_SIZE = 15
     }
 }
