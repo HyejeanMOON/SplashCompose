@@ -24,9 +24,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -37,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.hyejeanmoon.splashcompose.MainActivity
 import com.hyejeanmoon.splashcompose.R
-import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
 
 @Composable
 fun SettingsScreen(
@@ -207,21 +204,19 @@ fun SettingsAlertDialog(
     onCloseDialog: () -> Unit
 ) {
     AlertDialog(
-        modifier = modifier.padding(40.dp, 0.dp),
+        modifier = modifier.padding(10.dp, 0.dp),
         onDismissRequest = {
-            onCloseDialog()
+            // do nothing
         },
         confirmButton = {
-            Button(
-                onClick = {
+            Text(
+                text = "Dismiss",
+                modifier = Modifier.clickable {
                     onCloseDialog()
-                }
-            ) {
-                Text(
-                    text = "Dismiss",
-                    color = Color.Black,
-                )
-            }
+                },
+                color = Color.Black,
+            )
+
         },
         title = {
             Text(
@@ -258,7 +253,7 @@ fun RadioButtonList(
         }
     }
 
-    var selectedOption = remember { mutableStateOf(initialPosition) }
+    var selectedOption by remember { mutableStateOf(initialPosition) }
     Column(
         modifier = modifier
     ) {
@@ -266,9 +261,9 @@ fun RadioButtonList(
             Row(
                 Modifier
                     .selectable(
-                        selected = (text == radioOptionList[selectedOption.value]),
+                        selected = (text == radioOptionList[selectedOption]),
                         onClick = {
-                            selectedOption.value = index
+                            selectedOption = index
                             when (item) {
                                 MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
                                     settingsViewModel.putOrderBy(text)
@@ -282,9 +277,9 @@ fun RadioButtonList(
                     .padding(horizontal = 20.dp)
             ) {
                 RadioButton(
-                    selected = (text == radioOptionList[selectedOption.value]),
+                    selected = (text == radioOptionList[selectedOption]),
                     onClick = {
-                        selectedOption.value = index
+                        selectedOption = index
                         when (item) {
                             MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
                                 settingsViewModel.putOrderBy(text)
