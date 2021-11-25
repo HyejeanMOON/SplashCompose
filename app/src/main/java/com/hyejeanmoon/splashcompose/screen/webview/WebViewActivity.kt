@@ -23,10 +23,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 
@@ -54,7 +54,7 @@ class WebViewActivity : ComponentActivity() {
                                 navigationIcon = {
                                     Icon(
                                         modifier = Modifier.clickable { finish() },
-                                        painter = painterResource(id = R.drawable.ic_arrow_back),
+                                        imageVector = Icons.Filled.ArrowBack,
                                         contentDescription = "back icon",
                                         tint = Color.Black
                                     )

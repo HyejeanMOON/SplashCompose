@@ -26,6 +26,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -153,7 +155,7 @@ fun PhotoDetailImg(
                 }
                 .padding(20.dp)
                 .clickable { onBackIconClick() },
-            painter = painterResource(id = R.drawable.ic_arrow_back),
+            imageVector = Icons.Filled.ArrowBack,
             contentDescription = "back icon",
             tint = Color.White
         )
@@ -167,7 +169,7 @@ fun PhotoDetailUserInfo(
     viewModel: PhotoDetailViewModel,
     isFavoritePhoto: Boolean?,
     onUserInfoClick: (String) -> Unit,
-    onDownloadImage:() -> Unit
+    onDownloadImage: () -> Unit
 ) {
     ConstraintLayout(
         modifier = modifier
@@ -246,9 +248,9 @@ fun PhotoDetailUserInfo(
                     bottom.linkTo(parent.bottom)
                 }
                 .clickable {
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         viewModel.downloadPhotoByIdVersionQ()
-                    }else{
+                    } else {
                         onDownloadImage()
                     }
                     viewModel.downloadPhotoById()

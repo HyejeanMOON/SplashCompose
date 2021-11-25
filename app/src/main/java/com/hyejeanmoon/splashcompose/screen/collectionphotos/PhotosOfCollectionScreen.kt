@@ -23,18 +23,18 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.hyejeanmoon.splashcompose.ErrorAlert
-import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoImage
 
@@ -44,7 +44,7 @@ fun PhotosOfCollectionScreen(
     photosOfCollectionViewModel: PhotosOfCollectionViewModel,
     onPhotoClick: (Photo?) -> Unit,
     onBackIconClick: () -> Unit,
-    onUserInfoClick:(String) -> Unit,
+    onUserInfoClick: (String) -> Unit,
     collectionTitle: String
 ) {
     val pagingItems = photosOfCollectionViewModel.photosOfCollections.collectAsLazyPagingItems()
@@ -62,7 +62,7 @@ fun PhotosOfCollectionScreen(
                 navigationIcon = {
                     Icon(
                         modifier = Modifier.clickable { onBackIconClick() },
-                        painter = painterResource(id = R.drawable.ic_arrow_back),
+                        imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "back icon",
                         tint = Color.Black
                     )
@@ -82,7 +82,7 @@ fun PhotosOfCollectionScreen(
                         photo = photo,
                         onPhotoClick = onPhotoClick,
                         resolution = photosOfCollectionViewModel.resolution,
-                        onUserInfoClick = {onUserInfoClick(photo.user?.userName.orEmpty())}
+                        onUserInfoClick = { onUserInfoClick(photo.user?.userName.orEmpty()) }
                     )
                 }
             }
