@@ -22,16 +22,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -51,10 +50,7 @@ import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
 import com.hyejeanmoon.splashcompose.screen.random.RandomPhotoScreen
 import com.hyejeanmoon.splashcompose.screen.random.RandomPhotoViewModel
-import com.hyejeanmoon.splashcompose.screen.settings.SettingItemDetail
-import com.hyejeanmoon.splashcompose.screen.settings.SettingsItem
-import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
-import com.hyejeanmoon.splashcompose.screen.settings.SettingsViewModel
+import com.hyejeanmoon.splashcompose.screen.settings.*
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 import com.hyejeanmoon.splashcompose.screen.webview.WebViewActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
@@ -70,7 +66,6 @@ class MainActivity : ComponentActivity() {
     private val settingsViewModel: SettingsViewModel by viewModels()
     private val randomPhotoViewModel: RandomPhotoViewModel by viewModels()
 
-    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -169,8 +164,8 @@ class MainActivity : ComponentActivity() {
                         }
                     ) {
 
-                        var openDialog = remember { mutableStateOf(false) }
-                        var settingsItem = remember { mutableStateOf("") }
+                        var openDialog by remember { mutableStateOf(false) }
+                        var settingsItem by remember { mutableStateOf("") }
 
                         NavHost(navController, startDestination = Screen.Random.route) {
                             composable(Screen.Random.route) {
@@ -256,8 +251,8 @@ class MainActivity : ComponentActivity() {
                                         when (title) {
                                             SETTINGS_ITEM_DISPLAY_RESOLUTION,
                                             SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
-                                                openDialog.value = true
-                                                settingsItem.value = title
+                                                openDialog = true
+                                                settingsItem = title
                                             }
                                             SETTINGS_ITEM_ABOUT_DEVELOPER,
                                             SETTINGS_ITEM_VERSION,
@@ -293,11 +288,11 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
-                        if (openDialog.value) {
+                        if (openDialog) {
                             SettingsAlertDialog(
-                                item = settingsItem.value,
+                                item = settingsItem,
                                 onCloseDialog = {
-                                    openDialog.value = false
+                                    openDialog = false
                                 },
                                 settingsViewModel = settingsViewModel
                             )
@@ -346,111 +341,5 @@ class MainActivity : ComponentActivity() {
         const val SETTINGS_TITLE_OTHERS = "Others"
         const val SETTINGS_TITLE_APPLICATION_SETTINGS = "Application Settings"
         const val APPLICATION_TITLE = "Moonlight Pictures"
-    }
-}
-
-@Composable
-fun SettingsAlertDialog(
-    modifier: Modifier = Modifier,
-    settingsViewModel: SettingsViewModel,
-    item: String,
-    onCloseDialog: () -> Unit
-) {
-    AlertDialog(
-        modifier = modifier.padding(40.dp, 0.dp),
-        onDismissRequest = {
-            onCloseDialog()
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    onCloseDialog()
-                }
-            ) {
-                Text(
-                    text = "Dismiss",
-                    color = Color.Black,
-                )
-            }
-        },
-        title = {
-            Text(
-                text = item,
-                color = Color.Black
-            )
-        },
-        text = {
-            RadioButtonList(
-                settingsViewModel = settingsViewModel,
-                item = item
-            )
-        }
-    )
-}
-
-@Composable
-fun RadioButtonList(
-    modifier: Modifier = Modifier,
-    settingsViewModel: SettingsViewModel,
-    item: String
-) {
-    var radioOptionList: List<String> = listOf()
-    var initialPosition = 0
-
-    when (item) {
-        MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
-            radioOptionList = settingsViewModel.orderByList
-            initialPosition = settingsViewModel.getOrderByPosition()
-        }
-        MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
-            radioOptionList = settingsViewModel.displayResolutionList
-            initialPosition = settingsViewModel.getDisplayResolutionPosition()
-        }
-    }
-
-    var selectedOption = remember { mutableStateOf(initialPosition) }
-    Column(
-        modifier = modifier
-    ) {
-        radioOptionList.forEachIndexed { index, text ->
-            Row(
-                Modifier
-                    .selectable(
-                        selected = (text == radioOptionList[selectedOption.value]),
-                        onClick = {
-                            selectedOption.value = index
-                            when (item) {
-                                MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
-                                    settingsViewModel.putOrderBy(text)
-                                }
-                                MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
-                                    settingsViewModel.putDisplayResolution(text)
-                                }
-                            }
-                        }
-                    )
-                    .padding(horizontal = 20.dp)
-            ) {
-                RadioButton(
-                    selected = (text == radioOptionList[selectedOption.value]),
-                    onClick = {
-                        selectedOption.value = index
-                        when (item) {
-                            MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
-                                settingsViewModel.putOrderBy(text)
-                            }
-                            MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
-                                settingsViewModel.putDisplayResolution(text)
-                            }
-                        }
-                    }
-                )
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.body1.merge(),
-                    modifier = Modifier.padding(start = 16.dp)
-                )
-            }
-        }
     }
 }

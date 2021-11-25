@@ -22,9 +22,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -33,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.hyejeanmoon.splashcompose.MainActivity
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
 
@@ -193,6 +196,112 @@ fun SettingsItemDetail(
                 bottom.linkTo(parent.bottom)
             }
         )
+    }
+}
+
+@Composable
+fun SettingsAlertDialog(
+    modifier: Modifier = Modifier,
+    settingsViewModel: SettingsViewModel,
+    item: String,
+    onCloseDialog: () -> Unit
+) {
+    AlertDialog(
+        modifier = modifier.padding(40.dp, 0.dp),
+        onDismissRequest = {
+            onCloseDialog()
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onCloseDialog()
+                }
+            ) {
+                Text(
+                    text = "Dismiss",
+                    color = Color.Black,
+                )
+            }
+        },
+        title = {
+            Text(
+                text = item,
+                color = Color.Black
+            )
+        },
+        text = {
+            RadioButtonList(
+                settingsViewModel = settingsViewModel,
+                item = item
+            )
+        }
+    )
+}
+
+@Composable
+fun RadioButtonList(
+    modifier: Modifier = Modifier,
+    settingsViewModel: SettingsViewModel,
+    item: String
+) {
+    var radioOptionList: List<String> = listOf()
+    var initialPosition = 0
+
+    when (item) {
+        MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+            radioOptionList = settingsViewModel.orderByList
+            initialPosition = settingsViewModel.getOrderByPosition()
+        }
+        MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
+            radioOptionList = settingsViewModel.displayResolutionList
+            initialPosition = settingsViewModel.getDisplayResolutionPosition()
+        }
+    }
+
+    var selectedOption = remember { mutableStateOf(initialPosition) }
+    Column(
+        modifier = modifier
+    ) {
+        radioOptionList.forEachIndexed { index, text ->
+            Row(
+                Modifier
+                    .selectable(
+                        selected = (text == radioOptionList[selectedOption.value]),
+                        onClick = {
+                            selectedOption.value = index
+                            when (item) {
+                                MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+                                    settingsViewModel.putOrderBy(text)
+                                }
+                                MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
+                                    settingsViewModel.putDisplayResolution(text)
+                                }
+                            }
+                        }
+                    )
+                    .padding(horizontal = 20.dp)
+            ) {
+                RadioButton(
+                    selected = (text == radioOptionList[selectedOption.value]),
+                    onClick = {
+                        selectedOption.value = index
+                        when (item) {
+                            MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+                                settingsViewModel.putOrderBy(text)
+                            }
+                            MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
+                                settingsViewModel.putDisplayResolution(text)
+                            }
+                        }
+                    }
+                )
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.body1.merge(),
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+        }
     }
 }
 
