@@ -316,15 +316,13 @@ fun PageContent(
         }
         stringResource(id = R.string.tabrow_collections) -> {
             UserDetailCollections(
-                viewModel = viewModel,
-                onCollectionItemsClick = onCollectionItemsClick
+                viewModel = viewModel
             )
         }
         stringResource(id = R.string.tabrow_liked_photos) -> {
             UserDetailLikedPhotos(
                 viewModel = viewModel,
-                onPhotoClick = onPhotoClick,
-                onUserInfoClick = onUserInfoClick
+                onPhotoClick = onPhotoClick
             )
         }
     }
@@ -433,9 +431,6 @@ fun UserDetailPhotos(
                 photo = item,
                 onPhotoClick = { onPhotoClick(item) },
                 resolution = viewModel.resolution,
-                onUserInfoClick = {
-                    // do nothing
-                },
                 isShowUserInfo = false
             )
         }
@@ -458,8 +453,7 @@ fun UserDetailPhotos(
 @Composable
 fun UserDetailCollections(
     modifier: Modifier = Modifier,
-    viewModel: UserDetailViewModel,
-    onCollectionItemsClick: (String, String) -> Unit
+    viewModel: UserDetailViewModel
 ) {
     val collections = viewModel.userDetailCollectionsFlow.collectAsLazyPagingItems()
 
@@ -476,12 +470,6 @@ fun UserDetailCollections(
                 CollectionsItem(
                     collections = it,
                     resolution = viewModel.resolution,
-                    onCollectionsItemClick = { id, title ->
-                        onCollectionItemsClick(id, title)
-                    },
-                    onUserInfoClick = {
-                        // do nothing
-                    },
                     isShowUserInfo = false
                 )
             }
@@ -507,8 +495,7 @@ fun UserDetailCollections(
 fun UserDetailLikedPhotos(
     modifier: Modifier = Modifier,
     viewModel: UserDetailViewModel,
-    onPhotoClick: (UsersPhotos?) -> Unit,
-    onUserInfoClick: (String) -> Unit
+    onPhotoClick: (UsersPhotos?) -> Unit
 ) {
     val photos =
         viewModel.userDetailLikedPhotosDataSourceFlow.collectAsLazyPagingItems()
@@ -526,8 +513,7 @@ fun UserDetailLikedPhotos(
                 modifier = Modifier.fillMaxWidth(),
                 photo = item,
                 onPhotoClick = { onPhotoClick(item) },
-                resolution = viewModel.resolution,
-                onUserInfoClick = onUserInfoClick
+                resolution = viewModel.resolution
             )
         }
     }
@@ -552,8 +538,7 @@ fun PhotoDetailImage(
     isShowUserInfo: Boolean = true,
     photo: UsersPhotos?,
     resolution: String,
-    onPhotoClick: (UsersPhotos?) -> Unit,
-    onUserInfoClick: (String) -> Unit,
+    onPhotoClick: (UsersPhotos?) -> Unit
 ) {
 
     val photoUrl = PhotoUtils.getUserDetailPhotoUrlByResolution(
@@ -567,8 +552,7 @@ fun PhotoDetailImage(
         if (isShowUserInfo) {
             PhotoUserInfo(
                 userName = photo?.user?.userName.orEmpty(),
-                userPhoto = photo?.user?.profileImage?.large.orEmpty(),
-                onUserInfoClick = onUserInfoClick,
+                userPhoto = photo?.user?.profileImage?.large.orEmpty()
             )
         }
 

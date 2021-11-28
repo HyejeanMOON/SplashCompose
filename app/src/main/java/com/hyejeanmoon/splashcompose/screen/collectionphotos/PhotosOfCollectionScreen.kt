@@ -43,9 +43,7 @@ import com.hyejeanmoon.splashcompose.screen.photos.PhotoImage
 fun PhotosOfCollectionScreen(
     modifier: Modifier = Modifier,
     photosOfCollectionViewModel: PhotosOfCollectionViewModel = hiltViewModel(),
-    onPhotoClick: (Photo?) -> Unit,
     onBackIconClick: () -> Unit,
-    onUserInfoClick: (String) -> Unit,
     collectionTitle: String
 ) {
     val pagingItems = photosOfCollectionViewModel.photosOfCollections.collectAsLazyPagingItems()
@@ -81,9 +79,7 @@ fun PhotosOfCollectionScreen(
                 item?.also { photo ->
                     PhotoImage(
                         photo = photo,
-                        onPhotoClick = onPhotoClick,
-                        resolution = photosOfCollectionViewModel.resolution,
-                        onUserInfoClick = { onUserInfoClick(photo.user?.userName.orEmpty()) }
+                        resolution = photosOfCollectionViewModel.resolution
                     )
                 }
             }

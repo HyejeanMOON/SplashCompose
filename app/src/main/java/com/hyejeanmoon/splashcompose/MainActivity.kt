@@ -41,17 +41,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hyejeanmoon.splashcompose.db.AppDatabase
-import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
-import com.hyejeanmoon.splashcompose.screen.collections.CollectionsViewModel
 import com.hyejeanmoon.splashcompose.screen.favorites.FavoritesActivity
-import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
-import com.hyejeanmoon.splashcompose.screen.photos.PhotosViewModel
 import com.hyejeanmoon.splashcompose.screen.random.RandomPhotoScreen
 import com.hyejeanmoon.splashcompose.screen.random.RandomPhotoViewModel
 import com.hyejeanmoon.splashcompose.screen.settings.*
-import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 import com.hyejeanmoon.splashcompose.screen.webview.WebViewActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import com.hyejeanmoon.splashcompose.utils.DataManager
@@ -172,37 +167,10 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(Screen.Photos.route) {
-                                PhotoScreen(
-                                    onPhotoClick = {
-                                        PhotoDetailActivity.start(
-                                            it?.id.orEmpty(),
-                                            this@MainActivity
-                                        )
-                                    },
-                                    onUserInfoClick = { userName ->
-                                        UserDetailActivity.startUserDetailActivity(
-                                            this@MainActivity,
-                                            userName
-                                        )
-                                    }
-                                )
+                                PhotoScreen()
                             }
                             composable(Screen.Collections.route) {
-                                CollectionsScreen(
-                                    onCollectionsItemClick = { collectionId, collectionTitle ->
-                                        PhotosOfCollectionActivity.start(
-                                            this@MainActivity,
-                                            collectionId,
-                                            collectionTitle
-                                        )
-                                    },
-                                    onUserInfoClick = { userName ->
-                                        UserDetailActivity.startUserDetailActivity(
-                                            this@MainActivity,
-                                            userName
-                                        )
-                                    }
-                                )
+                                CollectionsScreen()
                             }
                             composable(Screen.Settings.route) {
                                 SettingsScreen(

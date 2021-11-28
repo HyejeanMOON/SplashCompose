@@ -17,7 +17,6 @@
 package com.hyejeanmoon.splashcompose.screen.photos
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +25,6 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -48,15 +47,14 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.glide.rememberGlidePainter
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.entity.Photo
-import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
+import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
+import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 
 @Composable
 fun PhotoScreen(
     modifier: Modifier = Modifier,
-    viewModel: PhotosViewModel = hiltViewModel(),
-    onPhotoClick: (Photo?) -> Unit,
-    onUserInfoClick: (String) -> Unit
+    viewModel: PhotosViewModel = hiltViewModel()
 ) {
     val pagingItems = viewModel.photoList.collectAsLazyPagingItems()
 
@@ -70,9 +68,7 @@ fun PhotoScreen(
             item?.also {
                 PhotoImage(
                     photo = it,
-                    resolution = viewModel.resolution,
-                    onPhotoClick = onPhotoClick,
-                    onUserInfoClick = onUserInfoClick
+                    resolution = viewModel.resolution
                 )
             }
         }
@@ -97,10 +93,11 @@ fun PhotoScreen(
 fun PhotoImage(
     modifier: Modifier = Modifier,
     photo: Photo,
-    resolution: String,
-    onPhotoClick: (Photo) -> Unit,
-    onUserInfoClick: (String) -> Unit
+    resolution: String
 ) {
+
+    val context = LocalContext.current
+
     val photoUrl = PhotoUtils.getPhotoUrlByResolution(
         resolution,
         photo
@@ -118,8 +115,7 @@ fun PhotoImage(
                 }
                 .padding(0.dp, 10.dp, 0.dp, 10.dp),
             userName = photo.user?.userName.orEmpty(),
-            userPhoto = photo.user?.profileImage?.large.orEmpty(),
-            onUserInfoClick = onUserInfoClick
+            userPhoto = photo.user?.profileImage?.large.orEmpty()
         )
 
         Image(
@@ -133,7 +129,7 @@ fun PhotoImage(
                 }
                 .padding(20.dp, 0.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .clickable { onPhotoClick(photo) },
+                .clickable { PhotoDetailActivity.start(photo.id ?: "", context) },
             painter = rememberCoilPainter(
                 photoUrl,
                 fadeIn = true
@@ -149,9 +145,10 @@ fun PhotoUserInfo(
     modifier: Modifier = Modifier,
     userName: String,
     userPhoto: String,
-    textColor: Color = Color.Black,
-    onUserInfoClick: (String) -> Unit
+    textColor: Color = Color.Black
 ) {
+    val context = LocalContext.current
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
@@ -171,7 +168,10 @@ fun PhotoUserInfo(
                     bottom.linkTo(parent.bottom)
                 }
                 .clickable {
-                    onUserInfoClick(userName)
+                    UserDetailActivity.startUserDetailActivity(
+                        context,
+                        userName
+                    )
                 },
             painter = rememberGlidePainter(
                 request = userPhoto,
@@ -193,7 +193,10 @@ fun PhotoUserInfo(
                 }
                 .padding(0.dp, 20.dp, 0.dp, 0.dp)
                 .clickable {
-                    onUserInfoClick(userName)
+                    UserDetailActivity.startUserDetailActivity(
+                        context,
+                        userName
+                    )
                 },
             text = userName,
             color = textColor,

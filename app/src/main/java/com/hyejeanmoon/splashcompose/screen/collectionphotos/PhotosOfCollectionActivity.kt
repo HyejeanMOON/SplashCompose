@@ -16,18 +16,14 @@
 
 package com.hyejeanmoon.splashcompose.screen.collectionphotos
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
-import com.hyejeanmoon.splashcompose.entity.Photo
-import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
-import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,15 +41,8 @@ class PhotosOfCollectionActivity : ComponentActivity() {
             SplashComposeTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     PhotosOfCollectionScreen(
-                        onPhotoClick = { PhotoDetailActivity.start(it?.id.orEmpty(), this) },
                         onBackIconClick = { finish() },
-                        collectionTitle = collectionTitle,
-                        onUserInfoClick = { userName ->
-                            UserDetailActivity.startUserDetailActivity(
-                                this,
-                                userName
-                            )
-                        }
+                        collectionTitle = collectionTitle
                     )
                 }
             }
@@ -64,12 +53,12 @@ class PhotosOfCollectionActivity : ComponentActivity() {
         const val COLLECTION_ID = "COLLECTION_ID"
         private const val COLLECTION_TITLE = "COLLECTION_TITLE"
 
-        fun start(activity: ComponentActivity, collectionId: String, collectionTitle: String) {
+        fun start(context: Context, collectionId: String, collectionTitle: String) {
             val intent = Intent()
-            intent.setClass(activity, PhotosOfCollectionActivity::class.java)
+            intent.setClass(context, PhotosOfCollectionActivity::class.java)
             intent.putExtra(COLLECTION_ID, collectionId)
             intent.putExtra(COLLECTION_TITLE, collectionTitle)
-            activity.startActivity(intent)
+            context.startActivity(intent)
         }
     }
 }

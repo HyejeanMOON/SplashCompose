@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,15 +43,14 @@ import androidx.paging.compose.items
 import com.google.accompanist.coil.rememberCoilPainter
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.entity.Collections
+import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoUserInfo
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 
 @Composable
 fun CollectionsScreen(
     modifier: Modifier = Modifier,
-    collectionsViewModel: CollectionsViewModel = hiltViewModel(),
-    onCollectionsItemClick: (String, String) -> Unit,
-    onUserInfoClick: (String) -> Unit
+    collectionsViewModel: CollectionsViewModel = hiltViewModel()
 ) {
     val pagingItems = collectionsViewModel.collections.collectAsLazyPagingItems()
     LazyColumn(
@@ -61,9 +61,7 @@ fun CollectionsScreen(
                 val item by remember { mutableStateOf(collectionsItem) }
                 CollectionsItem(
                     collections = item,
-                    onCollectionsItemClick = onCollectionsItemClick,
-                    resolution = collectionsViewModel.resolution,
-                    onUserInfoClick = onUserInfoClick
+                    resolution = collectionsViewModel.resolution
                 )
             }
         }
@@ -89,16 +87,15 @@ fun CollectionsItem(
     modifier: Modifier = Modifier,
     isShowUserInfo: Boolean = true,
     resolution: String,
-    collections: Collections,
-    onCollectionsItemClick: (String, String) -> Unit,
-    onUserInfoClick: (String) -> Unit,
+    collections: Collections
 ) {
+    val context = LocalContext.current
+
     Column(modifier = modifier) {
         if (isShowUserInfo) {
             PhotoUserInfo(
                 userName = collections.user?.userName.orEmpty(),
-                userPhoto = collections.user?.profileImage?.large.orEmpty(),
-                onUserInfoClick = onUserInfoClick
+                userPhoto = collections.user?.profileImage?.large.orEmpty()
             )
         }
 
@@ -108,7 +105,11 @@ fun CollectionsItem(
                 .fillMaxWidth()
                 .requiredHeight(300.dp)
                 .clickable {
-                    onCollectionsItemClick(collections.id.orEmpty(), collections.title.orEmpty())
+                    PhotosOfCollectionActivity.start(
+                        context,
+                        collections.id.orEmpty(),
+                        collections.title.orEmpty()
+                    )
                 }
         ) {
 
