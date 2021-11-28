@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,13 +50,13 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
+import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 
 @Composable
 fun PhotoDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: PhotoDetailViewModel = hiltViewModel(),
     onBackIconClick: () -> Unit,
-    onUserInfoClick: (String) -> Unit,
     onDownloadImage: () -> Unit
 ) {
     val photo by viewModel.photo.observeAsState()
@@ -75,7 +76,6 @@ fun PhotoDetailScreen(
             PhotoDetailUserInfo(
                 photo = photo,
                 viewModel = viewModel,
-                onUserInfoClick = onUserInfoClick,
                 isFavoritePhoto = isFavoritePhoto,
                 onDownloadImage = onDownloadImage
             )
@@ -169,9 +169,10 @@ fun PhotoDetailUserInfo(
     photo: Photo?,
     viewModel: PhotoDetailViewModel,
     isFavoritePhoto: Boolean?,
-    onUserInfoClick: (String) -> Unit,
     onDownloadImage: () -> Unit
 ) {
+    val context = LocalContext.current
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -183,7 +184,12 @@ fun PhotoDetailUserInfo(
         // user icon
         Image(
             modifier = Modifier
-                .clickable { onUserInfoClick(photo?.user?.userName.orEmpty()) }
+                .clickable {
+                    UserDetailActivity.startUserDetailActivity(
+                        context,
+                        photo?.user?.userName.orEmpty()
+                    )
+                }
                 .padding(20.dp, 5.dp)
                 .clip(CircleShape)
                 .constrainAs(userPhoto) {
@@ -205,7 +211,10 @@ fun PhotoDetailUserInfo(
         Text(
             modifier = Modifier
                 .clickable {
-                    onUserInfoClick(photo?.user?.userName.orEmpty())
+                    UserDetailActivity.startUserDetailActivity(
+                        context,
+                        photo?.user?.userName.orEmpty()
+                    )
                 }
                 .constrainAs(userName) {
                     start.linkTo(userPhoto.end)

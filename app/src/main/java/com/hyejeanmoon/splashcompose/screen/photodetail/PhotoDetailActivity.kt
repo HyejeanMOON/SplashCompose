@@ -49,9 +49,6 @@ class PhotoDetailActivity : ComponentActivity() {
                 onBackIconClick = {
                     finish()
                 },
-                onUserInfoClick = { userName ->
-                    UserDetailActivity.startUserDetailActivity(this, userName = userName)
-                },
                 onDownloadImage = {
                     val permission = ActivityCompat.checkSelfPermission(
                         this,
