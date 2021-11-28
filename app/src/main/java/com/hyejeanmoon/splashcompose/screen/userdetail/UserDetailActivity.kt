@@ -17,6 +17,7 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -73,11 +74,11 @@ class UserDetailActivity : ComponentActivity() {
     companion object {
         const val INTENT_USER_NAME = "INTENT_USER_NAME"
 
-        fun startUserDetailActivity(activity: Activity, userName: String) {
+        fun startUserDetailActivity(context: Context, userName: String) {
             val intent = Intent()
             intent.putExtra(INTENT_USER_NAME, userName)
-            intent.setClass(activity, UserDetailActivity::class.java)
-            activity.startActivity(intent)
+            intent.setClass(context, UserDetailActivity::class.java)
+            context.startActivity(intent)
         }
     }
 }

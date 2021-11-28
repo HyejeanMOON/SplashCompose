@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -37,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,14 +47,14 @@ import com.google.accompanist.glide.rememberGlidePainter
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
+import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
+import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.TransparentMoonGray
 
 @Composable
 fun RandomPhotoScreen(
     modifier: Modifier = Modifier,
-    viewModel: RandomPhotoViewModel = hiltViewModel(),
-    onRandomPhotoClick: (String) -> Unit,
-    onUserInfoClick: (String) -> Unit
+    viewModel: RandomPhotoViewModel = hiltViewModel()
 ) {
 
     val randomPhoto by viewModel.randomPhoto.observeAsState()
@@ -62,7 +62,7 @@ fun RandomPhotoScreen(
 
     ConstraintLayout(modifier = modifier) {
 
-        val (image,userInfo) = createRefs()
+        val (image, userInfo) = createRefs()
 
         // photo
         Image(
@@ -93,8 +93,6 @@ fun RandomPhotoScreen(
                     top.linkTo(parent.top)
                 },
             viewModel = viewModel,
-            onRandomPhotoClick = onRandomPhotoClick,
-            onUserInfoClick = onUserInfoClick,
             randomPhoto = randomPhoto
         )
 
@@ -109,10 +107,11 @@ fun RandomPhotoScreen(
 fun RandomPhotoUserInfo(
     modifier: Modifier = Modifier,
     viewModel: RandomPhotoViewModel,
-    randomPhoto: Photo?,
-    onUserInfoClick: (String) -> Unit,
-    onRandomPhotoClick: (String) -> Unit
+    randomPhoto: Photo?
 ) {
+
+    val context = LocalContext.current
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -149,7 +148,10 @@ fun RandomPhotoUserInfo(
         Image(
             modifier = Modifier
                 .clickable {
-                    onUserInfoClick(randomPhoto?.user?.userName.orEmpty())
+                    UserDetailActivity.startUserDetailActivity(
+                        context,
+                        randomPhoto?.user?.userName.orEmpty()
+                    )
                 }
                 .padding(20.dp, 10.dp)
                 .clip(CircleShape)
@@ -172,7 +174,10 @@ fun RandomPhotoUserInfo(
         Text(
             modifier = Modifier
                 .clickable {
-                    onUserInfoClick(randomPhoto?.user?.userName.orEmpty())
+                    UserDetailActivity.startUserDetailActivity(
+                        context,
+                        randomPhoto?.user?.userName.orEmpty()
+                    )
                 }
                 .constrainAs(userName) {
                     start.linkTo(userPhoto.end)
@@ -194,7 +199,7 @@ fun RandomPhotoUserInfo(
                 }
                 .padding(0.dp, 0.dp, 20.dp, 0.dp)
                 .clickable {
-                    onRandomPhotoClick(randomPhoto?.id.orEmpty())
+                    PhotoDetailActivity.start(randomPhoto?.id.orEmpty(), context)
                 },
             painter = painterResource(id = R.drawable.ic_info_outline),
             contentDescription = "Information Icon",

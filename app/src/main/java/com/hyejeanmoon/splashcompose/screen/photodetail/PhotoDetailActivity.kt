@@ -16,6 +16,7 @@
 
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -102,11 +103,11 @@ class PhotoDetailActivity : ComponentActivity() {
         const val INTENT_PHOTO_ID = "INTENT_PHOTO_ID"
         private const val REQUEST_CODE = 1
 
-        fun start(photoId: String, activity: ComponentActivity) {
+        fun start(photoId: String, context: Context) {
             val intent = Intent()
-            intent.setClass(activity, PhotoDetailActivity::class.java)
+            intent.setClass(context, PhotoDetailActivity::class.java)
             intent.putExtra(INTENT_PHOTO_ID, photoId)
-            activity.startActivity(intent)
+            context.startActivity(intent)
         }
     }
 }
