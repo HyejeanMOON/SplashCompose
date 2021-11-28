@@ -25,7 +25,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun WebPageScreen(urlToRender: String) {
+fun WebViewScreen(urlToRender: String) {
     AndroidView(factory = {
         WebView(it).apply {
             layoutParams = ViewGroup.LayoutParams(

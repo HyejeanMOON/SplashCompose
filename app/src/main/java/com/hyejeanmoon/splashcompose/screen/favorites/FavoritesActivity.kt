@@ -62,7 +62,7 @@ class FavoritesActivity : ComponentActivity() {
                                 },
                                 title = {
                                     Text(
-                                        text = getString(R.string.title_favorites),
+                                        text = getString(R.string.screen_favorites),
                                         color = Color.Black
                                     )
                                 }

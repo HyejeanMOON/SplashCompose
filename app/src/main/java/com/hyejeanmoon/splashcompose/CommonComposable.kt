@@ -19,9 +19,12 @@ package com.hyejeanmoon.splashcompose
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,19 +37,31 @@ import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.random.RandomPhotoScreen
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
+import com.hyejeanmoon.splashcompose.screen.webview.WebViewScreen
 import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
+import com.hyejeanmoon.splashcompose.utils.NavUtils.back
 
 @Composable
 fun AppScaffold() {
-    val applicationTitle = "Moonlight Pictures"
 
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val scaffoldState = rememberScaffoldState()
 
-    var expanded by remember { mutableStateOf(false) }
-    var openDialog by remember { mutableStateOf(false) }
+    var shouldShowBackIcon by remember {
+        mutableStateOf(false)
+    }
+
+    var shouldShowAppBar by remember {
+        mutableStateOf(true)
+    }
+
+    val applicationName = "Moonlight Pictures"
+    var appBarTitle by remember {
+        mutableStateOf(applicationName)
+    }
+
+    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier,
@@ -87,34 +102,87 @@ fun AppScaffold() {
             }
         },
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = applicationTitle,
-                        color = Color.Black
+            if (shouldShowAppBar) {
+                if (shouldShowBackIcon) {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = appBarTitle,
+                                color = Color.Black
+                            )
+                        },
+                        navigationIcon = {
+                            Icon(
+                                modifier = Modifier.clickable { navController.back() },
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "back icon",
+                                tint = Color.Black
+                            )
+                        }
+                    )
+                } else {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = appBarTitle,
+                                color = Color.Black
+                            )
+                        }
                     )
                 }
-            )
+            }
         }
     ) {
-
-        var openDialog by remember { mutableStateOf(false) }
-        var settingsItem by remember { mutableStateOf("") }
-
         NavHost(
             navController, startDestination = Screen.Random.route
         ) {
             composable(Screen.Random.route) {
                 RandomPhotoScreen()
+                shouldShowAppBar = true
+                shouldShowBackIcon = false
+                appBarTitle = applicationName
             }
             composable(Screen.Photos.route) {
                 PhotoScreen()
+                shouldShowAppBar = true
+                shouldShowBackIcon = false
+                appBarTitle = applicationName
             }
             composable(Screen.Collections.route) {
                 CollectionsScreen()
+                shouldShowAppBar = true
+                shouldShowBackIcon = false
+                appBarTitle = applicationName
             }
             composable(Screen.Settings.route) {
-                SettingsScreen()
+                SettingsScreen(navController = navController)
+                shouldShowAppBar = true
+                shouldShowBackIcon = false
+                appBarTitle = applicationName
+            }
+            composable(Screen.License.route) {
+                WebViewScreen(
+                    urlToRender = "file:///android_asset/licenses.html"
+                )
+                shouldShowAppBar = true
+                shouldShowBackIcon = true
+                appBarTitle = context.getString(Screen.License.stringId)
+            }
+            composable(Screen.PhotoDetail.route) {
+                shouldShowAppBar = false
+                shouldShowBackIcon = false
+                appBarTitle = applicationName
+                appBarTitle = context.getString(Screen.PhotoDetail.stringId)
+            }
+            composable(Screen.UserDetail.route) {
+                shouldShowAppBar = true
+                shouldShowBackIcon = true
+                appBarTitle = context.getString(Screen.UserDetail.stringId)
+            }
+            composable(Screen.Favorites.route) {
+                shouldShowAppBar = true
+                shouldShowBackIcon = true
+                appBarTitle = context.getString(Screen.Favorites.stringId)
             }
         }
     }

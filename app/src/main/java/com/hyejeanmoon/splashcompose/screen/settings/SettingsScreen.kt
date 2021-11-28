@@ -36,15 +36,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.hyejeanmoon.splashcompose.BuildConfig
 import com.hyejeanmoon.splashcompose.R
-import com.hyejeanmoon.splashcompose.screen.webview.WebViewActivity
+import com.hyejeanmoon.splashcompose.Screen
 import com.hyejeanmoon.splashcompose.utils.DataManager
+import com.hyejeanmoon.splashcompose.utils.NavUtils
 
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
+    navController:NavHostController
 ) {
     val settingsItemList = listOf(
         SettingsItem(
@@ -77,7 +80,8 @@ fun SettingsScreen(
 
     SettingsScreenUI(
         viewModel = viewModel,
-        settingsItems = settingsItemList
+        settingsItems = settingsItemList,
+        navController = navController
     )
 }
 
@@ -85,6 +89,7 @@ fun SettingsScreen(
 fun SettingsScreenUI(
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel,
+    navController: NavHostController,
     settingsItems: List<SettingsItem>
 ) {
     LazyColumn(
@@ -96,6 +101,7 @@ fun SettingsScreenUI(
                 SettingsItemDetail(
                     item = s.title,
                     viewModel = viewModel,
+                    navController = navController,
                     itemContent = s.content,
                     itemDescription = s.description
                 )
@@ -162,6 +168,7 @@ fun SettingsItemTitle(
 fun SettingsItemDetail(
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel,
+    navController: NavHostController,
     item: SettingsItems,
     itemDescription: String = "",
     itemContent: String = ""
@@ -185,11 +192,7 @@ fun SettingsItemDetail(
                         // do nothing
                     }
                     SettingsItems.LICENSES -> {
-                        WebViewActivity.start(
-                            "file:///android_asset/licenses.html",
-                            item.title,
-                            context
-                        )
+                        NavUtils.navTo(navController,Screen.License)
                     }
                     SettingsItems.ABOUT_DEVELOPER -> {
                         val uri =

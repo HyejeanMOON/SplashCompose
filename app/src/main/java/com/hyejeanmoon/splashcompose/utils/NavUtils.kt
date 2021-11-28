@@ -19,12 +19,13 @@ package com.hyejeanmoon.splashcompose.utils
 import android.net.Uri
 import android.os.Parcelable
 import androidx.navigation.NavHostController
+import com.hyejeanmoon.splashcompose.Screen
 
 object NavUtils {
 
     fun navTo(
         navCtrl: NavHostController,
-        destinationName: String,
+        screen: Screen,
         args: Any? = null,
         backStackRouteName: String? = null,
         isLaunchSingleTop: Boolean = true,
@@ -58,7 +59,7 @@ object NavUtils {
             }
         }
 
-        navCtrl.navigate("$destinationName$arguments") {
+        navCtrl.navigate("${screen.route}$arguments") {
             if (backStackRouteName != null) {
                 popUpTo(backStackRouteName) { saveState = true }
             }
