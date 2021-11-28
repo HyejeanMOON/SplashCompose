@@ -39,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -53,7 +54,7 @@ import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 @Composable
 fun PhotoScreen(
     modifier: Modifier = Modifier,
-    viewModel: PhotosViewModel,
+    viewModel: PhotosViewModel = hiltViewModel(),
     onPhotoClick: (Photo?) -> Unit,
     onUserInfoClick: (String) -> Unit
 ) {
@@ -111,11 +112,11 @@ fun PhotoImage(
         PhotoUserInfo(
             modifier = Modifier
                 .constrainAs(userInfo) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-                .padding(0.dp,10.dp,0.dp,10.dp),
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(0.dp, 10.dp, 0.dp, 10.dp),
             userName = photo.user?.userName.orEmpty(),
             userPhoto = photo.user?.profileImage?.large.orEmpty(),
             onUserInfoClick = onUserInfoClick

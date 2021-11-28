@@ -39,15 +39,12 @@ class PhotosOfCollectionActivity : ComponentActivity() {
 
         val collectionTitle = intent.getStringExtra(COLLECTION_TITLE).orEmpty()
 
-        val viewModel: PhotosOfCollectionViewModel by viewModels()
-
         setContent {
             SetUpStatusBar()
 
             SplashComposeTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     PhotosOfCollectionScreen(
-                        photosOfCollectionViewModel = viewModel,
                         onPhotoClick = { PhotoDetailActivity.start(it?.id.orEmpty(), this) },
                         onBackIconClick = { finish() },
                         collectionTitle = collectionTitle,

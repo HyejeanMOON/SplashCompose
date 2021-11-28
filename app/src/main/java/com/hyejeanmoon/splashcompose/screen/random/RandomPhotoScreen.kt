@@ -41,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.accompanist.glide.rememberGlidePainter
 import com.hyejeanmoon.splashcompose.ErrorAlert
@@ -51,7 +52,7 @@ import com.hyejeanmoon.splashcompose.ui.theme.TransparentMoonGray
 @Composable
 fun RandomPhotoScreen(
     modifier: Modifier = Modifier,
-    viewModel: RandomPhotoViewModel,
+    viewModel: RandomPhotoViewModel = hiltViewModel(),
     onRandomPhotoClick: (String) -> Unit,
     onUserInfoClick: (String) -> Unit
 ) {

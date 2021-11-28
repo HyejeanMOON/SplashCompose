@@ -61,8 +61,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val photosViewModel: PhotosViewModel by viewModels()
-    private val collectionsViewModel: CollectionsViewModel by viewModels()
     private val settingsViewModel: SettingsViewModel by viewModels()
     private val randomPhotoViewModel: RandomPhotoViewModel by viewModels()
 
@@ -170,7 +168,6 @@ class MainActivity : ComponentActivity() {
                         NavHost(navController, startDestination = Screen.Random.route) {
                             composable(Screen.Random.route) {
                                 RandomPhotoScreen(
-                                    viewModel = randomPhotoViewModel,
                                     onRandomPhotoClick = {
                                         PhotoDetailActivity.start(it, this@MainActivity)
                                     },
@@ -184,7 +181,6 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Screen.Photos.route) {
                                 PhotoScreen(
-                                    viewModel = photosViewModel,
                                     onPhotoClick = {
                                         PhotoDetailActivity.start(
                                             it?.id.orEmpty(),
@@ -201,7 +197,6 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Screen.Collections.route) {
                                 CollectionsScreen(
-                                    collectionsViewModel = collectionsViewModel,
                                     onCollectionsItemClick = { collectionId, collectionTitle ->
                                         PhotosOfCollectionActivity.start(
                                             this@MainActivity,

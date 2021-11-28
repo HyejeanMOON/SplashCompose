@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -47,7 +48,7 @@ import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 @Composable
 fun CollectionsScreen(
     modifier: Modifier = Modifier,
-    collectionsViewModel: CollectionsViewModel,
+    collectionsViewModel: CollectionsViewModel = hiltViewModel(),
     onCollectionsItemClick: (String, String) -> Unit,
     onUserInfoClick: (String) -> Unit
 ) {

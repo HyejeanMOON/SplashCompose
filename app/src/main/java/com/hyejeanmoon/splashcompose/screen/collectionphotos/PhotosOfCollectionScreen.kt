@@ -31,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -41,7 +42,7 @@ import com.hyejeanmoon.splashcompose.screen.photos.PhotoImage
 @Composable
 fun PhotosOfCollectionScreen(
     modifier: Modifier = Modifier,
-    photosOfCollectionViewModel: PhotosOfCollectionViewModel,
+    photosOfCollectionViewModel: PhotosOfCollectionViewModel = hiltViewModel(),
     onPhotoClick: (Photo?) -> Unit,
     onBackIconClick: () -> Unit,
     onUserInfoClick: (String) -> Unit,

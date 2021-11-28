@@ -50,7 +50,6 @@ class UserDetailActivity : ComponentActivity() {
             SplashComposeTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     UserDetailScreen(
-                        viewModel = viewModel,
                         onBackIconClick = { finish() },
                         onCollectionItemsClick = { collectionId, collectionTitle ->
                             PhotosOfCollectionActivity.start(this, collectionId, collectionTitle)
@@ -59,7 +58,7 @@ class UserDetailActivity : ComponentActivity() {
                             PhotoDetailActivity.start(it?.id.orEmpty(), this)
                         },
                         onUserInfoClick = { userName ->
-                            UserDetailActivity.startUserDetailActivity(
+                            startUserDetailActivity(
                                 this,
                                 userName
                             )

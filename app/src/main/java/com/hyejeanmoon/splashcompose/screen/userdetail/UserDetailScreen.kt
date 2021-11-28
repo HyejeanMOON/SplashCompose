@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
@@ -64,7 +65,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun UserDetailScreen(
     modifier: Modifier = Modifier,
-    viewModel: UserDetailViewModel,
+    viewModel: UserDetailViewModel = hiltViewModel(),
     onBackIconClick: () -> Unit,
     onCollectionItemsClick: (String, String) -> Unit,
     onPhotoClick: (UsersPhotos?) -> Unit,
