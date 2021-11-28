@@ -71,7 +71,6 @@ class FavoritesActivity : ComponentActivity() {
                         }
                     ) {
                         FavoritesScreen(
-                            viewModel = favoritesViewModel,
                             onFavoritePhotoClick = { photoId ->
                                 PhotoDetailActivity.start(photoId, this)
                             }

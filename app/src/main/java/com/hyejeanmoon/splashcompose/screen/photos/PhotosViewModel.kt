@@ -27,9 +27,10 @@ import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class PhotosViewModel(
+class PhotosViewModel @Inject constructor(
     app: Application
 ) : AndroidViewModel(app) {
 

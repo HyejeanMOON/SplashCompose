@@ -22,9 +22,10 @@ import com.hyejeanmoon.splashcompose.OrderBy
 import com.hyejeanmoon.splashcompose.Resolution
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel(
+class SettingsViewModel  @Inject constructor(
     app: Application
 ) : AndroidViewModel(app) {
 

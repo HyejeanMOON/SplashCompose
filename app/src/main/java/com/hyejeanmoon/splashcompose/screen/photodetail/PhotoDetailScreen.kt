@@ -41,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -52,7 +53,7 @@ import com.hyejeanmoon.splashcompose.entity.Photo
 @Composable
 fun PhotoDetailScreen(
     modifier: Modifier = Modifier,
-    viewModel: PhotoDetailViewModel,
+    viewModel: PhotoDetailViewModel = hiltViewModel(),
     onBackIconClick: () -> Unit,
     onUserInfoClick: (String) -> Unit,
     onDownloadImage: () -> Unit

@@ -28,14 +28,14 @@ import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
-import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class PhotosOfCollectionViewModel(
-    app:Application,
-    @Assisted private val state: SavedStateHandle
-):AndroidViewModel(app) {
+class PhotosOfCollectionViewModel @Inject constructor(
+    app: Application,
+    state: SavedStateHandle
+) : AndroidViewModel(app) {
 
     private var id = ""
 
@@ -55,7 +55,7 @@ class PhotosOfCollectionViewModel(
     private val collectionRepository = CollectionsRepository(collectionsApiService)
 
     private val photosOfCollectionDataSource =
-        PhotosOfCollectionDataSource(collectionRepository,id)
+        PhotosOfCollectionDataSource(collectionRepository, id)
 
     var photosOfCollections = Pager(
         config = PagingConfig(
@@ -66,7 +66,7 @@ class PhotosOfCollectionViewModel(
         pagingSourceFactory = { photosOfCollectionDataSource }
     ).flow.cachedIn(viewModelScope)
 
-    companion object{
+    companion object {
         private const val PAGE_SIZE = 15
         private const val INITIAL_LOAD_SIZE = 15
     }

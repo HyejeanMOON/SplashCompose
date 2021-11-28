@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -49,7 +50,7 @@ import com.hyejeanmoon.splashcompose.db.FavoritePhoto
 @Composable
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
-    viewModel: FavoritesViewModel,
+    viewModel: FavoritesViewModel = hiltViewModel(),
     onFavoritePhotoClick: (String) -> Unit
 ) {
     val isRefreshing by viewModel.isRefreshing.collectAsState()

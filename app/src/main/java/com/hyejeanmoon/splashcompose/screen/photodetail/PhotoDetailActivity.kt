@@ -45,7 +45,6 @@ class PhotoDetailActivity : ComponentActivity() {
             SetUpStatusBar()
 
             PhotoDetailScreen(
-                viewModel = viewModel,
                 onBackIconClick = {
                     finish()
                 },

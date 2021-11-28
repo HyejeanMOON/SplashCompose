@@ -28,13 +28,13 @@ import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.LogUtils
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
-import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class UserDetailViewModel(
+class UserDetailViewModel @Inject constructor(
     val app: Application,
-    @Assisted val state: SavedStateHandle
+    val state: SavedStateHandle
 ) : AndroidViewModel(app) {
 
     private var userName: String = ""

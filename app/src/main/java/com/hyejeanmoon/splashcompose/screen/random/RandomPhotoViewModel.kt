@@ -25,9 +25,12 @@ import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
-class RandomPhotoViewModel(
+@HiltViewModel
+class RandomPhotoViewModel @Inject constructor(
     val app: Application
 ) : AndroidViewModel(app) {
 

@@ -168,6 +168,7 @@ class MainActivity : ComponentActivity() {
                         NavHost(navController, startDestination = Screen.Random.route) {
                             composable(Screen.Random.route) {
                                 RandomPhotoScreen(
+                                    viewModel = randomPhotoViewModel,
                                     onRandomPhotoClick = {
                                         PhotoDetailActivity.start(it, this@MainActivity)
                                     },

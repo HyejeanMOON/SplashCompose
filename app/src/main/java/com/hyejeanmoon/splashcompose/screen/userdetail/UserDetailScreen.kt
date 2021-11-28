@@ -198,15 +198,15 @@ fun UserDetailScreen(
                 // TabRow
                 val pagesMutableList: MutableList<String> = mutableListOf()
 
-                if (userDetail?.totalPhotos ?: 0 > 0) {
+                if ((userDetail?.totalPhotos ?: 0) > 0) {
                     pagesMutableList.add(stringResource(id = R.string.tabrow_photos))
                 }
 
-                if (userDetail?.totalCollections ?: 0 > 0) {
+                if ((userDetail?.totalCollections ?: 0) > 0) {
                     pagesMutableList.add(stringResource(id = R.string.tabrow_collections))
                 }
 
-                if (userDetail?.totalLikes ?: 0 > 0) {
+                if ((userDetail?.totalLikes ?: 0) > 0) {
                     pagesMutableList.add(stringResource(id = R.string.tabrow_liked_photos))
                 }
 
