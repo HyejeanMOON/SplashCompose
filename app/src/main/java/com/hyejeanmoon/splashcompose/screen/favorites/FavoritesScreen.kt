@@ -33,6 +33,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,13 +46,13 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.db.FavoritePhoto
+import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 
 @ExperimentalFoundationApi
 @Composable
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
-    viewModel: FavoritesViewModel = hiltViewModel(),
-    onFavoritePhotoClick: (String) -> Unit
+    viewModel: FavoritesViewModel = hiltViewModel()
 ) {
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val favoritePhotoList by viewModel.favoritePhotoList.observeAsState()
@@ -74,8 +75,7 @@ fun FavoritesScreen(
                 ) {
                     items(photoList) { photo ->
                         FavoritePhotoItem(
-                            photo = photo,
-                            onFavoritePhotoClick = onFavoritePhotoClick
+                            photo = photo
                         )
                     }
                 }
@@ -87,14 +87,15 @@ fun FavoritesScreen(
 @Composable
 fun FavoritePhotoItem(
     modifier: Modifier = Modifier,
-    photo: FavoritePhoto,
-    onFavoritePhotoClick: (String) -> Unit
+    photo: FavoritePhoto
 ) {
+    val context = LocalContext.current
+
     Image(
         modifier = modifier
             .size(160.dp)
             .clickable {
-                onFavoritePhotoClick(photo.id)
+                PhotoDetailActivity.start(photo.id, context)
             },
         painter = rememberGlidePainter(
             request = photo.photoUrl.orEmpty(),

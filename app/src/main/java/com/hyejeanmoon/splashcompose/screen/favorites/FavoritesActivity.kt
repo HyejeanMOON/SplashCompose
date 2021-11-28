@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
-import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,11 +69,7 @@ class FavoritesActivity : ComponentActivity() {
                             )
                         }
                     ) {
-                        FavoritesScreen(
-                            onFavoritePhotoClick = { photoId ->
-                                PhotoDetailActivity.start(photoId, this)
-                            }
-                        )
+                        FavoritesScreen()
                     }
                 }
             }
