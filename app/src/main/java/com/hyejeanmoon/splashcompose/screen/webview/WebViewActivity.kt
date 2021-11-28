@@ -17,6 +17,7 @@
 package com.hyejeanmoon.splashcompose.screen.webview
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -73,12 +74,12 @@ class WebViewActivity : ComponentActivity() {
         private const val WEB_VIEW_URL = "WEB_VIEW_URL"
         private const val WEB_VIEW_TITLE = "WEB_VIEW_TITLE"
 
-        fun start(url: String, title: String, activity: Activity) {
+        fun start(url: String, title: String, context: Context) {
             val intent = Intent()
-            intent.setClass(activity, WebViewActivity::class.java)
+            intent.setClass(context, WebViewActivity::class.java)
             intent.putExtra(WEB_VIEW_URL, url)
             intent.putExtra(WEB_VIEW_TITLE, title)
-            activity.startActivity(intent)
+            context.startActivity(intent)
         }
     }
 }

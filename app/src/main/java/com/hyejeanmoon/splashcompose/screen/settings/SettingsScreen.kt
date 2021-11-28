@@ -16,6 +16,8 @@
 
 package com.hyejeanmoon.splashcompose.screen.settings
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,34 +29,76 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.hyejeanmoon.splashcompose.MainActivity
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.hyejeanmoon.splashcompose.BuildConfig
 import com.hyejeanmoon.splashcompose.R
+import com.hyejeanmoon.splashcompose.screen.webview.WebViewActivity
+import com.hyejeanmoon.splashcompose.utils.DataManager
 
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    settingsItems: List<SettingsItem>,
-    onSettingsItemClick: (String) -> Unit
+    viewModel: SettingsViewModel = hiltViewModel()
+) {
+    val settingsItemList = listOf(
+        SettingsItem(
+            SettingsTitles.APPLICATION_SETTINGS,
+            listOf(
+                SettingItemDetail(
+                    title = SettingsItems.DISPLAY_RESOLUTION
+                ),
+                SettingItemDetail(
+                    title = SettingsItems.PHOTO_DISPLAY_ORDER,
+                    "This setting will take effect the next time you start the app"
+                ),
+                SettingItemDetail(title = SettingsItems.CLEAR_CACHE)
+            )
+        ),
+        SettingsItem(
+            SettingsTitles.OTHERS,
+            listOf(
+                SettingItemDetail(
+                    title = SettingsItems.VERSION,
+                    content = BuildConfig.VERSION_NAME
+                ),
+                SettingItemDetail(
+                    title = SettingsItems.LICENSES
+                ),
+                SettingItemDetail(title = SettingsItems.ABOUT_DEVELOPER)
+            )
+        )
+    )
+
+    SettingsScreenUI(
+        viewModel = viewModel,
+        settingsItems = settingsItemList
+    )
+}
+
+@Composable
+fun SettingsScreenUI(
+    modifier: Modifier = Modifier,
+    viewModel: SettingsViewModel,
+    settingsItems: List<SettingsItem>
 ) {
     LazyColumn(
         modifier = modifier
     ) {
         items(items = settingsItems) {
-            SettingsItemTitle(titleName = it.title)
+            SettingsItemTitle(titleName = it.title.title)
             it.itemDetail.forEachIndexed { index, s ->
                 SettingsItemDetail(
-                    itemName = s.title,
+                    item = s.title,
+                    viewModel = viewModel,
                     itemContent = s.content,
                     itemDescription = s.description
-                ) {
-                    onSettingsItemClick(s.title)
-                }
+                )
                 if (index == it.itemDetail.size - 1) {
                     Spacer(
                         modifier = Modifier
@@ -69,12 +113,12 @@ fun SettingsScreen(
 }
 
 data class SettingsItem(
-    val title: String,
+    val title: SettingsTitles,
     val itemDetail: List<SettingItemDetail>
 )
 
 data class SettingItemDetail(
-    val title: String,
+    val title: SettingsItems,
     val description: String = "",
     val content: String = ""
 )
@@ -117,16 +161,47 @@ fun SettingsItemTitle(
 @Composable
 fun SettingsItemDetail(
     modifier: Modifier = Modifier,
-    itemName: String,
+    viewModel: SettingsViewModel,
+    item: SettingsItems,
     itemDescription: String = "",
-    itemContent: String = "",
-    onItemClick: (String) -> Unit
+    itemContent: String = ""
 ) {
+    var openDialog by remember {
+        mutableStateOf(false)
+    }
+
+    val context = LocalContext.current
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
             .requiredHeight(50.dp)
-            .clickable { onItemClick(itemName) }
+            .clickable {
+                when (item) {
+                    SettingsItems.DISPLAY_RESOLUTION, SettingsItems.PHOTO_DISPLAY_ORDER -> {
+                        openDialog = true
+                    }
+                    SettingsItems.VERSION -> {
+                        // do nothing
+                    }
+                    SettingsItems.LICENSES -> {
+                        WebViewActivity.start(
+                            "file:///android_asset/licenses.html",
+                            item.title,
+                            context
+                        )
+                    }
+                    SettingsItems.ABOUT_DEVELOPER -> {
+                        val uri =
+                            Uri.parse("https://github.com/HyejeanMOON")
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        context.startActivity(intent)
+                    }
+                    SettingsItems.CLEAR_CACHE -> {
+                        DataManager.clearCacheInScopedStorage(context)
+                    }
+                }
+            }
     ) {
         val (text, icon, desc, content, divider) = createRefs()
         Text(
@@ -137,7 +212,7 @@ fun SettingsItemDetail(
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 },
-            text = itemName,
+            text = item.title,
             textAlign = TextAlign.Left,
             color = Color.Black,
             fontSize = 18.sp
@@ -193,6 +268,15 @@ fun SettingsItemDetail(
                 bottom.linkTo(parent.bottom)
             }
         )
+
+        if (openDialog) {
+            SettingsAlertDialog(
+                settingsViewModel = viewModel,
+                item = item
+            ) {
+                openDialog = false
+            }
+        }
     }
 }
 
@@ -200,7 +284,7 @@ fun SettingsItemDetail(
 fun SettingsAlertDialog(
     modifier: Modifier = Modifier,
     settingsViewModel: SettingsViewModel,
-    item: String,
+    item: SettingsItems,
     onCloseDialog: () -> Unit
 ) {
     AlertDialog(
@@ -220,7 +304,7 @@ fun SettingsAlertDialog(
         },
         title = {
             Text(
-                text = item,
+                text = item.title,
                 color = Color.Black
             )
         },
@@ -237,17 +321,17 @@ fun SettingsAlertDialog(
 fun RadioButtonList(
     modifier: Modifier = Modifier,
     settingsViewModel: SettingsViewModel,
-    item: String
+    item: SettingsItems
 ) {
     var radioOptionList: List<String> = listOf()
     var initialPosition = 0
 
     when (item) {
-        MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+        SettingsItems.PHOTO_DISPLAY_ORDER -> {
             radioOptionList = settingsViewModel.orderByList
             initialPosition = settingsViewModel.getOrderByPosition()
         }
-        MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
+        SettingsItems.DISPLAY_RESOLUTION -> {
             radioOptionList = settingsViewModel.displayResolutionList
             initialPosition = settingsViewModel.getDisplayResolutionPosition()
         }
@@ -265,11 +349,14 @@ fun RadioButtonList(
                         onClick = {
                             selectedOption = index
                             when (item) {
-                                MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+                                SettingsItems.PHOTO_DISPLAY_ORDER -> {
                                     settingsViewModel.putOrderBy(text)
                                 }
-                                MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
+                                SettingsItems.DISPLAY_RESOLUTION -> {
                                     settingsViewModel.putDisplayResolution(text)
+                                }
+                                else -> {
+                                    // do nothing
                                 }
                             }
                         }
@@ -281,11 +368,14 @@ fun RadioButtonList(
                     onClick = {
                         selectedOption = index
                         when (item) {
-                            MainActivity.SETTINGS_ITEM_PHOTO_DISPLAY_ORDER -> {
+                            SettingsItems.PHOTO_DISPLAY_ORDER -> {
                                 settingsViewModel.putOrderBy(text)
                             }
-                            MainActivity.SETTINGS_ITEM_DISPLAY_RESOLUTION -> {
+                            SettingsItems.DISPLAY_RESOLUTION -> {
                                 settingsViewModel.putDisplayResolution(text)
+                            }
+                            else -> {
+                                // do nothing
                             }
                         }
                     }
@@ -296,34 +386,6 @@ fun RadioButtonList(
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSettingsItemTitle() {
-    SettingsItemTitle(titleName = "Others")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSettingsItem() {
-    SettingsItemDetail(itemName = "Version") {
-
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSettings() {
-    Column {
-        SettingsItemTitle(titleName = "Others")
-        SettingsItemDetail(itemName = "Version", itemContent = "1.0") {
-
-        }
-        SettingsItemDetail(itemName = "About me") {
-
         }
     }
 }

@@ -56,6 +56,16 @@ fun RandomPhotoScreen(
     modifier: Modifier = Modifier,
     viewModel: RandomPhotoViewModel = hiltViewModel()
 ) {
+    viewModel.getRandomPhoto()
+
+    RandomPhotoScreenUI()
+}
+
+@Composable
+fun RandomPhotoScreenUI(
+    modifier: Modifier = Modifier,
+    viewModel: RandomPhotoViewModel = hiltViewModel()
+) {
 
     val randomPhoto by viewModel.randomPhoto.observeAsState()
     val exception by viewModel.exception.observeAsState()
