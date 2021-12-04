@@ -16,6 +16,7 @@
 
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
+import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -43,6 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -51,12 +54,12 @@ import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
+import com.hyejeanmoon.splashcompose.utils.NavUtils.back
 
 @Composable
 fun PhotoDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: PhotoDetailViewModel = hiltViewModel(),
-    onBackIconClick: () -> Unit,
     onDownloadImage: () -> Unit
 ) {
     val photo by viewModel.photo.observeAsState()
@@ -72,7 +75,7 @@ fun PhotoDetailScreen(
         Column(
             modifier = modifier.verticalScroll(state = scrollState)
         ) {
-            PhotoDetailImg(photo = photo, onBackIconClick = onBackIconClick)
+            PhotoDetailImg(photo = photo)
             PhotoDetailUserInfo(
                 photo = photo,
                 viewModel = viewModel,
@@ -119,9 +122,10 @@ fun PhotoDetailScreen(
 @Composable
 fun PhotoDetailImg(
     modifier: Modifier = Modifier,
-    photo: Photo?,
-    onBackIconClick: () -> Unit
+    photo: Photo?
 ) {
+    val context = LocalContext.current
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -155,7 +159,7 @@ fun PhotoDetailImg(
                     start.linkTo(image.start)
                 }
                 .padding(20.dp)
-                .clickable { onBackIconClick() },
+                .clickable { (context as Activity).finish() },
             imageVector = Icons.Filled.ArrowBack,
             contentDescription = "back icon",
             tint = Color.White

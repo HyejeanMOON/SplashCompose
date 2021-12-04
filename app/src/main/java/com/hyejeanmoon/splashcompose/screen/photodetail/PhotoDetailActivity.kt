@@ -26,6 +26,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
+import androidx.navigation.compose.rememberNavController
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
@@ -46,9 +47,6 @@ class PhotoDetailActivity : ComponentActivity() {
             SetUpStatusBar()
 
             PhotoDetailScreen(
-                onBackIconClick = {
-                    finish()
-                },
                 onDownloadImage = {
                     val permission = ActivityCompat.checkSelfPermission(
                         this,
