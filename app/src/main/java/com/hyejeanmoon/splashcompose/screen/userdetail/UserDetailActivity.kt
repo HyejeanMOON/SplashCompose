@@ -16,7 +16,6 @@
 
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle

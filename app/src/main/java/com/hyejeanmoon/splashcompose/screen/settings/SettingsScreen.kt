@@ -345,7 +345,7 @@ fun RadioButtonList(
         modifier = modifier
     ) {
         radioOptionList.forEachIndexed { index, text ->
-            Row(
+            ConstraintLayout(
                 Modifier
                     .selectable(
                         selected = (text == radioOptionList[selectedOption]),
@@ -366,7 +366,14 @@ fun RadioButtonList(
                     )
                     .padding(horizontal = 20.dp)
             ) {
+                val (radioRef,textRef) = createRefs()
+
                 RadioButton(
+                    modifier = Modifier.constrainAs(radioRef){
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    },
                     selected = (text == radioOptionList[selectedOption]),
                     onClick = {
                         selectedOption = index
@@ -387,6 +394,11 @@ fun RadioButtonList(
                     text = text,
                     style = MaterialTheme.typography.body1.merge(),
                     modifier = Modifier.padding(start = 16.dp)
+                        .constrainAs(textRef){
+                            top.linkTo(radioRef.top)
+                            bottom.linkTo(radioRef.bottom)
+                            start.linkTo(radioRef.end)
+                        }
                 )
             }
         }
