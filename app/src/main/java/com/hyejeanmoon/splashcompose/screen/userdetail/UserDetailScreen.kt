@@ -213,7 +213,7 @@ fun UserDetailScreen(
                 val pages: List<String> = pagesMutableList.toList()
 
                 val pagerState = rememberPagerState(
-                    pageCount = pages.size
+                    initialPage = pages.size
                 )
 
                 if (pagerState.pageCount > 0) {
@@ -270,6 +270,7 @@ fun UserDetailScreen(
 
                     // Pagers
                     HorizontalPager(
+                        count = pages.size,
                         modifier = Modifier
                             .constrainAs(pager) {
                                 top.linkTo(tabrow.bottom)

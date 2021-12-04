@@ -57,7 +57,6 @@ fun RandomPhotoScreen(
     viewModel: RandomPhotoViewModel = hiltViewModel()
 ) {
     viewModel.getRandomPhoto()
-
     RandomPhotoScreenUI()
 }
 

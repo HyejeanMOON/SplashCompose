@@ -107,7 +107,7 @@ dependencies {
 
     // Jetpack Hilt
     implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    kapt "com.google.dagger:hilt-compiler:2.40.4"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0-beta01"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
@@ -122,13 +122,20 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:2.7.1"
 
     // Pager
-    implementation "com.google.accompanist:accompanist-pager:0.12.0"
+    implementation "com.google.accompanist:accompanist-pager:0.21.4-beta"
     // If using indicators, also depend on
-    implementation "com.google.accompanist:accompanist-pager-indicators:0.18.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.21.4-beta"
 
     // System ui controller
-    implementation "com.google.accompanist:accompanist-systemuicontroller:0.18.0"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.21.4-beta"
 
     // swipe refresh
-    implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.21.4-beta"
+
+    // navigation animation
+    implementation "com.google.accompanist:accompanist-navigation-animation:0.21.4-beta"
+
+    // insets
+    implementation "com.google.accompanist:accompanist-insets:0.21.3-beta"
+    implementation "com.google.accompanist:accompanist-insets-ui:0.21.3-beta"
 }

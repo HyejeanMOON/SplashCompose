@@ -56,7 +56,7 @@ fun PhotoScreen(
     modifier: Modifier = Modifier,
     viewModel: PhotosViewModel = hiltViewModel()
 ) {
-    val pagingItems = viewModel.photoList.collectAsLazyPagingItems()
+    val pagingItems = viewModel.pagingPhotoList.pagingPhotoList.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = modifier.fillMaxSize()
