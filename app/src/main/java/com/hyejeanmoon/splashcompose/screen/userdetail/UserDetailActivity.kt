@@ -32,13 +32,13 @@ import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+@OptIn(ExperimentalAnimationApi::class)
 @AndroidEntryPoint
 class UserDetailActivity : ComponentActivity() {
 
     private val viewModel: UserDetailViewModel by viewModels()
 
-    @ExperimentalPagerApi
-    @OptIn(ExperimentalAnimationApi::class)
+    @OptIn(ExperimentalPagerApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
