@@ -57,8 +57,6 @@ import com.hyejeanmoon.splashcompose.screen.collections.CollectionsItem
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailLocation
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoUserInfo
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -67,14 +65,11 @@ fun UserDetailScreen(
     modifier: Modifier = Modifier,
     viewModel: UserDetailViewModel = hiltViewModel(),
     onBackIconClick: () -> Unit,
-    onCollectionItemsClick: (String, String) -> Unit,
-    onPhotoClick: (UsersPhotos?) -> Unit,
-    onUserInfoClick: (String) -> Unit
+    onPhotoClick: (UsersPhotos?) -> Unit
 ) {
     val userDetail by viewModel.userDetail.observeAsState()
     val exception by viewModel.exception.observeAsState()
 
-    val coroutines = rememberCoroutineScope()
     var visible by remember { mutableStateOf(true) }
     var clickCount by remember { mutableStateOf(0) }
 
@@ -212,11 +207,9 @@ fun UserDetailScreen(
 
                 val pages: List<String> = pagesMutableList.toList()
 
-                val pagerState = rememberPagerState(
-                    initialPage = pages.size
-                )
+                val pagerState = rememberPagerState()
 
-                if (pagerState.pageCount > 0) {
+                if (pages.isNotEmpty()) {
                     TabRow(
                         modifier = Modifier
                             .constrainAs(tabrow) {
@@ -254,11 +247,6 @@ fun UserDetailScreen(
                                 },
                                 selected = pagerState.currentPage == index,
                                 onClick = {
-                                    coroutines.launch(Dispatchers.IO) {
-                                        pagerState.scrollToPage(
-                                            page = index
-                                        )
-                                    }
                                     if (pagerState.currentPage == index) {
                                         clickCount += 1
                                         visible = clickCount % 2 == 0
@@ -284,9 +272,7 @@ fun UserDetailScreen(
                             currentPage = pagerState.currentPage,
                             pages = pages,
                             viewModel = viewModel,
-                            onPhotoClick = onPhotoClick,
-                            onCollectionItemsClick = onCollectionItemsClick,
-                            onUserInfoClick = onUserInfoClick
+                            onPhotoClick = onPhotoClick
                         )
                     }
                 }
@@ -304,9 +290,7 @@ fun PageContent(
     currentPage: Int,
     pages: List<String>,
     viewModel: UserDetailViewModel,
-    onPhotoClick: (UsersPhotos?) -> Unit,
-    onCollectionItemsClick: (String, String) -> Unit,
-    onUserInfoClick: (String) -> Unit
+    onPhotoClick: (UsersPhotos?) -> Unit
 ) {
     when (pages[currentPage]) {
         stringResource(id = R.string.tabrow_photos) -> {
@@ -416,7 +400,7 @@ fun UserDetailPhotos(
     viewModel: UserDetailViewModel,
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
-    val photos = viewModel.userDetailPhotosFlow.collectAsLazyPagingItems()
+    val photos = viewModel.viewState.pagingPhotos.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = modifier
@@ -456,7 +440,7 @@ fun UserDetailCollections(
     modifier: Modifier = Modifier,
     viewModel: UserDetailViewModel
 ) {
-    val collections = viewModel.userDetailCollectionsFlow.collectAsLazyPagingItems()
+    val collections = viewModel.viewState.pagingCollections.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = modifier
@@ -499,7 +483,7 @@ fun UserDetailLikedPhotos(
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
     val photos =
-        viewModel.userDetailLikedPhotosDataSourceFlow.collectAsLazyPagingItems()
+        viewModel.viewState.pagingLikedPhotos.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = modifier

@@ -17,16 +17,23 @@
 package com.hyejeanmoon.splashcompose.screen.collections
 
 import android.app.Application
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
+import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,17 +55,29 @@ class CollectionsViewModel @Inject constructor(
     private val collectionsDataSource =
         CollectionsDataSource(collectionRepository)
 
-    var collections = Pager(
-        config = PagingConfig(
-            pageSize = PAGE_SIZE,
-            enablePlaceholders = false,
-            initialLoadSize = INITIAL_LOAD_SIZE
-        ),
-        pagingSourceFactory = { collectionsDataSource }
-    ).flow.cachedIn(viewModelScope)
+    private val collections by lazy {
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false,
+                initialLoadSize = INITIAL_LOAD_SIZE
+            ),
+            pagingSourceFactory = { collectionsDataSource }
+        ).flow.cachedIn(viewModelScope)
+    }
 
-    companion object{
+    var viewStates by mutableStateOf(CollectionViewState(collections))
+        private set
+
+    companion object {
         private const val PAGE_SIZE = 15
         private const val INITIAL_LOAD_SIZE = 15
     }
 }
+
+data class CollectionViewState(
+    val pagingData: PagingCollection,
+    val listState: LazyListState = LazyListState()
+)
+
+typealias PagingCollection = Flow<PagingData<Collections>>

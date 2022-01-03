@@ -20,6 +20,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -52,9 +53,13 @@ fun CollectionsScreen(
     modifier: Modifier = Modifier,
     collectionsViewModel: CollectionsViewModel = hiltViewModel()
 ) {
-    val pagingItems = collectionsViewModel.collections.collectAsLazyPagingItems()
+    val viewStates = collectionsViewModel.viewStates
+    val pagingItems = viewStates.pagingData.collectAsLazyPagingItems()
+    var listState = if (pagingItems.itemCount > 0) viewStates.listState else LazyListState()
+
     LazyColumn(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        state = listState
     ) {
         items(pagingItems) { collectionsItem ->
             collectionsItem?.also {

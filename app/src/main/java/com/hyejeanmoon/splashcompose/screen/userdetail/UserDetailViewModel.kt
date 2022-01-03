@@ -17,18 +17,25 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
 import android.app.Application
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
+import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.UserDetail
+import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.LogUtils
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -87,35 +94,59 @@ class UserDetailViewModel @Inject constructor(
         )
     }
 
-    val userDetailPhotosFlow = Pager(
-        config = PagingConfig(
-            pageSize = PAGE_SIZE,
-            enablePlaceholders = false,
-            initialLoadSize = INITIAL_LOAD_SIZE
-        ),
-        pagingSourceFactory = { userDetailPhotosDataSource }
-    ).flow.cachedIn(viewModelScope)
+    private val userDetailPhotosFlow by lazy {
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false,
+                initialLoadSize = INITIAL_LOAD_SIZE
+            ),
+            pagingSourceFactory = { userDetailPhotosDataSource }
+        ).flow.cachedIn(viewModelScope)
+    }
 
-    val userDetailCollectionsFlow = Pager(
-        config = PagingConfig(
-            pageSize = PAGE_SIZE,
-            enablePlaceholders = false,
-            initialLoadSize = INITIAL_LOAD_SIZE
-        ),
-        pagingSourceFactory = { userDetailCollectionsDataSource }
-    ).flow.cachedIn(viewModelScope)
+    private val userDetailCollectionsFlow by lazy {
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false,
+                initialLoadSize = INITIAL_LOAD_SIZE
+            ),
+            pagingSourceFactory = { userDetailCollectionsDataSource }
+        ).flow.cachedIn(viewModelScope)
+    }
 
-    val userDetailLikedPhotosDataSourceFlow = Pager(
-        config = PagingConfig(
-            pageSize = PAGE_SIZE,
-            enablePlaceholders = false,
-            initialLoadSize = INITIAL_LOAD_SIZE
-        ),
-        pagingSourceFactory = { userDetailLikedPhotosDataSource }
-    ).flow.cachedIn(viewModelScope)
+    private val userDetailLikedPhotosDataSourceFlow by lazy {
+        Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false,
+                initialLoadSize = INITIAL_LOAD_SIZE
+            ),
+            pagingSourceFactory = { userDetailLikedPhotosDataSource }
+        ).flow.cachedIn(viewModelScope)
+    }
+
+    var viewState by mutableStateOf(
+        UserDetailViewState(
+            pagingPhotos = userDetailPhotosFlow,
+            pagingCollections = userDetailCollectionsFlow,
+            pagingLikedPhotos = userDetailLikedPhotosDataSourceFlow
+        )
+    )
 
     companion object {
         private const val PAGE_SIZE = 15
         private const val INITIAL_LOAD_SIZE = 15
     }
 }
+
+data class UserDetailViewState(
+    val pagingPhotos: PagingPhotos,
+    val pagingCollections: PagingCollections,
+    val pagingLikedPhotos: PagingLikedPhotos
+)
+
+typealias PagingPhotos = Flow<PagingData<UsersPhotos>>
+typealias PagingCollections = Flow<PagingData<Collections>>
+typealias PagingLikedPhotos = Flow<PagingData<UsersPhotos>>
