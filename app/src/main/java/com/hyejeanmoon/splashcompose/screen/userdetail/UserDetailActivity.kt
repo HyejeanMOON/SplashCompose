@@ -48,12 +48,7 @@ class UserDetailActivity : ComponentActivity() {
 
             SplashComposeTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    UserDetailScreen(
-                        onBackIconClick = { finish() },
-                        onPhotoClick = {
-                            PhotoDetailActivity.start(it?.id.orEmpty(), this)
-                        }
-                    )
+                    UserDetailScreen()
                 }
             }
         }

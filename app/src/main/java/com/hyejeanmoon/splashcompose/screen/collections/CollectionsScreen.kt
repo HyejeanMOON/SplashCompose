@@ -53,9 +53,11 @@ fun CollectionsScreen(
     modifier: Modifier = Modifier,
     collectionsViewModel: CollectionsViewModel = hiltViewModel()
 ) {
-    val viewStates = collectionsViewModel.viewStates
+    val viewStates = remember {
+        collectionsViewModel.viewStates
+    }
     val pagingItems = viewStates.pagingData.collectAsLazyPagingItems()
-    var listState = if (pagingItems.itemCount > 0) viewStates.listState else LazyListState()
+    val listState = if (pagingItems.itemCount > 0) viewStates.listState else LazyListState()
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),

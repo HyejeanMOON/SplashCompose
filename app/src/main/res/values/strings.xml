@@ -6,9 +6,9 @@
     <string name="screen_license">License</string>
     <string name="screen_favorites">Favorites</string>
     <string name="screen_settings">Settings</string>
-    <string name="toast_start_download">download started!</string>
-    <string name="toast_complete_download">download completed!</string>
-    <string name="toast_clear_cache_completed">clear cache completed!</string>
+    <string name="toast_start_download">downloading!</string>
+    <string name="toast_complete_download">download is completed!</string>
+    <string name="toast_clear_cache_completed">cleared cache!</string>
     <string name="tabrow_photos">Photos</string>
     <string name="tabrow_collections">Collections</string>
     <string name="tabrow_liked_photos">Liked Photos</string>

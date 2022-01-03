@@ -46,7 +46,10 @@ fun PhotosOfCollectionScreen(
     onBackIconClick: () -> Unit,
     collectionTitle: String
 ) {
-    val pagingItems = photosOfCollectionViewModel.photosOfCollections.collectAsLazyPagingItems()
+    val viewState = remember {
+        photosOfCollectionViewModel.viewStates
+    }
+    val pagingItems = viewState.pagingPhotos.collectAsLazyPagingItems()
 
     Scaffold(
         modifier = modifier,

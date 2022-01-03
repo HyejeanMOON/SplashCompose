@@ -16,6 +16,7 @@
 
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -54,6 +56,7 @@ import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsItem
+import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailLocation
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoUserInfo
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
@@ -63,15 +66,15 @@ import com.hyejeanmoon.splashcompose.utils.PhotoUtils
 @Composable
 fun UserDetailScreen(
     modifier: Modifier = Modifier,
-    viewModel: UserDetailViewModel = hiltViewModel(),
-    onBackIconClick: () -> Unit,
-    onPhotoClick: (UsersPhotos?) -> Unit
+    viewModel: UserDetailViewModel = hiltViewModel()
 ) {
     val userDetail by viewModel.userDetail.observeAsState()
     val exception by viewModel.exception.observeAsState()
 
     var visible by remember { mutableStateOf(true) }
     var clickCount by remember { mutableStateOf(0) }
+
+    val activity = LocalContext.current as Activity
 
     Scaffold(
         modifier = modifier,
@@ -80,7 +83,7 @@ fun UserDetailScreen(
                 navigationIcon = {
                     Icon(
                         modifier = Modifier.clickable {
-                            onBackIconClick()
+                            activity.finish()
                         },
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "back icon",
@@ -271,8 +274,7 @@ fun UserDetailScreen(
                         PageContent(
                             currentPage = pagerState.currentPage,
                             pages = pages,
-                            viewModel = viewModel,
-                            onPhotoClick = onPhotoClick
+                            viewModel = viewModel
                         )
                     }
                 }
@@ -289,14 +291,17 @@ fun UserDetailScreen(
 fun PageContent(
     currentPage: Int,
     pages: List<String>,
-    viewModel: UserDetailViewModel,
-    onPhotoClick: (UsersPhotos?) -> Unit
+    viewModel: UserDetailViewModel
 ) {
+    val context = LocalContext.current
+
     when (pages[currentPage]) {
         stringResource(id = R.string.tabrow_photos) -> {
             UserDetailPhotos(
                 viewModel = viewModel,
-                onPhotoClick = onPhotoClick
+                onPhotoClick = {
+                    PhotoDetailActivity.start(it?.id.orEmpty(), context)
+                }
             )
         }
         stringResource(id = R.string.tabrow_collections) -> {
@@ -307,7 +312,9 @@ fun PageContent(
         stringResource(id = R.string.tabrow_liked_photos) -> {
             UserDetailLikedPhotos(
                 viewModel = viewModel,
-                onPhotoClick = onPhotoClick
+                onPhotoClick = {
+                    PhotoDetailActivity.start(it?.id.orEmpty(), context)
+                }
             )
         }
     }
@@ -400,7 +407,10 @@ fun UserDetailPhotos(
     viewModel: UserDetailViewModel,
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
-    val photos = viewModel.viewState.pagingPhotos.collectAsLazyPagingItems()
+    val viewState = remember {
+        viewModel.viewState
+    }
+    val photos = viewState.pagingPhotos.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = modifier
@@ -440,7 +450,10 @@ fun UserDetailCollections(
     modifier: Modifier = Modifier,
     viewModel: UserDetailViewModel
 ) {
-    val collections = viewModel.viewState.pagingCollections.collectAsLazyPagingItems()
+    val viewState = remember {
+        viewModel.viewState
+    }
+    val collections = viewState.pagingCollections.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = modifier
@@ -482,8 +495,11 @@ fun UserDetailLikedPhotos(
     viewModel: UserDetailViewModel,
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
+    val viewState = remember {
+        viewModel.viewState
+    }
     val photos =
-        viewModel.viewState.pagingLikedPhotos.collectAsLazyPagingItems()
+        viewState.pagingLikedPhotos.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = modifier
