@@ -16,12 +16,18 @@
 
 package com.hyejeanmoon.splashcompose.utils
 
+import android.content.Context
 import com.hyejeanmoon.splashcompose.Resolution
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 
 object PhotoUtils {
+
+    fun getPhotoResolutionFromPref(context: Context):String{
+        val pref = SharedPreferencesUtils(context)
+        return pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
+    }
 
     fun getPhotoUrlByResolution(resolution: String, photo: Photo?): String {
         return when (resolution) {

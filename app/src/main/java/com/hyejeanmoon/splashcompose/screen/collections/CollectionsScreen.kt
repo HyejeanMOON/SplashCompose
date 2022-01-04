@@ -47,6 +47,7 @@ import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoUserInfo
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
+import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 
 @Composable
 fun CollectionsScreen(
@@ -67,8 +68,7 @@ fun CollectionsScreen(
             collectionsItem?.also {
                 val item by remember { mutableStateOf(collectionsItem) }
                 CollectionsItem(
-                    collections = item,
-                    resolution = collectionsViewModel.resolution
+                    collections = item
                 )
             }
         }
@@ -93,10 +93,10 @@ fun CollectionsScreen(
 fun CollectionsItem(
     modifier: Modifier = Modifier,
     isShowUserInfo: Boolean = true,
-    resolution: String,
     collections: Collections
 ) {
     val context = LocalContext.current
+    val resolution = PhotoUtils.getPhotoResolutionFromPref(context)
 
     Column(modifier = modifier) {
         if (isShowUserInfo) {

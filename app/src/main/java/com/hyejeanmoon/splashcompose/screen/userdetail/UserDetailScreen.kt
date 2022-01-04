@@ -60,6 +60,7 @@ import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailLocation
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoUserInfo
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
+import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -425,7 +426,6 @@ fun UserDetailPhotos(
                 modifier = Modifier.fillMaxWidth(),
                 photo = item,
                 onPhotoClick = { onPhotoClick(item) },
-                resolution = viewModel.resolution,
                 isShowUserInfo = false
             )
         }
@@ -467,7 +467,6 @@ fun UserDetailCollections(
             item?.also {
                 CollectionsItem(
                     collections = it,
-                    resolution = viewModel.resolution,
                     isShowUserInfo = false
                 )
             }
@@ -513,8 +512,7 @@ fun UserDetailLikedPhotos(
             PhotoDetailImage(
                 modifier = Modifier.fillMaxWidth(),
                 photo = item,
-                onPhotoClick = { onPhotoClick(item) },
-                resolution = viewModel.resolution
+                onPhotoClick = { onPhotoClick(item) }
             )
         }
     }
@@ -538,9 +536,10 @@ fun PhotoDetailImage(
     modifier: Modifier = Modifier,
     isShowUserInfo: Boolean = true,
     photo: UsersPhotos?,
-    resolution: String,
     onPhotoClick: (UsersPhotos?) -> Unit
 ) {
+    val context = LocalContext.current
+    val resolution = PhotoUtils.getPhotoResolutionFromPref(context)
 
     val photoUrl = PhotoUtils.getUserDetailPhotoUrlByResolution(
         resolution,

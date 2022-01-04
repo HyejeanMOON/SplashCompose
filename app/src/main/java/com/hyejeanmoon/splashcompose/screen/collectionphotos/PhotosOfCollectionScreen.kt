@@ -81,8 +81,7 @@ fun PhotosOfCollectionScreen(
                 }
                 item?.also { photo ->
                     PhotoImage(
-                        photo = photo,
-                        resolution = photosOfCollectionViewModel.resolution
+                        photo = photo
                     )
                 }
             }

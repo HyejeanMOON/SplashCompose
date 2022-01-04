@@ -32,7 +32,6 @@ import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
-import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -43,14 +42,7 @@ class PhotosOfCollectionViewModel @Inject constructor(
     state: SavedStateHandle
 ) : AndroidViewModel(app) {
 
-    private var id = ""
-
-    init {
-        id = state.get<String>(PhotosOfCollectionActivity.COLLECTION_ID).orEmpty()
-    }
-
-    private val pref = SharedPreferencesUtils(app)
-    val resolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
+    private val id = state.get<String>(PhotosOfCollectionActivity.COLLECTION_ID).orEmpty()
 
     private val collectionsApiService =
         ApiServiceHelper.createCollectionsApiService(

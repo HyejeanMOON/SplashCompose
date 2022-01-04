@@ -52,7 +52,6 @@ class UserDetailViewModel @Inject constructor(
 
     private val pref = SharedPreferencesUtils(app)
     private val orderBy = pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
-    val resolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
 
     private val _userDetail: MutableLiveData<UserDetail> = MutableLiveData()
     val userDetail: LiveData<UserDetail> get() = _userDetail

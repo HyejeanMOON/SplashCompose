@@ -50,6 +50,7 @@ import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
+import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 
 @Composable
 fun PhotoScreen(
@@ -67,8 +68,7 @@ fun PhotoScreen(
             }
             item?.also {
                 PhotoImage(
-                    photo = it,
-                    resolution = viewModel.resolution
+                    photo = it
                 )
             }
         }
@@ -92,11 +92,10 @@ fun PhotoScreen(
 @Composable
 fun PhotoImage(
     modifier: Modifier = Modifier,
-    photo: Photo,
-    resolution: String
+    photo: Photo
 ) {
-
     val context = LocalContext.current
+    val resolution = PhotoUtils.getPhotoResolutionFromPref(context)
 
     val photoUrl = PhotoUtils.getPhotoUrlByResolution(
         resolution,

@@ -47,7 +47,6 @@ class PhotosViewModel @Inject constructor(
         )
 
     private val pref = SharedPreferencesUtils(app)
-    val resolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
     val orderBy = pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
 
     private val photosDataSource =

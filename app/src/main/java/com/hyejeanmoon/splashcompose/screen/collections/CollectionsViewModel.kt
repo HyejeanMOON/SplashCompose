@@ -49,9 +49,6 @@ class CollectionsViewModel @Inject constructor(
 
     private val collectionRepository = CollectionsRepository(collectionsApiService)
 
-    private val pref = SharedPreferencesUtils(app)
-    val resolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
-
     private val collectionsDataSource =
         CollectionsDataSource(collectionRepository)
 
