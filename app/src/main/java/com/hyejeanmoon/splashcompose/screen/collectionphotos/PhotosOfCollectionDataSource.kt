@@ -54,5 +54,4 @@ class PhotosOfCollectionDataSource(
     companion object {
         private const val START_INDEX = 1
     }
-
 }

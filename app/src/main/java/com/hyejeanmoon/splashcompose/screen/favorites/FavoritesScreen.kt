@@ -40,8 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.hyejeanmoon.splashcompose.R
@@ -97,12 +96,8 @@ fun FavoritePhotoItem(
             .clickable {
                 PhotoDetailActivity.start(photo.id, context)
             },
-        painter = rememberGlidePainter(
-            request = photo.photoUrl.orEmpty(),
-            fadeIn = true,
-            requestBuilder = {
-                diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            }
+        painter = rememberImagePainter(
+            photo.photoUrl.orEmpty()
         ),
         contentDescription = "favorite photo",
         contentScale = ContentScale.Crop

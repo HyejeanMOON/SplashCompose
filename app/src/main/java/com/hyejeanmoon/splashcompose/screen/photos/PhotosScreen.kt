@@ -42,15 +42,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.accompanist.coil.rememberCoilPainter
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.compose.rememberImagePainter
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
-import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 
 @Composable
 fun PhotoScreen(
@@ -120,6 +117,7 @@ fun PhotoImage(
         Image(
             modifier = Modifier
                 .fillMaxWidth()
+                .requiredHeight(300.dp)
                 .constrainAs(photoRef) {
                     top.linkTo(userInfo.bottom)
                     start.linkTo(parent.start)
@@ -129,9 +127,8 @@ fun PhotoImage(
                 .padding(20.dp, 0.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .clickable { PhotoDetailActivity.start(photo.id ?: "", context) },
-            painter = rememberCoilPainter(
-                photoUrl,
-                fadeIn = true
+            painter = rememberImagePainter(
+                photoUrl
             ),
             contentDescription = "photo image",
             contentScale = ContentScale.Crop
@@ -172,12 +169,8 @@ fun PhotoUserInfo(
                         userName
                     )
                 },
-            painter = rememberGlidePainter(
-                request = userPhoto,
-                fadeIn = true,
-                requestBuilder = {
-                    diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                }
+            painter = rememberImagePainter(
+                userPhoto
             ),
             contentDescription = "user profile image"
         )

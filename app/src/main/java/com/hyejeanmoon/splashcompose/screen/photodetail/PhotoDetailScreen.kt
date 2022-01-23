@@ -44,17 +44,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailActivity
-import com.hyejeanmoon.splashcompose.utils.NavUtils.back
 
 @Composable
 fun PhotoDetailScreen(
@@ -141,12 +137,8 @@ fun PhotoDetailImg(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-            painter = rememberGlidePainter(
-                request = photo?.urls?.full.orEmpty(),
-                fadeIn = true,
-                requestBuilder = {
-                    diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                }
+            painter = rememberImagePainter(
+                photo?.urls?.full.orEmpty()
             ),
             contentDescription = "photo detail",
             contentScale = ContentScale.Crop
@@ -201,12 +193,8 @@ fun PhotoDetailUserInfo(
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 },
-            painter = rememberGlidePainter(
-                request = photo?.user?.profileImage?.large.orEmpty(),
-                fadeIn = true,
-                requestBuilder = {
-                    diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                }
+            painter = rememberImagePainter(
+                photo?.user?.profileImage?.large.orEmpty()
             ),
             contentDescription = "user profile image"
         )

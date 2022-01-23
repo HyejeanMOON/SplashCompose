@@ -42,8 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.compose.rememberImagePainter
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.entity.Photo
@@ -82,12 +81,8 @@ fun RandomPhotoScreenUI(
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 },
-            painter = rememberGlidePainter(
-                request = randomPhoto?.urls?.full.orEmpty(),
-                fadeIn = true,
-                requestBuilder = {
-                    diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                }
+            painter = rememberImagePainter(
+                randomPhoto?.urls?.full.orEmpty()
             ),
             contentDescription = "Random Photo",
             contentScale = ContentScale.Crop
@@ -169,12 +164,8 @@ fun RandomPhotoUserInfo(
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 },
-            painter = rememberGlidePainter(
-                request = randomPhoto?.user?.profileImage?.large.orEmpty(),
-                fadeIn = true,
-                requestBuilder = {
-                    diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                }
+            painter = rememberImagePainter(
+                randomPhoto?.user?.profileImage?.large.orEmpty()
             ),
             contentDescription = "user profile image"
         )

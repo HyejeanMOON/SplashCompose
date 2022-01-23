@@ -46,7 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -60,7 +60,6 @@ import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailLocation
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoUserInfo
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
-import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
@@ -125,9 +124,8 @@ fun UserDetailScreen(
                                 start.linkTo(parent.start)
                                 top.linkTo(parent.top)
                             },
-                        painter = rememberCoilPainter(
-                            request = userDetail?.profileImage?.large.orEmpty(),
-                            fadeIn = true
+                        painter = rememberImagePainter(
+                            userDetail?.profileImage?.large.orEmpty()
                         ),
                         contentDescription = "user cover photo"
                     )
@@ -558,16 +556,16 @@ fun PhotoDetailImage(
 
         Image(
             modifier = Modifier
+                .requiredHeight(300.dp)
                 .fillMaxWidth()
                 .padding(20.dp, 10.dp, 20.dp, 0.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .clickable { onPhotoClick(photo) },
-            painter = rememberCoilPainter(
-                photoUrl,
-                fadeIn = true
+            painter = rememberImagePainter(
+                photoUrl
             ),
             contentDescription = "photo image",
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.Crop
         )
     }
 }

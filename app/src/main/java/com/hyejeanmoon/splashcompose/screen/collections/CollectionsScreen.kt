@@ -41,13 +41,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.hyejeanmoon.splashcompose.ErrorAlert
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.screen.collectionphotos.PhotosOfCollectionActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoUserInfo
 import com.hyejeanmoon.splashcompose.utils.PhotoUtils
-import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 
 @Composable
 fun CollectionsScreen(
@@ -138,9 +137,8 @@ fun CollectionsItem(
                         bottom.linkTo(image.bottom)
                     }
                     .clip(RoundedCornerShape(10.dp)),
-                painter = rememberCoilPainter(
-                    coverPhotoUrl,
-                    fadeIn = true
+                painter = rememberImagePainter(
+                    coverPhotoUrl
                 ),
                 contentDescription = "collections cover image",
                 contentScale = ContentScale.Crop
