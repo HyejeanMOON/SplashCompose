@@ -21,10 +21,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +45,7 @@ import com.google.accompanist.navigation.animation.AnimatedComposeNavigator
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
+import com.hyejeanmoon.splashcompose.screen.favorites.FavoritesActivity
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
 import com.hyejeanmoon.splashcompose.screen.random.RandomPhotoScreen
 import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
@@ -140,6 +143,10 @@ fun AppScaffold() {
                                 text = appBarTitle,
                                 color = Color.Black
                             )
+                        },
+                        actions = {
+                            // DropdownMenu
+                            DropDownMenuUI()
                         }
                     )
                 }
@@ -230,3 +237,57 @@ fun animatedComposable(
         }
     }
 }
+
+@Composable
+fun DropDownMenuUI() {
+
+    val context = LocalContext.current
+
+    var isExpanded by remember {
+        mutableStateOf(false)
+    }
+
+    IconButton(
+        onClick = {
+            isExpanded = true
+        },
+        content = {
+            Icon(
+                imageVector = Icons.Filled.MoreVert,
+                contentDescription = "More Icon",
+                tint = Color.Black
+            )
+        }
+    )
+
+    val list = listOf(
+        DropdownMenuItem(
+            name = context.getString(R.string.screen_favorites),
+            onClick = {
+                FavoritesActivity.start(context)
+            }
+        )
+    )
+
+    DropdownMenu(
+        expanded = isExpanded,
+        onDismissRequest = { isExpanded = false },
+        content = {
+            Column {
+                list.forEachIndexed { _, s ->
+                    DropdownMenuItem(onClick = {
+                        isExpanded = false
+                        s.onClick()
+                    }) {
+                        Text(text = s.name)
+                    }
+                }
+            }
+        }
+    )
+}
+
+data class DropdownMenuItem(
+    val name: String,
+    val onClick: () -> Unit
+)

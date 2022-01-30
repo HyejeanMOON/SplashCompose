@@ -16,6 +16,7 @@
 
 package com.hyejeanmoon.splashcompose.screen.favorites
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -83,10 +84,10 @@ class FavoritesActivity : ComponentActivity() {
     }
 
     companion object {
-        fun start(activity: ComponentActivity) {
+        fun start(context: Context) {
             val intent = Intent()
-            intent.setClass(activity, FavoritesActivity::class.java)
-            activity.startActivity(intent)
+            intent.setClass(context, FavoritesActivity::class.java)
+            context.startActivity(intent)
         }
     }
 }
