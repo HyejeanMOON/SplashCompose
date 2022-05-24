@@ -98,7 +98,7 @@ fun UserDetailScreen(
                 }
             )
         }
-    ) {
+    ) { _ ->
         ConstraintLayout {
             val (visibleLayout, tabrow, pager) = createRefs()
 
