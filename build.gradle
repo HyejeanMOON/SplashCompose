@@ -2,24 +2,23 @@
 
 buildscript {
     ext {
-        compose_version = '1.2.0-alpha01'
+        compose_version = '1.2.0-beta02'
         datastore_version = '1.0.0'
         retrofit_version = '2.9.0'
-        room_version = '2.4.1'
         accompanist_version = '0.22.0-rc'
         inset_version = '0.22.0-rc'
-        material_version = '1.2.0-alpha01'
-        compose_ui_version = '1.2.0-alpha01'
+        material_version = '1.2.0-beta02'
+        compose_ui_version = '1.2.0-beta02'
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0-alpha07'
+        classpath 'com.android.tools.build:gradle:7.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.40.5'
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.4.0-rc01"
+        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.4.2'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
