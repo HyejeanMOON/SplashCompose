@@ -17,10 +17,14 @@
 package com.hyejeanmoon.splashcompose
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
 
@@ -49,6 +53,7 @@ fun ErrorAlert(
     }
     if (openAlert) {
         AlertDialog(
+            modifier = Modifier.padding(40.dp, 0.dp),
             onDismissRequest = { },
             confirmButton = {
                 Text(
@@ -56,8 +61,55 @@ fun ErrorAlert(
                     text = stringResource(id = R.string.alert_error_button)
                 )
             },
-            title = { Text(text = stringResource(id = R.string.alert_error_title)) },
-            text = { Text(text = stringResource(id = R.string.alert_error_message)) }
+            title = {
+                Text(
+                    modifier = Modifier.padding(10.dp, 5.dp),
+                    text = stringResource(id = R.string.alert_error_title)
+                )
+            },
+            text = {
+                Text(
+                    modifier = Modifier.padding(10.dp, 5.dp),
+                    text = stringResource(id = R.string.alert_error_message)
+                )
+            }
+        )
+    }
+}
+
+@Composable
+fun ExitAlertDialog(
+    viewModel: MainViewModel = hiltViewModel(),
+    onConfirmButtonClicked: () -> Unit
+) {
+    val openAlert by viewModel.shouldShowExitAlertDialog.observeAsState()
+    if (openAlert == true) {
+        AlertDialog(
+            modifier = Modifier.padding(40.dp, 0.dp),
+            onDismissRequest = { },
+            confirmButton = {
+                Text(
+                    modifier = Modifier
+                        .padding(10.dp, 5.dp)
+                        .clickable {
+                            viewModel.shouldShowExitAlertDialog.postValue(false)
+                            onConfirmButtonClicked()
+                        },
+                    text = stringResource(id = R.string.alert_exit_ok_button)
+                )
+            },
+            dismissButton = {
+                Text(
+                    modifier = Modifier
+                        .padding(10.dp, 5.dp)
+                        .clickable {
+                            viewModel.shouldShowExitAlertDialog.postValue(false)
+                        },
+                    text = stringResource(id = R.string.alert_exit_cancel_button)
+                )
+            },
+            title = { Text(text = stringResource(id = R.string.alert_exit_title)) },
+            text = { Text(text = stringResource(id = R.string.alert_exit_message)) }
         )
     }
 }

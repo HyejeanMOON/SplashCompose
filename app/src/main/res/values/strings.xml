@@ -15,4 +15,8 @@
     <string name="alert_error_title">Error</string>
     <string name="alert_error_message">Oop.There is an error, please retry it later.</string>
     <string name="alert_error_button">OK</string>
+    <string name="alert_exit_title">Exit</string>
+    <string name="alert_exit_message">Do you want exit this application?</string>
+    <string name="alert_exit_ok_button">OK</string>
+    <string name="alert_exit_cancel_button">Cancel</string>
 </resources>

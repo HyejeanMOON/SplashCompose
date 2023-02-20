@@ -18,7 +18,9 @@ package com.hyejeanmoon.splashcompose
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.addCallback
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import com.hyejeanmoon.splashcompose.db.AppDatabase
@@ -29,10 +31,16 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initPref()
+
+        onBackPressedDispatcher.addCallback {
+            viewModel.shouldShowExitAlertDialog.postValue(true)
+        }
 
         setContent {
             SetUpStatusBar()
@@ -40,6 +48,9 @@ class MainActivity : ComponentActivity() {
             SplashComposeTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     AppScaffold()
+                    ExitAlertDialog(viewModel) {
+                        finish()
+                    }
                 }
             }
         }
@@ -66,9 +77,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        onBackPressedDispatcher.onBackPressed()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         // inorder to avoid memory leaks
         AppDatabase.destroyInstance()
-        finish()
     }
 }
