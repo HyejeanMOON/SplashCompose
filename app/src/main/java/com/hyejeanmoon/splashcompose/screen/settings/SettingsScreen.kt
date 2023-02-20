@@ -78,6 +78,7 @@ fun SettingsScreen(
     )
 
     SettingsScreenUI(
+        modifier = modifier,
         viewModel = viewModel,
         settingsItems = settingsItemList,
         navController = navController
@@ -92,7 +93,7 @@ fun SettingsScreenUI(
     settingsItems: List<SettingsItem>
 ) {
     LazyColumn(
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
         items(items = settingsItems) {
             SettingsItemTitle(titleName = it.title.title)

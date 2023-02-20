@@ -18,6 +18,8 @@ package com.hyejeanmoon.splashcompose
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
@@ -152,7 +154,7 @@ fun AppScaffold() {
                 }
             }
         }
-    ) {
+    ) { _ ->
         AnimatedNavHost(
             navController = navController,
             startDestination = Screen.Random.route
@@ -220,16 +222,20 @@ fun animatedComposable(
     navGraphBuilder.composable(
         route,
         enterTransition = {
-            slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(200))
+            slideInHorizontally(initialOffsetX = { 1000 }, animationSpec = tween(200)) +
+                    fadeIn(initialAlpha = 100f)
         },
         exitTransition = {
-            slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(200))
+            slideOutHorizontally(targetOffsetX = { -1000 }, animationSpec = tween(200)) +
+                    fadeOut(targetAlpha = 0f)
         },
         popEnterTransition = {
-            slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(200))
+            slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(200)) +
+                    fadeIn(initialAlpha = 100f)
         },
         popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(200))
+            slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(200)) +
+                    fadeOut(targetAlpha = 0f)
         }
     ) {
         navBackStackEntry?.also {
