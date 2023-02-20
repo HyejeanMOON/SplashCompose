@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.hyejeanmoon.splashcompose.BuildConfig
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.Screen
 import com.hyejeanmoon.splashcompose.utils.DataManager
@@ -68,7 +67,7 @@ fun SettingsScreen(
             listOf(
                 SettingItemDetail(
                     title = SettingsItems.VERSION,
-                    content = BuildConfig.VERSION_NAME
+                    content = "1.3.0"
                 ),
                 SettingItemDetail(
                     title = SettingsItems.LICENSES
@@ -337,6 +336,9 @@ fun RadioButtonList(
         SettingsItems.DISPLAY_RESOLUTION -> {
             radioOptionList = settingsViewModel.displayResolutionList
             initialPosition = settingsViewModel.getDisplayResolutionPosition()
+        }
+        else -> {
+            // do noting
         }
     }
 
