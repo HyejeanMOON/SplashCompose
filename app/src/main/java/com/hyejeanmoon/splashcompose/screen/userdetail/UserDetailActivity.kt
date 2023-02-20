@@ -27,7 +27,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
-import com.hyejeanmoon.splashcompose.screen.photodetail.PhotoDetailActivity
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 

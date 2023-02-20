@@ -31,7 +31,6 @@ import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
 import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
-import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -18,7 +18,6 @@ package com.hyejeanmoon.splashcompose.screen.photos
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.hyejeanmoon.splashcompose.OrderBy
 import com.hyejeanmoon.splashcompose.entity.Photo
 
 class PhotosDataSource(

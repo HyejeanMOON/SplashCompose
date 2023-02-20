@@ -69,7 +69,7 @@ class FavoritesActivity : ComponentActivity() {
                                 }
                             )
                         }
-                    ) {
+                    ) { _ ->
                         FavoritesScreen()
                     }
                 }

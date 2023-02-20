@@ -17,29 +17,12 @@
 package com.hyejeanmoon.splashcompose
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.hyejeanmoon.splashcompose.screen.collections.CollectionsScreen
-import com.hyejeanmoon.splashcompose.screen.photos.PhotoScreen
-import com.hyejeanmoon.splashcompose.screen.random.RandomPhotoScreen
-import com.hyejeanmoon.splashcompose.screen.settings.SettingsScreen
-import com.hyejeanmoon.splashcompose.screen.webview.WebViewScreen
 import com.hyejeanmoon.splashcompose.ui.theme.MoonGray
-import com.hyejeanmoon.splashcompose.utils.NavUtils.back
 
 @Composable
 fun SetUpStatusBar() {

@@ -36,7 +36,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.hyejeanmoon.splashcompose.ErrorAlert
-import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photos.PhotoImage
 
 @Composable

@@ -17,7 +17,6 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
 import com.hyejeanmoon.splashcompose.entity.Collections
-import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import retrofit2.Call
