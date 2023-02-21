@@ -16,6 +16,7 @@
 
 package com.hyejeanmoon.splashcompose
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -95,8 +96,20 @@ fun AppScaffold() {
                     BottomNavigationItem(
                         selected = currentRoute == screen.route,
                         onClick = {
+                            // prevent a problem that a screen shows multiple times since bottom item is clicked multiple times.
+                            if (currentRoute == screen.route) return@BottomNavigationItem
                             navController.navigate(screen.route) {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations 
+                                // on the back stack as users select items
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                // Avoid multiple copies of the same destination when
+                                // reselecting the same item
                                 launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
+                                restoreState = true
                             }
                         },
                         icon = {
