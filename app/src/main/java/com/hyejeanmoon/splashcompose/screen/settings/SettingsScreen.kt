@@ -291,14 +291,16 @@ fun SettingsAlertDialog(
     onCloseDialog: () -> Unit
 ) {
     AlertDialog(
-        modifier = modifier.padding(10.dp, 0.dp),
+        modifier = modifier.padding(40.dp, 0.dp),
         onDismissRequest = {
             // do nothing
         },
         confirmButton = {
             Text(
                 text = "Dismiss",
-                modifier = Modifier.clickable {
+                modifier = Modifier
+                    .padding(10.dp, 5.dp)
+                    .clickable {
                     onCloseDialog()
                 },
                 color = Color.Black,
