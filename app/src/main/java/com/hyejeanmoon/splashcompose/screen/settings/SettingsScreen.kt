@@ -310,7 +310,8 @@ fun SettingsAlertDialog(
         title = {
             Text(
                 text = item.title,
-                color = Color.Black
+                color = Color.Black,
+                fontSize = 20.sp
             )
         },
         text = {
@@ -397,7 +398,7 @@ fun RadioButtonList(
                 )
                 Text(
                     text = text,
-                    style = MaterialTheme.typography.body1.merge(),
+                    style = MaterialTheme.typography.body2.merge(),
                     modifier = Modifier.padding(start = 16.dp)
                         .constrainAs(textRef){
                             top.linkTo(radioRef.top)
