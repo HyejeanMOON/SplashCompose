@@ -67,7 +67,7 @@ fun SettingsScreen(
             listOf(
                 SettingItemDetail(
                     title = SettingsItems.VERSION,
-                    content = "1.4.0"
+                    content = "1.4.1"
                 ),
                 SettingItemDetail(
                     title = SettingsItems.LICENSES
