@@ -16,7 +16,6 @@
 
 package com.hyejeanmoon.splashcompose
 
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
