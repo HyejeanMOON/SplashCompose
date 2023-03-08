@@ -21,7 +21,7 @@ import androidx.paging.PagingState
 import com.hyejeanmoon.splashcompose.entity.Photo
 
 class PhotosDataSource(
-    private val photosRepository: PhotosRepositoryImpl
+    private val photosRepository: PhotosRepository
 ) : PagingSource<Int, Photo>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {

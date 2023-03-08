@@ -24,7 +24,7 @@ package com.hyejeanmoon.splashcompose.utils
 class EnvParameters {
     companion object {
         const val BASE_URL = "https://api.unsplash.com"
-        const val CLIENT_ID = "xAVwyaxXbRKg_6qP2BhvtvD4e171m1SxkaawaizZYm0"
+        const val CLIENT_ID = ""
         const val DB_NAME = "SplashCompose.db"
         const val SHARED_PREFERENCE_DATA_NAME = "SPLASH_COMPOSE"
         const val KEY_ORDER_BY = "SPLASH_COMPOSE_ORDER_BY"

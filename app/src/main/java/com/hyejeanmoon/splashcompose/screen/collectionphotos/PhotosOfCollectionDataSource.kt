@@ -20,13 +20,13 @@ import android.content.SharedPreferences
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.hyejeanmoon.splashcompose.entity.Photo
-import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepositoryImpl
+import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.getString
 import javax.inject.Inject
 
 class PhotosOfCollectionDataSource @Inject constructor(
-    private val collectionsRepository: CollectionsRepositoryImpl,
+    private val collectionsRepository: CollectionsRepository,
     private val sharedPreferences: SharedPreferences
 ) : PagingSource<Int, Photo>() {
 

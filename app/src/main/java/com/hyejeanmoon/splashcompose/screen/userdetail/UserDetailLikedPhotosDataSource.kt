@@ -25,7 +25,7 @@ import com.hyejeanmoon.splashcompose.utils.getString
 import javax.inject.Inject
 
 class UserDetailLikedPhotosDataSource @Inject constructor(
-    private val userDetailRepository: UserDetailRepositoryImpl,
+    private val userDetailRepository: UserDetailRepository,
     private val sharedPreferences: SharedPreferences
 ) : PagingSource<Int, UsersPhotos>() {
 
