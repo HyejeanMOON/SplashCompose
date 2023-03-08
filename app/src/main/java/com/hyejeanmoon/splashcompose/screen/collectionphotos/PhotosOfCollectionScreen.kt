@@ -70,7 +70,7 @@ fun PhotosOfCollectionScreen(
                 }
             )
         }
-    ) {
+    ) { _ ->
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -92,9 +92,11 @@ fun PhotosOfCollectionScreen(
             loadState.refresh is LoadState.Error -> {
                 ErrorAlert()
             }
+
             loadState.append is LoadState.Error -> {
                 ErrorAlert()
             }
+
             loadState.prepend is LoadState.Error -> {
                 ErrorAlert()
             }
