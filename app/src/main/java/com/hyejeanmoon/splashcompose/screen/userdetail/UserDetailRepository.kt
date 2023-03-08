@@ -19,18 +19,19 @@ package com.hyejeanmoon.splashcompose.screen.userdetail
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class UserDetailRepository(
+class UserDetailRepository @Inject constructor(
     private val userDetailApiService: UserDetailApiService
 ) {
 
     suspend fun getUsersPhotos(
         userName: String,
-        page:Int,
-        perPage:Int,
+        page: Int,
+        perPage: Int,
         orderBy: String
     ): List<UsersPhotos> = suspendCoroutine {
         userDetailApiService.getPhotosByUserName(
@@ -47,8 +48,8 @@ class UserDetailRepository(
 
     suspend fun getUsersLikedPhotos(
         userName: String,
-        page:Int,
-        perPage:Int,
+        page: Int,
+        perPage: Int,
         orderBy: String
     ): List<UsersPhotos> = suspendCoroutine {
         userDetailApiService.getLikedPhotosByUserName(
@@ -65,8 +66,8 @@ class UserDetailRepository(
 
     suspend fun getUsersCollections(
         userName: String,
-        page:Int,
-        perPage:Int,
+        page: Int,
+        perPage: Int,
         orderBy: String
     ): List<Collections> = suspendCoroutine {
         userDetailApiService.getCollectionsByUserName(
@@ -81,7 +82,7 @@ class UserDetailRepository(
         }))
     }
 
-    companion object{
+    companion object {
         private const val ORDER_BY_LATEST = "latest"
     }
 }

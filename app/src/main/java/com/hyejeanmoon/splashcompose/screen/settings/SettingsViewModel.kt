@@ -17,19 +17,21 @@
 package com.hyejeanmoon.splashcompose.screen.settings
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import com.hyejeanmoon.splashcompose.OrderBy
 import com.hyejeanmoon.splashcompose.Resolution
-import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
+import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.getString
+import com.hyejeanmoon.splashcompose.utils.putString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel  @Inject constructor(
-    app: Application
+class SettingsViewModel @Inject constructor(
+    app: Application,
+    private val sharedPreferences: SharedPreferences
 ) : AndroidViewModel(app) {
-
-    private val pref = SharedPreferencesUtils(app)
 
     val displayResolutionList: List<String> = listOf(
 //        Resolution.THUMB.name,
@@ -54,26 +56,26 @@ class SettingsViewModel  @Inject constructor(
     )
 
     fun getDisplayResolutionPosition(): Int {
-        val resolution = pref.getString(
-            SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION
+        val resolution = sharedPreferences.getString(
+            EnvParameters.KEY_DISPLAY_RESOLUTION
         )
         var position = 0
         displayResolutionList.forEachIndexed { index, s ->
-            if(s == resolution) position = index
+            if (s == resolution) position = index
         }
         return position
     }
 
     fun putDisplayResolution(data: String) {
-        pref.putString(
-            SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION,
+        sharedPreferences.putString(
+            EnvParameters.KEY_DISPLAY_RESOLUTION,
             data
         )
     }
 
     fun getOrderByPosition(): Int {
-        val orderBy = pref.getString(
-            SharedPreferencesUtils.KEY_ORDER_BY
+        val orderBy = sharedPreferences.getString(
+            EnvParameters.KEY_ORDER_BY
         )
         var position = 0
         orderByList.forEachIndexed { index, s ->
@@ -84,8 +86,8 @@ class SettingsViewModel  @Inject constructor(
     }
 
     fun putOrderBy(data: String) {
-        pref.putString(
-            SharedPreferencesUtils.KEY_ORDER_BY,
+        sharedPreferences.putString(
+            EnvParameters.KEY_ORDER_BY,
             data
         )
     }

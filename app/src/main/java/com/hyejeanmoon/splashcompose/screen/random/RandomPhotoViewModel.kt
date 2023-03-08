@@ -21,23 +21,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
-import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
-import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.entity.Photo
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.screen.photos.PhotosApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class RandomPhotoViewModel @Inject constructor(
-    val app: Application
+    val app: Application,
+    private val photosApiService: PhotosApiService
 ) : AndroidViewModel(app) {
-
-    private val photosApiService =
-        ApiServiceHelper.createPhotosApiService(
-            EnvParameters.BASE_URL,
-            SplashOkHttpClient().splashOkHttpClient
-        )
 
     private val _randomPhoto: MutableLiveData<Photo> = MutableLiveData()
     val randomPhoto: LiveData<Photo> get() = _randomPhoto

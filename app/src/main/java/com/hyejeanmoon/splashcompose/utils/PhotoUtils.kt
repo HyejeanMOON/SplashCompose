@@ -21,12 +21,13 @@ import com.hyejeanmoon.splashcompose.Resolution
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
+import com.hyejeanmoon.splashcompose.hilt.SystemComponentsModule
 
 object PhotoUtils {
 
     fun getPhotoResolutionFromPref(context: Context):String{
-        val pref = SharedPreferencesUtils(context)
-        return pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
+        val pref = SystemComponentsModule().provideSharedPreferences(context)
+        return pref.getString(EnvParameters.KEY_DISPLAY_RESOLUTION)
     }
 
     fun getPhotoUrlByResolution(resolution: String, photo: Photo?): String {

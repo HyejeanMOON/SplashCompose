@@ -27,11 +27,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
-import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.entity.Photo
-import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -39,21 +35,9 @@ import javax.inject.Inject
 @HiltViewModel
 class PhotosOfCollectionViewModel @Inject constructor(
     app: Application,
-    state: SavedStateHandle
+    state: SavedStateHandle,
+    photosOfCollectionDataSource: PhotosOfCollectionDataSource
 ) : AndroidViewModel(app) {
-
-    private val id = state.get<String>(PhotosOfCollectionActivity.COLLECTION_ID).orEmpty()
-
-    private val collectionsApiService =
-        ApiServiceHelper.createCollectionsApiService(
-            EnvParameters.BASE_URL,
-            SplashOkHttpClient().splashOkHttpClient
-        )
-
-    private val collectionRepository = CollectionsRepository(collectionsApiService)
-
-    private val photosOfCollectionDataSource =
-        PhotosOfCollectionDataSource(collectionRepository, id)
 
     private val photosOfCollections by lazy {
         Pager(

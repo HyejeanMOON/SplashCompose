@@ -16,20 +16,25 @@
 
 package com.hyejeanmoon.splashcompose.screen.collectionphotos
 
+import android.content.SharedPreferences
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
+import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.getString
+import javax.inject.Inject
 
-class PhotosOfCollectionDataSource(
+class PhotosOfCollectionDataSource @Inject constructor(
     private val collectionsRepository: CollectionsRepository,
-    private val id: String
+    private val sharedPreferences: SharedPreferences
 ) : PagingSource<Int, Photo>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
         val position = params.key ?: START_INDEX
 
         return try {
+            val id = sharedPreferences.getString(EnvParameters.KEY_PHOTO_ID)
             val photos = collectionsRepository.getPhotosOfCollection(
                 id = id,
                 page = position,

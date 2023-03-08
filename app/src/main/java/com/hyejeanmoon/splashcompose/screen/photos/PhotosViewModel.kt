@@ -26,31 +26,16 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
-import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.entity.Photo
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
-import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
 class PhotosViewModel @Inject constructor(
-    app: Application
+    app: Application,
+    photosDataSource: PhotosDataSource
 ) : AndroidViewModel(app) {
-
-    private val photosApiService =
-        ApiServiceHelper.createPhotosApiService(
-            EnvParameters.BASE_URL,
-            SplashOkHttpClient().splashOkHttpClient
-        )
-
-    private val pref = SharedPreferencesUtils(app)
-    val orderBy = pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
-
-    private val photosDataSource =
-        PhotosDataSource(PhotosRepository(photosApiService, orderBy))
 
     private val photoList: PagingPhotoList by lazy {
         Pager(

@@ -24,12 +24,10 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
-import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
-import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.db.AppDatabase
 import com.hyejeanmoon.splashcompose.db.FavoritePhoto
 import com.hyejeanmoon.splashcompose.entity.Photo
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.screen.photos.PhotosApiService
 import com.hyejeanmoon.splashcompose.utils.FileUtils
 import com.hyejeanmoon.splashcompose.utils.LogUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +40,8 @@ import javax.inject.Inject
 class PhotoDetailViewModel @Inject constructor(
     val app: Application,
     state: SavedStateHandle,
-    val appDatabase: AppDatabase
+    private val appDatabase: AppDatabase,
+    private val photosApiService: PhotosApiService
 ) : AndroidViewModel(app) {
     private var photoId = ""
 
@@ -51,12 +50,6 @@ class PhotoDetailViewModel @Inject constructor(
     }
 
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
-
-    private val photosApiService =
-        ApiServiceHelper.createPhotosApiService(
-            EnvParameters.BASE_URL,
-            SplashOkHttpClient().splashOkHttpClient
-        )
 
     private val _photo: MutableLiveData<Photo> = MutableLiveData()
     val photo: LiveData<Photo> get() = _photo

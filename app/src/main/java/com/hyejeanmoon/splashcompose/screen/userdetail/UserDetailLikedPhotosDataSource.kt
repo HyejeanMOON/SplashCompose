@@ -16,18 +16,27 @@
 
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
+import android.content.SharedPreferences
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
+import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.getString
+import javax.inject.Inject
 
-class UserDetailLikedPhotosDataSource(
+class UserDetailLikedPhotosDataSource @Inject constructor(
     private val userDetailRepository: UserDetailRepository,
-    private val userName: String,
-    private val orderBy:String
+    private val sharedPreferences: SharedPreferences
 ) : PagingSource<Int, UsersPhotos>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UsersPhotos> {
         val position = params.key ?: START_INDEX
+        val userName = sharedPreferences.getString(
+            EnvParameters.KEY_PHOTO_USER_NAME
+        )
+        val orderBy = sharedPreferences.getString(
+            EnvParameters.KEY_ORDER_BY
+        )
 
         return try {
             val photos = userDetailRepository.getUsersLikedPhotos(

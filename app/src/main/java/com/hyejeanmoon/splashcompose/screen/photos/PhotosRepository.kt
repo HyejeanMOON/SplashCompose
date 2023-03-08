@@ -16,15 +16,18 @@
 
 package com.hyejeanmoon.splashcompose.screen.photos
 
+import android.content.SharedPreferences
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
+import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class PhotosRepository(
+class PhotosRepository @Inject constructor(
     private val photosApiService: PhotosApiService,
-    val orderBy: String
+    private val sharedPreferences: SharedPreferences
 ) {
 
     suspend fun getPhoto(id: String): Photo = suspendCoroutine {
@@ -39,6 +42,7 @@ class PhotosRepository(
         page:Int,
         perPage:Int
     ):List<Photo> = suspendCoroutine{
+        val orderBy = sharedPreferences.getString(EnvParameters.KEY_ORDER_BY,"") ?:""
         photosApiService.getPhotos(page, perPage, orderBy).enqueue(
             ApiEnqueueCallback({ response ->
                 it.resume(response)

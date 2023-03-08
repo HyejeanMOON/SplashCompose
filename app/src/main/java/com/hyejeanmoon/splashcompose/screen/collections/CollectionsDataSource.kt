@@ -19,8 +19,9 @@ package com.hyejeanmoon.splashcompose.screen.collections
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.hyejeanmoon.splashcompose.entity.Collections
+import javax.inject.Inject
 
-class CollectionsDataSource(
+class CollectionsDataSource @Inject constructor(
     private val collectionsRepository: CollectionsRepository
 ) : PagingSource<Int, Collections>() {
 

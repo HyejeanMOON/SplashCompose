@@ -16,13 +16,17 @@
 
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
+import android.content.SharedPreferences
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
+import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.getString
+import javax.inject.Inject
 
-class UserDetailPhotosDataSource(
+class UserDetailPhotosDataSource @Inject constructor(
     private val userDetailRepository: UserDetailRepository,
-    private val userName: String
+    private val sharedPreferences: SharedPreferences
 ) : PagingSource<Int, UsersPhotos>() {
 
     override fun getRefreshKey(state: PagingState<Int, UsersPhotos>): Int? {
@@ -31,6 +35,9 @@ class UserDetailPhotosDataSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UsersPhotos> {
         val position = params.key ?: START_INDEX
+        val userName = sharedPreferences.getString(
+            EnvParameters.KEY_PHOTO_USER_NAME
+        )
 
         return try {
             val photos = userDetailRepository.getUsersPhotos(

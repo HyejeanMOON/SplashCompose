@@ -17,6 +17,7 @@
 package com.hyejeanmoon.splashcompose.screen.userdetail
 
 import android.app.Application
+import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,14 +27,12 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
-import com.hyejeanmoon.splashcompose.api.ApiServiceHelper
-import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.UserDetail
 import com.hyejeanmoon.splashcompose.entity.UsersPhotos
 import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.LogUtils
-import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
+import com.hyejeanmoon.splashcompose.utils.getString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -41,47 +40,25 @@ import javax.inject.Inject
 @HiltViewModel
 class UserDetailViewModel @Inject constructor(
     val app: Application,
-    val state: SavedStateHandle
+    val state: SavedStateHandle,
+    private val userDetailPhotosDataSource: UserDetailPhotosDataSource,
+    private val userDetailLikedPhotosDataSource: UserDetailLikedPhotosDataSource,
+    private val userDetailCollectionsDataSource: UserDetailCollectionsDataSource,
+    private val sharedPreferences: SharedPreferences,
+    private val userDetailApiService: UserDetailApiService
 ) : AndroidViewModel(app) {
-
-    private var userName: String = ""
-
-    init {
-        userName = state.get<String>(UserDetailActivity.INTENT_USER_NAME).orEmpty()
-    }
-
-    private val pref = SharedPreferencesUtils(app)
-    private val orderBy = pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
 
     private val _userDetail: MutableLiveData<UserDetail> = MutableLiveData()
     val userDetail: LiveData<UserDetail> get() = _userDetail
 
-    private val userDetailApiService = ApiServiceHelper.createUserDetailApiService(
-        EnvParameters.BASE_URL,
-        SplashOkHttpClient().splashOkHttpClient
-    )
-
     private val _exception: MutableLiveData<Exception> = MutableLiveData()
     val exception: LiveData<Exception> get() = _exception
 
-    private val userDetailRepository = UserDetailRepository(userDetailApiService)
-    private val userDetailPhotosDataSource = UserDetailPhotosDataSource(
-        userDetailRepository,
-        userName
-    )
-    private val userDetailLikedPhotosDataSource = UserDetailLikedPhotosDataSource(
-        userDetailRepository,
-        userName,
-        orderBy
-    )
-    private val userDetailCollectionsDataSource = UserDetailCollectionsDataSource(
-        userDetailRepository,
-        userName,
-        orderBy
-    )
-
     fun getUserDetailInfo() {
         LogUtils.outputLog("getUserDetailInfo")
+        val userName = sharedPreferences.getString(
+            EnvParameters.KEY_PHOTO_USER_NAME
+        )
         userDetailApiService.getUserDetails(
             userName = userName
         ).enqueue(ApiEnqueueCallback(

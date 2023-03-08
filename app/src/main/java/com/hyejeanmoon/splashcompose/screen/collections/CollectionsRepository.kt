@@ -19,11 +19,12 @@ package com.hyejeanmoon.splashcompose.screen.collections
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.Photo
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class CollectionsRepository(
+class CollectionsRepository @Inject constructor(
     private val collectionsApiService: CollectionsApiService
 ) {
     suspend fun getCollections(

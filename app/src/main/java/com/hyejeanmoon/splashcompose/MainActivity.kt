@@ -23,8 +23,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import com.hyejeanmoon.splashcompose.hilt.SystemComponentsModule
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
-import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
+import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.getString
+import com.hyejeanmoon.splashcompose.utils.putString
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,21 +59,21 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initPref() {
-        val pref = SharedPreferencesUtils(this)
+        val pref = SystemComponentsModule().provideSharedPreferences(this)
 
         //  display resolution
-        val displayResolution = pref.getString(SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION)
+        val displayResolution = pref.getString(EnvParameters.KEY_DISPLAY_RESOLUTION)
         if (displayResolution.isBlank()) {
             pref.putString(
-                SharedPreferencesUtils.KEY_DISPLAY_RESOLUTION,
+                EnvParameters.KEY_DISPLAY_RESOLUTION,
                 Resolution.REGULAR.name
             )
         }
         //  order by
-        val orderBy = pref.getString(SharedPreferencesUtils.KEY_ORDER_BY)
+        val orderBy = pref.getString(EnvParameters.KEY_ORDER_BY)
         if (orderBy.isBlank()) {
             pref.putString(
-                SharedPreferencesUtils.KEY_ORDER_BY,
+                EnvParameters.KEY_ORDER_BY,
                 OrderBy.LATEST.name
             )
         }
