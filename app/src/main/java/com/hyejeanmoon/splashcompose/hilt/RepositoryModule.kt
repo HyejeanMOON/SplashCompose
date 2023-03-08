@@ -1,12 +1,13 @@
 package com.hyejeanmoon.splashcompose.hilt
 
-import android.content.SharedPreferences
-import com.hyejeanmoon.splashcompose.screen.collections.CollectionsApiService
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepository
-import com.hyejeanmoon.splashcompose.screen.photos.PhotosApiService
+import com.hyejeanmoon.splashcompose.screen.collections.CollectionsRepositoryImpl
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosRepository
+import com.hyejeanmoon.splashcompose.screen.photos.PhotosRepositoryImpl
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailApiService
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailRepository
+import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailRepositoryImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,30 +15,20 @@ import dagger.hilt.android.components.ViewModelComponent
 
 @Module
 @InstallIn(ViewModelComponent::class)
-class RepositoryModule {
+abstract class RepositoryModule {
 
-    @Provides
-    fun provideCollectionsRepository(
-        apiService: CollectionsApiService
-    ): CollectionsRepository {
-        return CollectionsRepository(apiService)
-    }
+    @Binds
+    abstract fun provideCollectionsRepository(
+        collectionsRepositoryImpl: CollectionsRepositoryImpl
+    ): CollectionsRepository
 
-    @Provides
-    fun providePhotosRepository(
-        apiService: PhotosApiService,
-        sharedPreferences: SharedPreferences
-    ): PhotosRepository {
-        return PhotosRepository(
-            apiService,
-            sharedPreferences
-        )
-    }
+    @Binds
+    abstract fun providePhotosRepository(
+        photosRepositoryImpl: PhotosRepositoryImpl
+    ): PhotosRepository
 
-    @Provides
-    fun provideUserDetailRepository(
-        apiService: UserDetailApiService
-    ): UserDetailRepository {
-        return UserDetailRepository(apiService)
-    }
+    @Binds
+    abstract fun provideUserDetailRepository(
+        userDetailRepositoryImpl: UserDetailRepositoryImpl
+    ): UserDetailRepository
 }

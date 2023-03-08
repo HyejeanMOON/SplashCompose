@@ -2,11 +2,11 @@ package com.hyejeanmoon.splashcompose.hilt
 
 import android.content.SharedPreferences
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosDataSource
-import com.hyejeanmoon.splashcompose.screen.photos.PhotosRepository
+import com.hyejeanmoon.splashcompose.screen.photos.PhotosRepositoryImpl
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailCollectionsDataSource
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailLikedPhotosDataSource
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailPhotosDataSource
-import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailRepository
+import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,14 +18,14 @@ class DataSourceModule {
 
     @Provides
     fun providePhotosDataSource(
-        photosRepository: PhotosRepository
+        photosRepository: PhotosRepositoryImpl
     ): PhotosDataSource {
         return PhotosDataSource(photosRepository)
     }
 
     @Provides
     fun provideUserDetailCollectionsDataSource(
-        userDetailRepository: UserDetailRepository,
+        userDetailRepository: UserDetailRepositoryImpl,
         sharedPreferences: SharedPreferences
     ): UserDetailCollectionsDataSource {
         return UserDetailCollectionsDataSource(
@@ -36,7 +36,7 @@ class DataSourceModule {
 
     @Provides
     fun provideUserDetailLikedPhotosDataSource(
-        userDetailRepository: UserDetailRepository,
+        userDetailRepository: UserDetailRepositoryImpl,
         sharedPreferences: SharedPreferences
     ): UserDetailLikedPhotosDataSource {
         return UserDetailLikedPhotosDataSource(
@@ -47,7 +47,7 @@ class DataSourceModule {
 
     @Provides
     fun provideUserDetailPhotosDataSource(
-        userDetailRepository: UserDetailRepository,
+        userDetailRepository: UserDetailRepositoryImpl,
         sharedPreferences: SharedPreferences
     ):UserDetailPhotosDataSource {
         return UserDetailPhotosDataSource(
