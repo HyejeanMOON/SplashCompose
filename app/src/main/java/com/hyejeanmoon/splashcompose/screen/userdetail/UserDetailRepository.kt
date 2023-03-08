@@ -81,8 +81,4 @@ class UserDetailRepository @Inject constructor(
             it.resumeWithException(exception = exception)
         }))
     }
-
-    companion object {
-        private const val ORDER_BY_LATEST = "latest"
-    }
 }
