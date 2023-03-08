@@ -27,6 +27,10 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
+import com.hyejeanmoon.splashcompose.hilt.SystemComponentsModule
+import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.getString
+import com.hyejeanmoon.splashcompose.utils.putString
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -91,8 +95,8 @@ class PhotoDetailActivity : ComponentActivity() {
 
         fun start(photoId: String, context: Context) {
             val intent = Intent()
-            intent.setClass(context, PhotoDetailActivity::class.java)
-            intent.putExtra(INTENT_PHOTO_ID, photoId)
+            val sharedPreferences = SystemComponentsModule().provideSharedPreferences(context)
+            sharedPreferences.putString(EnvParameters.KEY_PHOTO_ID, photoId)
             context.startActivity(intent)
         }
     }

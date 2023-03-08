@@ -27,7 +27,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
+import com.hyejeanmoon.splashcompose.hilt.SystemComponentsModule
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
+import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.utils.putString
 import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -58,8 +61,8 @@ class UserDetailActivity : ComponentActivity() {
 
         fun startUserDetailActivity(context: Context, userName: String) {
             val intent = Intent()
-            intent.putExtra(INTENT_USER_NAME, userName)
-            intent.setClass(context, UserDetailActivity::class.java)
+            val sharedPreferences = SystemComponentsModule().provideSharedPreferences(context)
+            sharedPreferences.putString(EnvParameters.KEY_PHOTO_USER_NAME, userName)
             context.startActivity(intent)
         }
     }
