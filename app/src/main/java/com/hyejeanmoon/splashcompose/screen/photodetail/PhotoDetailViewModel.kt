@@ -41,7 +41,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PhotoDetailViewModel @Inject constructor(
     val app: Application,
-    state: SavedStateHandle
+    state: SavedStateHandle,
+    val appDatabase: AppDatabase
 ) : AndroidViewModel(app) {
     private var photoId = ""
 
@@ -50,8 +51,6 @@ class PhotoDetailViewModel @Inject constructor(
     }
 
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
-
-    private val database = AppDatabase.getInstance(app)
 
     private val photosApiService =
         ApiServiceHelper.createPhotosApiService(
@@ -94,7 +93,9 @@ class PhotoDetailViewModel @Inject constructor(
     fun isFavoritePhoto() {
         LogUtils.outputLog("isFavoritePhoto")
         viewModelScope.launch(Dispatchers.IO) {
-            _isFavoritePhoto.postValue(database.getUserDao().isFavoritePhoto(photoId).isNotEmpty())
+            _isFavoritePhoto.postValue(
+                appDatabase.favoritePhotoDao().isFavoritePhoto(photoId).isNotEmpty()
+            )
         }
     }
 
@@ -102,14 +103,14 @@ class PhotoDetailViewModel @Inject constructor(
         LogUtils.outputLog("favoritePhoto")
         viewModelScope.launch(Dispatchers.IO) {
             if (_isFavoritePhoto.value == true) {
-                database.getUserDao().deleteFavoritePhoto(
+                appDatabase.favoritePhotoDao().deleteFavoritePhoto(
                     FavoritePhoto(
                         id = _photo.value?.id.orEmpty(),
                         photoUrl = _photo.value?.urls?.small.orEmpty()
                     )
                 )
             } else {
-                database.getUserDao().insertFavoritePhoto(
+                appDatabase.favoritePhotoDao().insertFavoritePhoto(
                     FavoritePhoto(
                         id = _photo.value?.id.orEmpty(),
                         photoUrl = _photo.value?.urls?.small.orEmpty()

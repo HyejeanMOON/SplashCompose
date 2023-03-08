@@ -31,12 +31,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    app: Application
+    app: Application,
+    private val appDatabase: AppDatabase
 ) : AndroidViewModel(app) {
 
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
-
-    private val database = AppDatabase.getInstance(app)
 
     private val _favoritePhotoList: MutableLiveData<List<FavoritePhoto>> = MutableLiveData()
     val favoritePhotoList: LiveData<List<FavoritePhoto>> get() = _favoritePhotoList
@@ -45,7 +44,7 @@ class FavoritesViewModel @Inject constructor(
         isRefreshing.value = true
         viewModelScope.launch(Dispatchers.IO) {
             _favoritePhotoList.postValue(
-                database.getUserDao().getAllFavoritePhoto()
+                appDatabase.favoritePhotoDao().getAllFavoritePhoto()
             )
         }
         isRefreshing.value = false

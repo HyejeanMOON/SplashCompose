@@ -25,5 +25,6 @@ class EnvParameters {
     companion object {
         const val BASE_URL = "https://api.unsplash.com"
         const val CLIENT_ID = ""
+        const val DB_NAME = "SplashCompose.db"
     }
 }

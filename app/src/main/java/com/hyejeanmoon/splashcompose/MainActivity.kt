@@ -23,7 +23,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import com.hyejeanmoon.splashcompose.db.AppDatabase
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
 import com.hyejeanmoon.splashcompose.utils.SharedPreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,14 +76,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // inorder to avoid memory leaks
-        AppDatabase.destroyInstance()
     }
 }
