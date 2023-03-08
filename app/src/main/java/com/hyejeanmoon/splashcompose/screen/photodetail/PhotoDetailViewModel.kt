@@ -17,12 +17,14 @@
 package com.hyejeanmoon.splashcompose.screen.photodetail
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
+import com.hyejeanmoon.splashcompose.EnvParameters
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
 import com.hyejeanmoon.splashcompose.db.AppDatabase
 import com.hyejeanmoon.splashcompose.db.FavoritePhoto
@@ -30,6 +32,7 @@ import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosApiService
 import com.hyejeanmoon.splashcompose.utils.FileUtils
 import com.hyejeanmoon.splashcompose.utils.LogUtils
+import com.hyejeanmoon.splashcompose.utils.getString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,15 +42,10 @@ import javax.inject.Inject
 @HiltViewModel
 class PhotoDetailViewModel @Inject constructor(
     val app: Application,
-    state: SavedStateHandle,
     private val appDatabase: AppDatabase,
-    private val photosApiService: PhotosApiService
+    private val photosApiService: PhotosApiService,
+    private val sharedPreferences: SharedPreferences
 ) : AndroidViewModel(app) {
-    private var photoId = ""
-
-    init {
-        photoId = state.get<String>(PhotoDetailActivity.INTENT_PHOTO_ID).orEmpty()
-    }
 
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -65,6 +63,8 @@ class PhotoDetailViewModel @Inject constructor(
 
     private val _downloadComplete: MutableLiveData<Unit> = MutableLiveData()
     val downloadComplete: LiveData<Unit> get() = _downloadComplete
+
+    private val photoId = sharedPreferences.getString(EnvParameters.KEY_PHOTO_ID)
 
     fun getPhotoById() {
         LogUtils.outputLog("getPhotoById")

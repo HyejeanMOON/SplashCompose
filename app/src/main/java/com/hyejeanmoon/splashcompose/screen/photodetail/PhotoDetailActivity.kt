@@ -89,7 +89,6 @@ class PhotoDetailActivity : ComponentActivity() {
     }
 
     companion object {
-        const val INTENT_PHOTO_ID = "INTENT_PHOTO_ID"
         private const val REQUEST_CODE = 1
 
         fun start(photoId: String, context: Context) {
