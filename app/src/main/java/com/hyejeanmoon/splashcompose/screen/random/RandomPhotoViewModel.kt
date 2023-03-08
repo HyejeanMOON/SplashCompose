@@ -20,16 +20,18 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
+import androidx.lifecycle.viewModelScope
 import com.hyejeanmoon.splashcompose.entity.Photo
-import com.hyejeanmoon.splashcompose.screen.photos.PhotosApiService
+import com.hyejeanmoon.splashcompose.screen.photos.PhotosRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RandomPhotoViewModel @Inject constructor(
     val app: Application,
-    private val photosApiService: PhotosApiService
+    private val photosRepository: PhotosRepository
 ) : AndroidViewModel(app) {
 
     private val _randomPhoto: MutableLiveData<Photo> = MutableLiveData()
@@ -39,12 +41,14 @@ class RandomPhotoViewModel @Inject constructor(
     val exception: LiveData<Exception> get() = _exception
 
     fun getRandomPhoto() {
-        photosApiService.getRandomPhoto().enqueue(
-            ApiEnqueueCallback({
-                _randomPhoto.postValue(it)
-            }, {
-                _exception.postValue(it)
-            })
-        )
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                _randomPhoto.postValue(
+                    photosRepository.getRandomPhoto()
+                )
+            } catch (exception: Exception) {
+                _exception.postValue(exception)
+            }
+        }
     }
 }
