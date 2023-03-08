@@ -93,9 +93,10 @@ class PhotoDetailActivity : ComponentActivity() {
         private const val REQUEST_CODE = 1
 
         fun start(photoId: String, context: Context) {
-            val intent = Intent()
             val sharedPreferences = SystemComponentsModule().provideSharedPreferences(context)
             sharedPreferences.putString(EnvParameters.KEY_PHOTO_ID, photoId)
+            val intent = Intent()
+            intent.setClass(context, PhotoDetailActivity::class.java)
             context.startActivity(intent)
         }
     }

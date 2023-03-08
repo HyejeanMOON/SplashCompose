@@ -60,9 +60,10 @@ class UserDetailActivity : ComponentActivity() {
         const val INTENT_USER_NAME = "INTENT_USER_NAME"
 
         fun startUserDetailActivity(context: Context, userName: String) {
-            val intent = Intent()
             val sharedPreferences = SystemComponentsModule().provideSharedPreferences(context)
             sharedPreferences.putString(EnvParameters.KEY_PHOTO_USER_NAME, userName)
+            val intent = Intent()
+            intent.setClass(context, UserDetailActivity::class.java)
             context.startActivity(intent)
         }
     }
