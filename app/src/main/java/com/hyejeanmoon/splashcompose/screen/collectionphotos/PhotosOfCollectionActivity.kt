@@ -23,8 +23,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import com.hyejeanmoon.splashcompose.EnvParameters
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
+import com.hyejeanmoon.splashcompose.hilt.SystemComponentsModule
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
+import com.hyejeanmoon.splashcompose.utils.putString
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,9 +57,10 @@ class PhotosOfCollectionActivity : ComponentActivity() {
         private const val COLLECTION_TITLE = "COLLECTION_TITLE"
 
         fun start(context: Context, collectionId: String, collectionTitle: String) {
+            val sharedPreferences = SystemComponentsModule().provideSharedPreferences(context)
+            sharedPreferences.putString(EnvParameters.KEY_COLLECTION_ID,collectionId)
             val intent = Intent()
             intent.setClass(context, PhotosOfCollectionActivity::class.java)
-            intent.putExtra(COLLECTION_ID, collectionId)
             intent.putExtra(COLLECTION_TITLE, collectionTitle)
             context.startActivity(intent)
         }

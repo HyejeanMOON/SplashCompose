@@ -34,9 +34,9 @@ class PhotosOfCollectionDataSource @Inject constructor(
         val position = params.key ?: START_INDEX
 
         return try {
-            val id = sharedPreferences.getString(EnvParameters.KEY_PHOTO_ID)
+            val collectionId = sharedPreferences.getString(EnvParameters.KEY_COLLECTION_ID)
             val photos = collectionsRepository.getPhotosOfCollection(
-                id = id,
+                id = collectionId,
                 page = position,
                 perPage = params.loadSize
             )
