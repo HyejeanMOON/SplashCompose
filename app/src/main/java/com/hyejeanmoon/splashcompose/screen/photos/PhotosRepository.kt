@@ -19,7 +19,7 @@ package com.hyejeanmoon.splashcompose.screen.photos
 import android.content.SharedPreferences
 import com.hyejeanmoon.splashcompose.entity.Photo
 import com.hyejeanmoon.splashcompose.api.ApiEnqueueCallback
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.EnvParameters
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException

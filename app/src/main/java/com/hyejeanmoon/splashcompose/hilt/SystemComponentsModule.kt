@@ -2,7 +2,7 @@ package com.hyejeanmoon.splashcompose.hilt
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.EnvParameters
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

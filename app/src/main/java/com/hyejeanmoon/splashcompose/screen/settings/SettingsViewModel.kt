@@ -21,7 +21,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import com.hyejeanmoon.splashcompose.OrderBy
 import com.hyejeanmoon.splashcompose.Resolution
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.getString
 import com.hyejeanmoon.splashcompose.utils.putString
 import dagger.hilt.android.lifecycle.HiltViewModel

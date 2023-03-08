@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hyejeanmoon.splashcompose.utils
+package com.hyejeanmoon.splashcompose
 
 /**
  * EnvParameters

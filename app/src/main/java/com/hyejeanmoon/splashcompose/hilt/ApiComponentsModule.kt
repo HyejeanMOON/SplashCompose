@@ -4,7 +4,7 @@ import com.hyejeanmoon.splashcompose.api.SplashOkHttpClient
 import com.hyejeanmoon.splashcompose.screen.collections.CollectionsApiService
 import com.hyejeanmoon.splashcompose.screen.photos.PhotosApiService
 import com.hyejeanmoon.splashcompose.screen.userdetail.UserDetailApiService
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.EnvParameters
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

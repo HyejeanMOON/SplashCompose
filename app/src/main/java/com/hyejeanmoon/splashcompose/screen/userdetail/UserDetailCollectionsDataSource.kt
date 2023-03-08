@@ -20,7 +20,7 @@ import android.content.SharedPreferences
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.hyejeanmoon.splashcompose.entity.Collections
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.getString
 import javax.inject.Inject
 

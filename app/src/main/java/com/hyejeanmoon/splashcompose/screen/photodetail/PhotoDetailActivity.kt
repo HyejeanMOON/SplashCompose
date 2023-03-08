@@ -28,8 +28,7 @@ import androidx.core.app.ActivityCompat
 import com.hyejeanmoon.splashcompose.R
 import com.hyejeanmoon.splashcompose.SetUpStatusBar
 import com.hyejeanmoon.splashcompose.hilt.SystemComponentsModule
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
-import com.hyejeanmoon.splashcompose.utils.getString
+import com.hyejeanmoon.splashcompose.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.putString
 import dagger.hilt.android.AndroidEntryPoint
 

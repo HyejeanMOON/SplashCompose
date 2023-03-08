@@ -17,6 +17,7 @@
 package com.hyejeanmoon.splashcompose.utils
 
 import android.content.Context
+import com.hyejeanmoon.splashcompose.EnvParameters
 import com.hyejeanmoon.splashcompose.Resolution
 import com.hyejeanmoon.splashcompose.entity.Collections
 import com.hyejeanmoon.splashcompose.entity.Photo

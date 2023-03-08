@@ -25,7 +25,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import com.hyejeanmoon.splashcompose.hilt.SystemComponentsModule
 import com.hyejeanmoon.splashcompose.ui.theme.SplashComposeTheme
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
 import com.hyejeanmoon.splashcompose.utils.getString
 import com.hyejeanmoon.splashcompose.utils.putString
 import dagger.hilt.android.AndroidEntryPoint

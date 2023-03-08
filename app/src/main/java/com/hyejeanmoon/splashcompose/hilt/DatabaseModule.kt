@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.hyejeanmoon.splashcompose.db.AppDatabase
 import com.hyejeanmoon.splashcompose.db.FavoritePhotoDao
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.EnvParameters
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -16,7 +16,7 @@
 
 package com.hyejeanmoon.splashcompose.api
 
-import com.hyejeanmoon.splashcompose.utils.EnvParameters
+import com.hyejeanmoon.splashcompose.EnvParameters
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
