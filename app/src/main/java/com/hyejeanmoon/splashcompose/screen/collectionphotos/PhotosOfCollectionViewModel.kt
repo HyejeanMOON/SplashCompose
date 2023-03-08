@@ -35,7 +35,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PhotosOfCollectionViewModel @Inject constructor(
     app: Application,
-    state: SavedStateHandle,
     photosOfCollectionDataSource: PhotosOfCollectionDataSource
 ) : AndroidViewModel(app) {
 

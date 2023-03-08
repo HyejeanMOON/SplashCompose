@@ -44,7 +44,7 @@ class PhotoDetailViewModel @Inject constructor(
     val app: Application,
     private val appDatabase: AppDatabase,
     private val photosApiService: PhotosApiService,
-    private val sharedPreferences: SharedPreferences
+    sharedPreferences: SharedPreferences
 ) : AndroidViewModel(app) {
 
     val isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)

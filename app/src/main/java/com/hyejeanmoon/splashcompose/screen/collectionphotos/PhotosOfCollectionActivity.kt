@@ -53,7 +53,6 @@ class PhotosOfCollectionActivity : ComponentActivity() {
     }
 
     companion object {
-        const val COLLECTION_ID = "COLLECTION_ID"
         private const val COLLECTION_TITLE = "COLLECTION_TITLE"
 
         fun start(context: Context, collectionId: String, collectionTitle: String) {
